@@ -118,7 +118,7 @@ namespace CNC.Controls
             else
             {
                 string rpm = p.ProgrammedRPM == 0d ? "S" + p.RPM.ToInvariantString() : "";
-                (DataContext as GrblViewModel).ExecuteCommand(string.Format((string)((RadioButton)sender).Tag, rpm));
+                (DataContext as GrblViewModel).ExecuteCommand(string.Format((string)((Button)sender).Tag, rpm));
             }
         }
 

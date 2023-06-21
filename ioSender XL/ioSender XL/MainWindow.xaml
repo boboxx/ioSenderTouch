@@ -10,12 +10,17 @@
         xmlns:cnclathecontrols="clr-namespace:CNC.Controls.Lathe;assembly=CNC.Controls.Lathe"
         xmlns:cncprobingcontrols="clr-namespace:CNC.Controls.Probing;assembly=CNC.Controls.Probing"
         xmlns:local="clr-namespace:GCode_Sender"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Sender ({0})" Height="640" Width="925" MinHeight="700" MinWidth="1250"
+        Title="Sender ({0})" Height="1024" Width="1640" MinHeight="700" MinWidth="1250"
         Loaded="Window_Load"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
-        Closed="Window_Closed" Icon="App.ico">
+        Closed="Window_Closed" Icon="App.ico" TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
     <Window.Resources>
         <system:String x:Uid="str_mnuRotate" x:Key="MenuRotate">Rotate</system:String>
         <system:String x:Uid="str_mnuArcsToLines" x:Key="MenuArcsToLines">Arcs to lines</system:String>
@@ -51,6 +56,13 @@
                 <MenuItem x:Uid="mnu_about" Header="_About" Click="aboutMenuItem_Click"/>
             </MenuItem>
         </Menu>
+        <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,60,0">
+            <Label Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center"/>
+            <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+            <Label  Name = "StateLabel" Content="{Binding GrblState}"  FontSize=" 20" HorizontalContentAlignment="Center" />
+            <Label Name ="StateColorLabel" Background="{Binding StateColor}" Width="25" Height="25" VerticalAlignment="top" HorizontalContentAlignment="Center"/>
+            <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
+        </StackPanel>
         <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
             <ToolBar IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Height="42" VerticalAlignment="Top" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}}" >
                 <cnccontrols:FileActionControl IsEnabled="{Binding Path=IsToolChanging, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -111,13 +123,16 @@
             <cnccontrols:MachinePositionFlyout x:Name="mposFlyout" Visibility="Hidden" Canvas.Right="22"/>
             <cnccontrols:THCMonitorControl x:Name="thcControl" Visibility="Hidden" Canvas.Right="22"/>
         </Canvas>
-        <TabControl Background="#FFE5E5E5" DockPanel.Dock="Left" x:Name="tabMode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Focusable="False" SelectionChanged="TabMode_SelectionChanged">
-            <TabControl.Resources>
+        <TabControl  
+            materialDesign:ColorZoneAssist.Mode="PrimaryDark"
+            Style="{StaticResource MaterialDesignFilledTabControl}"
+                       DockPanel.Dock="Left" x:Name="tabMode"  HorizontalAlignment="Stretch" Margin="2" Focusable="True" SelectionChanged="TabMode_SelectionChanged"> 
+            <!--<TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Height" Value="32" />
                     <Setter Property="MinWidth" Value="40" />
                 </Style>
-            </TabControl.Resources>
+            </TabControl.Resources>-->
             <TabItem x:Uid="tab_grbl" x:Name="tabGrbl" Header="Grbl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <local:JobView x:Name="Grbl"/>
             </TabItem>
@@ -132,33 +147,33 @@
             <TabItem x:Uid="tab_sdCard" x:Name="tabSDCard" Header="SD Card">
                 <cnccontrols:SDCardView x:Name="SDCardView" FileSelected="SDCardView_FileSelected"/>
             </TabItem>
-            <TabItem x:Uid="tab_turning" x:Name="tabTurning" Header="Turning">
+            <!--<TabItem x:Uid="tab_turning" x:Name="tabTurning" Header="Turning">
                 <cnclathecontrols:TurningWizard x:Name="turningWizard"/>
             </TabItem>
             <TabItem x:Uid="tab_parting" x:Name="tabParting" Header="Parting">
                 <cnclathecontrols:PartingWizard x:Name="partingWizard"/>
-            </TabItem>
-            <TabItem x:Uid="tab_threading" x:Name="tabThreading" Header="Threading">
+            </TabItem>-->
+            <!--<TabItem x:Uid="tab_threading" x:Name="tabThreading" Header="Threading">
                 <cnclathecontrols:ThreadingWizard x:Name="threadingWizard"/>
-            </TabItem>
+            </TabItem>-->
             <TabItem x:Uid="tab_offsets" x:Name="tabOffsets" Header="Offsets">
                 <cnccontrols:OffsetView x:Name="offsetControl"/>
             </TabItem>
             <TabItem x:Uid="tab_tools" x:Name="tabTools" Header="Tools">
                 <cnccontrols:ToolView x:Name="toolControl"/>
             </TabItem>
-            <TabItem x:Uid="tab_trinamic" x:Name="tabTrinamic" Header="Trinamic tuner">
+            <!--<TabItem x:Uid="tab_trinamic" x:Name="tabTrinamic" Header="Trinamic tuner">
                 <cnccontrols:TrinamicView x:Name="toolTrinamic"/>
-            </TabItem>
+            </TabItem>-->
             <TabItem x:Uid="tab_grblConfig" x:Name="tabConfig" Header="Settings: Grbl">
                 <cnccontrols:GrblConfigView x:Name="configControl"/>
             </TabItem>
             <TabItem x:Uid="tab_appConfig" x:Name="tabAppConfig" Header="Settings: App">
                 <cnccontrols:AppConfigView x:Name="appConfigControl"/>
             </TabItem>
-            <TabItem x:Uid="tab_pidTuner" x:Name="tabPIDTuner" Header="PID Tuner">
+            <!--<TabItem x:Uid="tab_pidTuner" x:Name="tabPIDTuner" Header="PID Tuner">
                 <cnccontrols:PIDLogView x:Name="toolPIDTuner"/>
-            </TabItem>
+            </TabItem>-->
             <!--
                 <TabItem x:Name="tabTurning" Header="Turning">
                     <Grid Background="#FFE5E5E5">

@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              FocusVisualStyle="{x:Null}"
              Loaded="JogControl_Loaded"
-             d:DesignHeight="238" Width="Auto">
+             d:DesignHeight="Auto" MinHeight="325" Width="Auto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -47,8 +47,8 @@
                 <Binding Path="GrblState" Converter="{StaticResource IsJoggingConverter}"/>
             </MultiBinding>
         </Grid.IsEnabled>
-        <StackPanel>
-            <GroupBox x:Uid="grp_jogDistance" Header="Distance" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Height="114" Width="80">
+        <StackPanel Margin="0,0,0,17">
+            <GroupBox x:Uid="grp_jogDistance" Header="Distance" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Height="140" Width="80">
                 <StackPanel>
                     <RadioButton Tag="3" Content="{Binding Path=JogData.Distance3, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.StepSize, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step3}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Click="distance_Click"/>
                     <RadioButton Tag="2" Content="{Binding Path=JogData.Distance2, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.StepSize, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step2}" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Click="distance_Click"/>
@@ -57,7 +57,7 @@
                     <Label Content="{Binding Path=Unit}" Height="20" FontSize="8"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox x:Uid="grp_jogFeedrate" Header="Feed rate" HorizontalAlignment="Left" Margin="5,0,0,4" VerticalAlignment="Top" Height="114" Width="80">
+            <GroupBox x:Uid="grp_jogFeedrate" Header="Feed rate" HorizontalAlignment="Left" Margin="5,0,0,4" VerticalAlignment="Top" Height="Auto" MinHeight="140" Width="80">
                 <StackPanel>
                     <RadioButton Tag="3" Content="{Binding Path=JogData.Feedrate3, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.Feed, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed3}"  HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
                     <RadioButton Tag="2" Content="{Binding Path=JogData.Feedrate2, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.Feed, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed2}" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
@@ -68,7 +68,7 @@
             </GroupBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="90,10,5,0" Width="Auto" Height="Auto">
-            <StackPanel Orientation="Horizontal" Width="Auto" Height="Auto" Visibility="{Binding Path=LatheModeEnabled, Converter={StaticResource IsNotVisibleConverter}}">
+            <StackPanel Orientation="Horizontal" Width="Auto" Height="287" Visibility="{Binding Path=LatheModeEnabled, Converter={StaticResource IsNotVisibleConverter}}" VerticalAlignment="Bottom" Margin="15,0,0,28">
                 <StackPanel VerticalAlignment="Center">
                     <Button Content="X-" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
                 </StackPanel>
@@ -84,56 +84,23 @@
                 <StackPanel VerticalAlignment="Center">
                     <Button Content="X+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
                 </StackPanel>
-                <StackPanel Style="{StaticResource ZAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
+                <StackPanel Style="{StaticResource ZAxisVisibleStyle}" VerticalAlignment="Center" Margin="20,0,0,0">
                     <Button Content="Z+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
                     <Button Content="Z-" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" VerticalAlignment="Top" Click="Button_Click"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Width="Auto" Height="Auto" Visibility="{Binding Path=LatheModeEnabled, Converter={StaticResource IsVisibleConverter}}">
-                <StackPanel VerticalAlignment="Center">
-                    <Button Content="Z-" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                </StackPanel>
-                <StackPanel VerticalAlignment="Center" Margin="5,0">
-                    <Button Content="X-" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                    <Button Tag="stop" Style="{StaticResource JogButtonStyle}" Margin="0,5" Click="Button_Click">
-                        <Button.Content>
-                            <Image Source="Resources/Symbols_Stop_32xLG.png"/>
-                        </Button.Content>
-                    </Button>
-                    <Button Content="X+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                </StackPanel>
-                <StackPanel VerticalAlignment="Center">
-                    <Button Content="Z+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                </StackPanel>
-                <StackPanel Style="{StaticResource YAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                    <Button Content="Y+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                    <Button Content="Y-" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-                </StackPanel>
+                <StackPanel VerticalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Center" Margin="5,0"/>
+                <StackPanel VerticalAlignment="Center"/>
+                <StackPanel Style="{StaticResource YAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
-            <StackPanel Style="{StaticResource AAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                <Button Content="{Binding Path=AxisLetter.A, Converter={StaticResource JogPlusConverter}, Mode=OneWay}" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                <Button Content="{Binding Path=AxisLetter.A, Converter={StaticResource JogMinusConverter}, Mode=OneWay}" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-            </StackPanel>
-            <StackPanel Style="{StaticResource BAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                <Button Content="{Binding Path=AxisLetter.B, Converter={StaticResource JogPlusConverter}, Mode=OneWay}" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                <Button Content="{Binding Path=AxisLetter.B, Converter={StaticResource JogMinusConverter}, Mode=OneWay}" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-            </StackPanel>
-            <StackPanel Style="{StaticResource CAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                <Button Content="{Binding Path=AxisLetter.C, Converter={StaticResource JogPlusConverter}, Mode=OneWay}" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                <Button Content="{Binding Path=AxisLetter.C, Converter={StaticResource JogMinusConverter}, Mode=OneWay}" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-            </StackPanel>
-            <StackPanel Style="{StaticResource UAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                <Button Content="U+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                <Button Content="U-" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-            </StackPanel>
-            <StackPanel Style="{StaticResource VAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                <Button Content="V+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                <Button Content="V-" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-            </StackPanel>
-            <StackPanel Style="{StaticResource WAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0">
-                <Button Content="W+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                <Button Content="W-" Style="{StaticResource JogButtonStyle}" Margin="0,70,0,0" Click="Button_Click"/>
-            </StackPanel>
+            <StackPanel Style="{StaticResource AAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <StackPanel Style="{StaticResource BAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <StackPanel Style="{StaticResource CAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <StackPanel Style="{StaticResource UAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <StackPanel Style="{StaticResource VAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <StackPanel Style="{StaticResource WAxisVisibleStyle}" VerticalAlignment="Center" Margin="5,0,0,0"/>
         </StackPanel>
     </Grid>
 </UserControl>

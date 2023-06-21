@@ -73,7 +73,7 @@ namespace CNC.Controls
 
             try
             {
-                Style = Application.Current.FindResource("btnSidebar") as Style;
+                //Style = Application.Current.FindResource("btnSidebar") as Style;
             }
             catch { }
 

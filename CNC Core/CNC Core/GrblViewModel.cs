@@ -43,6 +43,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading;
+using System.Windows.Forms;
 using CNC.GCode;
 
 namespace CNC.Core
@@ -263,6 +264,17 @@ namespace CNC.Core
                     CommandLog.Add(command);
                     ResponseLog.Add(command);
                 }
+            }
+        }
+
+        public Color StateColor
+        {
+            get { return _grblState.Color; }
+            set
+            {
+                if(_grblState.Color == value)return;
+                _grblState.Color = value;
+                OnPropertyChanged();
             }
         }
 
@@ -692,7 +704,8 @@ namespace CNC.Core
                     case GrblStates.Check:
                         _grblState.Color = Colors.White;
                         break;
-
+                   
+                        break;
                     default:
                         _grblState.Color = Colors.White;
                         break;
