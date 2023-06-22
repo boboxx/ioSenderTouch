@@ -12,7 +12,7 @@
         xmlns:local="clr-namespace:GCode_Sender"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Sender ({0})" Height="1024" Width="1640" MinHeight="700" MinWidth="1250"
+        Title="Sender ({0})" Height="1080" Width="1920" MinHeight="700" MinWidth="1250"
         Loaded="Window_Load"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
@@ -134,7 +134,7 @@
                 </Style>
             </TabControl.Resources>-->
             <TabItem x:Uid="tab_grbl" x:Name="tabGrbl" Header="Grbl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <local:JobView x:Name="Grbl"/>
+                <local:HomeView x:Name="Grbl"/>
             </TabItem>
             <!---
             <TabItem x:Uid="tab_3DView" x:Name="tabViewer" Header="3D View">

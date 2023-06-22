@@ -162,7 +162,7 @@ namespace GCode_Sender
             UIViewModel.SidebarItems.Add(new SidebarItem(gotoControl));
             UIViewModel.SidebarItems.Add(new SidebarItem(outlineFlyout));
             UIViewModel.SidebarItems.Add(new SidebarItem(mposFlyout));
-//          UIViewModel.SidebarItems.Add(new SidebarItem(thcControl));
+            UIViewModel.SidebarItems.Add(new SidebarItem(thcControl));
 
             UIViewModel.CurrentView = getView((TabItem)tabMode.Items[tabMode.SelectedIndex = 0]);
             System.Threading.Thread.Sleep(50);
