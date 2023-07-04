@@ -30,123 +30,148 @@
         <system:String x:Uid="str_runTime" x:Key="RunTime">Run time: {0}</system:String>
         <cnccontrols:BlocksToStringConverter x:Key="BlocksToStringConverter" />
         <cnccontrols:LogicalNotConverter x:Key="BooleanConverter" />
+        <cnccontrols:GrblStateToColorConverter x:Key="StateColorConverter" />
     </Window.Resources>
     <Window.DataContext>
         <cnccore:GrblViewModel />
     </Window.DataContext>
-    <DockPanel IsEnabled="{Binding Path=IsMPGActive, Converter={StaticResource BooleanConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <Menu IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" DockPanel.Dock="Top">
-            <MenuItem x:Uid="mnu_file" x:Name="menuFile" Header="_File">
-                <MenuItem x:Uid="mnu_load" Header="_Load" Click="fileOpenMenuItem_Click"/>
-                <MenuItem x:Uid="mnu_save" x:Name="menuSaveFile" Header="_Save" IsEnabled="false" Click="fileSaveMenuItem_Click"/>
-                <MenuItem x:Uid="mnu_close" x:Name="menuCloseFile" Header="_Close" IsEnabled="false" Click="fileCloseMenuItem_Click"/>
-                <MenuItem x:Uid="mnu_transform" x:Name="menuTransform" Header="_Transform" IsEnabled="false" ItemsSource="{Binding Path=UIViewModel.TransformMenuItems, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                <MenuItem x:Uid="mnu_openConsole" x:Name="menuOpenConsole" Header="_Open Console" Click="openConsoleMenuItem_Click"/>
-                <MenuItem x:Uid="mnu_exit" Header="_Exit" Click="exitMenuItem_Click"/>
-            </MenuItem>
-            <MenuItem x:Uid="mnu_camera" x:Name="menuCamera" Header="_Camera">
-                <MenuItem x:Uid="mnu_open" Header="_Open" Click="CameraOpen_Click"/>
-            </MenuItem>
-            <MenuItem x:Uid="mnu_help" x:Name="menuHelp" Header="_Help">
-                <MenuItem x:Uid="mnu_wiki" Header="_Wiki" Click="aboutWikiItem_Click"/>
-                <MenuItem x:Uid="mnu_usageTips" Header="Usage _tips" Click="tipsWikiItem_Click"/>
-                <MenuItem x:Uid="mnu_briefTour" Header="A _brief tour" Click="briefTour_Click"/>
-                <MenuItem x:Uid="mnu_videoTutorials" Header="_Video tutorials" Click="videoTutorials_Click"/>
-                <MenuItem x:Uid="mnu_errorsAndAlarms" Header="_Error and alarm codes" Click="errorAndAlarms_Click"/>
-                <MenuItem x:Uid="mnu_about" Header="_About" Click="aboutMenuItem_Click"/>
-            </MenuItem>
-        </Menu>
-        <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,60,0">
-            <Label Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center"/>
-            <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-            <Label  Name = "StateLabel" Content="{Binding GrblState}"  FontSize=" 20" HorizontalContentAlignment="Center" />
-            <Label Name ="StateColorLabel" Background="{Binding StateColor}" Width="25" Height="25" VerticalAlignment="top" HorizontalContentAlignment="Center"/>
-            <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
-        </StackPanel>
-        <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
-            <ToolBar IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Height="42" VerticalAlignment="Top" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}}" >
-                <cnccontrols:FileActionControl IsEnabled="{Binding Path=IsToolChanging, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <Separator Margin="4,0"></Separator>
-                <cnccontrols:MacroToolbarControl x:Name="toolbarMacros"/>
-            </ToolBar>
-        </ToolBarTray>
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="120" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem>
-                <TextBlock TextWrapping="NoWrap">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource BlocksToStringConverter}">
-                            <Binding Path="Blocks" />
-                            <Binding Path="BlockExecuting" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </StatusBarItem>
-            <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2">
-                <TextBlock x:Uid="lbl_message" Text="{Binding Path=Message}" TextWrapping="NoWrap"/>
-            </StatusBarItem>
-            <Separator Grid.Column="3" />
-            <StatusBarItem Grid.Column="4">
-                <TextBlock x:Uid="lbl_runtime" Text="{Binding Path=RunTime, StringFormat={StaticResource RunTime}}" TextWrapping="NoWrap" Padding="2,0"/>
-            </StatusBarItem>
-            <Separator Grid.Column="5" />
-            <StatusBarItem Grid.Column="6">
-                <TextBlock x:Uid="lbl_jogStep" ToolTip="Distance for keyboard step jog (with &lt;CTRL&gt; modifier)." Text="{Binding Path=JogStep, StringFormat={StaticResource JogStep}}" HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="4,0"/>
-            </StatusBarItem>
-        </StatusBar>
-        <Canvas DockPanel.Dock="Right" Width="22" VerticalAlignment="Stretch" HorizontalAlignment="Right" ClipToBounds="False" Panel.ZIndex="1" Margin="0,34,0,0">
-            <ItemsControl x:Name="xx" Width="22" VerticalAlignment="Stretch">
-                <ItemsControl.ItemsPanel>
+    <DockPanel LastChildFill="True" Name="DockPanel">
+        <Border Height="40"  BorderThickness="1" DockPanel.Dock="Top">
+            <Menu IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}">
+                <MenuItem x:Uid="mnu_file" x:Name="menuFile" Header="_File">
+                    <MenuItem x:Uid="mnu_load" Header="_Load" Click="fileOpenMenuItem_Click"/>
+                    <MenuItem x:Uid="mnu_save" x:Name="menuSaveFile" Header="_Save" IsEnabled="false" Click="fileSaveMenuItem_Click"/>
+                    <MenuItem x:Uid="mnu_close" x:Name="menuCloseFile" Header="_Close" IsEnabled="false" Click="fileCloseMenuItem_Click"/>
+                    <MenuItem x:Uid="mnu_transform" x:Name="menuTransform" Header="_Transform" IsEnabled="false" ItemsSource="{Binding Path=UIViewModel.TransformMenuItems, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    <MenuItem x:Uid="mnu_openConsole" x:Name="menuOpenConsole" Header="_Open Console" Click="openConsoleMenuItem_Click"/>
+                    <MenuItem x:Uid="mnu_exit" Header="_Exit" Click="exitMenuItem_Click"/>
+                    <Dock>Top</Dock>
+                </MenuItem>
+                <MenuItem x:Uid="mnu_camera" x:Name="menuCamera" Header="_Camera">
+                    <MenuItem x:Uid="mnu_open" Header="_Open" Click="CameraOpen_Click"/>
+                </MenuItem>
+                <MenuItem x:Uid="mnu_help" x:Name="menuHelp" Header="_Help">
+                    <MenuItem x:Uid="mnu_wiki" Header="_Wiki" Click="aboutWikiItem_Click"/>
+                    <MenuItem x:Uid="mnu_usageTips" Header="Usage _tips" Click="tipsWikiItem_Click"/>
+                    <MenuItem x:Uid="mnu_briefTour" Header="A _brief tour" Click="briefTour_Click"/>
+                    <MenuItem x:Uid="mnu_videoTutorials" Header="_Video tutorials" Click="videoTutorials_Click"/>
+                    <MenuItem x:Uid="mnu_errorsAndAlarms" Header="_Error and alarm codes" Click="errorAndAlarms_Click"/>
+                    <MenuItem x:Uid="mnu_about" Header="_About" Click="aboutMenuItem_Click"/>
+                </MenuItem>
+            </Menu>
+
+        </Border>
+
+        <Border Height="45" BorderThickness="1" DockPanel.Dock="Top">
+            <StackPanel  Name="Panel" Orientation="Horizontal"  Margin="0,0,0,0" HorizontalAlignment="Center">
+                <Label  Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center"/>
+                <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                <Label  Name = "GRBLState" Content="GRBL State:"  FontSize=" 20" HorizontalContentAlignment="Center" />
+                <Label  Name = "StateLabel" Content="{Binding GrblCurentState}"  FontSize=" 20" HorizontalContentAlignment="Center" />
+                <Label Name ="StateColorLabel" Background="{Binding Path =GrblState, Converter={StaticResource StateColorConverter}}" Width="25" Height="25" VerticalAlignment="top" HorizontalContentAlignment="Center"/>
+                <Label  Name="WCSLabel" Content="WCS:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="15,0,0,0"/>
+                <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
+                <Label  Name="Signals" Content="Signal Status:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="3,0,0,0"/>
+                <cnccontrols:SignalsControl></cnccontrols:SignalsControl>
+                <Button Margin="50,0,0,0"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                        materialDesign:ButtonProgressAssist.Value="-1" Width="175" Height="40" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Center" 
+                        BorderBrush="Red"
+                        Content="{Binding AlarmConText}"
+                        Background="Red" Command="{ Binding ClearAlarmCommand}"
+                        Visibility="{Binding ShowAlarmButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+            </StackPanel>
+        </Border>
+
+        <Border Height="25"  BorderThickness="1" DockPanel.Dock="Top">
+            <StatusBar>
+                <StatusBar.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Width="22"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="120" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            <cnccontrols:MacroExecuteControl x:Name="macroControl" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:GotoFlyoutControl x:Name="gotoControl" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:OutlineFlyout x:Name="outlineFlyout" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:MachinePositionFlyout x:Name="mposFlyout" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:THCMonitorControl x:Name="thcControl" Visibility="Hidden" Canvas.Right="22"/>
-        </Canvas>
-        <TabControl  
+                </StatusBar.ItemsPanel>
+                <StatusBarItem>
+                    <TextBlock TextWrapping="NoWrap">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource BlocksToStringConverter}">
+                                <Binding Path="Blocks" />
+                                <Binding Path="BlockExecuting" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StatusBarItem>
+                <Separator Grid.Column="1" />
+                <StatusBarItem Grid.Column="2">
+                    <TextBlock x:Uid="lbl_message" Text="{Binding Path=Message}" TextWrapping="NoWrap"/>
+                </StatusBarItem>
+                <Separator Grid.Column="3" />
+                <StatusBarItem Grid.Column="4">
+                    <TextBlock x:Uid="lbl_runtime" Text="{Binding Path=RunTime, StringFormat={StaticResource RunTime}}" TextWrapping="NoWrap" Padding="2,0"/>
+                </StatusBarItem>
+                <Separator Grid.Column="5" />
+                <StatusBarItem Grid.Column="6">
+                    <TextBlock x:Uid="lbl_jogStep" ToolTip="Distance for keyboard step jog (with &lt;CTRL&gt; modifier)." Text="{Binding Path=JogStep, StringFormat={StaticResource JogStep}}" HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="4,0"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Border>
+
+        <Border Height="55"  BorderThickness="1" DockPanel.Dock="Top">
+            <ToolBarTray  IsLocked="True">
+                <ToolBar IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Height="42" VerticalAlignment="Top" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}}" >
+                    <cnccontrols:FileActionControl IsEnabled="{Binding Path=IsToolChanging, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Separator Margin="4,0"></Separator>
+                    <cnccontrols:MacroToolbarControl x:Name="toolbarMacros"/>
+                </ToolBar>
+            </ToolBarTray>
+        </Border>
+        
+        <!--<Border Height="25" Background="LemonChiffon" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+            <TextBlock Foreground="Black">Dock = "Bottom"</TextBlock>
+        </Border>-->
+
+        <Border  Name="BorderLeft" BorderThickness="1" DockPanel.Dock="Left">
+
+            <!--<TabControl  
             materialDesign:ColorZoneAssist.Mode="PrimaryDark"
             Style="{StaticResource MaterialDesignFilledTabControl}"
-                       DockPanel.Dock="Left" x:Name="tabMode"  HorizontalAlignment="Stretch" Margin="2" Focusable="True" SelectionChanged="TabMode_SelectionChanged"> 
+                       DockPanel.Dock="Left" x:Name="tabMode"  HorizontalAlignment="Stretch" Margin="2" Focusable="True" SelectionChanged="TabMode_SelectionChanged">
+                -->
             <!--<TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Height" Value="32" />
                     <Setter Property="MinWidth" Value="40" />
                 </Style>
             </TabControl.Resources>-->
-            <TabItem x:Uid="tab_grbl" x:Name="tabGrbl" Header="Grbl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <local:HomeView x:Name="Grbl"/>
-            </TabItem>
+            <!--
+                <TabItem x:Uid="tab_grbl" x:Name="tabGrbl" Header="Grbl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <local:HomeView x:Name="Grbl"/>
+                </TabItem>
+                -->
             <!---
             <TabItem x:Uid="tab_3DView" x:Name="tabViewer" Header="3D View">
                 <cncviewer:Viewer x:Name="viewer"/>
             </TabItem>
             -->
-            <TabItem x:Uid="tab_probing" x:Name="tabProbing" Header="Probing">
-                <cncprobingcontrols:ProbingView x:Name="probingView"/>
-            </TabItem>
-            <TabItem x:Uid="tab_sdCard" x:Name="tabSDCard" Header="SD Card">
-                <cnccontrols:SDCardView x:Name="SDCardView" FileSelected="SDCardView_FileSelected"/>
-            </TabItem>
+            <!--
+                <TabItem x:Uid="tab_probing" x:Name="tabProbing" Header="Probing">
+                    <cncprobingcontrols:ProbingView x:Name="probingView"/>
+                </TabItem>
+                <TabItem x:Uid="tab_sdCard" x:Name="tabSDCard" Header="SD Card">
+                    <cnccontrols:SDCardView x:Name="SDCardView" FileSelected="SDCardView_FileSelected"/>
+                </TabItem>
+                -->
             <!--<TabItem x:Uid="tab_turning" x:Name="tabTurning" Header="Turning">
                 <cnclathecontrols:TurningWizard x:Name="turningWizard"/>
             </TabItem>
@@ -156,21 +181,25 @@
             <!--<TabItem x:Uid="tab_threading" x:Name="tabThreading" Header="Threading">
                 <cnclathecontrols:ThreadingWizard x:Name="threadingWizard"/>
             </TabItem>-->
-            <TabItem x:Uid="tab_offsets" x:Name="tabOffsets" Header="Offsets">
-                <cnccontrols:OffsetView x:Name="offsetControl"/>
-            </TabItem>
-            <TabItem x:Uid="tab_tools" x:Name="tabTools" Header="Tools">
-                <cnccontrols:ToolView x:Name="toolControl"/>
-            </TabItem>
+            <!--
+                <TabItem x:Uid="tab_offsets" x:Name="tabOffsets" Header="Offsets">
+                    <cnccontrols:OffsetView x:Name="offsetControl"/>
+                </TabItem>
+                <TabItem x:Uid="tab_tools" x:Name="tabTools" Header="Tools">
+                    <cnccontrols:ToolView x:Name="toolControl"/>
+                </TabItem>
+                -->
             <!--<TabItem x:Uid="tab_trinamic" x:Name="tabTrinamic" Header="Trinamic tuner">
                 <cnccontrols:TrinamicView x:Name="toolTrinamic"/>
             </TabItem>-->
-            <TabItem x:Uid="tab_grblConfig" x:Name="tabConfig" Header="Settings: Grbl">
-                <cnccontrols:GrblConfigView x:Name="configControl"/>
-            </TabItem>
-            <TabItem x:Uid="tab_appConfig" x:Name="tabAppConfig" Header="Settings: App">
-                <cnccontrols:AppConfigView x:Name="appConfigControl"/>
-            </TabItem>
+            <!--
+                <TabItem x:Uid="tab_grblConfig" x:Name="tabConfig" Header="Settings: Grbl">
+                    <cnccontrols:GrblConfigView x:Name="configControl"/>
+                </TabItem>
+                <TabItem x:Uid="tab_appConfig" x:Name="tabAppConfig" Header="Settings: App">
+                    <cnccontrols:AppConfigView x:Name="appConfigControl"/>
+                </TabItem>
+                -->
             <!--<TabItem x:Uid="tab_pidTuner" x:Name="tabPIDTuner" Header="PID Tuner">
                 <cnccontrols:PIDLogView x:Name="toolPIDTuner"/>
             </TabItem>-->
@@ -188,6 +217,30 @@
                     </Grid>
                 </TabItem>
 -->
-        </TabControl>
+            <!--
+            </TabControl>-->
+        </Border>
+
+
+        <!--</DockPanel>
+    <DockPanel IsEnabled="{Binding Path=IsMPGActive, Converter={StaticResource BooleanConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">-->
+
+
+
+        <Canvas DockPanel.Dock="Right" Width="22" VerticalAlignment="Stretch" HorizontalAlignment="Right" ClipToBounds="False" Panel.ZIndex="1" Margin="0,34,0,0">
+            <ItemsControl x:Name="xx" Width="22" VerticalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Width="22"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <cnccontrols:MacroExecuteControl x:Name="macroControl" Visibility="Hidden" Canvas.Right="22"/>
+            <cnccontrols:GotoFlyoutControl x:Name="gotoControl" Visibility="Hidden" Canvas.Right="22"/>
+            <cnccontrols:OutlineFlyout x:Name="outlineFlyout" Visibility="Hidden" Canvas.Right="22"/>
+            <cnccontrols:MachinePositionFlyout x:Name="mposFlyout" Visibility="Hidden" Canvas.Right="22"/>
+            <cnccontrols:THCMonitorControl x:Name="thcControl" Visibility="Hidden" Canvas.Right="22"/>
+        </Canvas>
+
     </DockPanel>
 </Window>

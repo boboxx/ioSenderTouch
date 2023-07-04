@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionCommand.cs" />
+    <Compile Include="Comands\Command.cs" />
     <Compile Include="EltimaStream.cs" />
     <Compile Include="GCode.cs" />
     <Compile Include="GCodeEmulator.cs" />

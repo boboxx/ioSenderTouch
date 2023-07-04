@@ -4,13 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" 
-              d:DesignWidth="250" Height="125">
+             mc:Ignorable="d" Height="125" Width="161.5">
     <UserControl.Resources>
         <local:BoolToVisibleConverter x:Key="IsVisibleConverter" />
     </UserControl.Resources>
-    <GroupBox  x:Uid="grp_coolant" x:Name="grpCoolant" Header="Coolant" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" MinHeight="125" Margin="0,0,0,-48">
-        <StackPanel HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" VerticalAlignment="Top" Width="184">
+    <GroupBox  x:Uid="grp_coolant" x:Name="grpCoolant" Header="Coolant" HorizontalAlignment="Left" VerticalAlignment="Top" Width="146" MinHeight="125">
+        <StackPanel HorizontalAlignment="Left" Margin="0,3,0,-7" Grid.Row="1" VerticalAlignment="Top" Width="134" Height="76">
             <CheckBox  x:Uid="lbl_flood" x:Name="chkFlood" Tag="Flood" Content="Flood"  IsChecked="{Binding Path=Flood, Mode=OneWay}" HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
             <CheckBox x:Uid="lbl_mist" x:Name="chkMist" Tag="Mist" Content="Mist" IsChecked="{Binding Path=Mist, Mode=OneWay}"  HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
             <CheckBox x:Uid="lbl_fan" x:Name="chkFan" Tag="Fan" Content="Fan" IsChecked="{Binding Path=Fan0, Mode=OneWay}"  Visibility="{Binding Path=HasFans, Mode=OneWay, Converter={StaticResource IsVisibleConverter}}" HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>

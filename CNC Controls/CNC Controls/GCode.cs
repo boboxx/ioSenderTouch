@@ -72,7 +72,7 @@ namespace CNC.Controls
         private List<GCodeTransformer> Transformers = new List<GCodeTransformer>();
 
         private static readonly Lazy<GCode> file = new Lazy<GCode>(() => new GCode());
-
+        public event EventHandler<bool> FileLoaded; 
         public event GCodeJob.ToolChangedHandler ToolChanged = null;
 
         private GCode()
@@ -224,6 +224,7 @@ namespace CNC.Controls
         {
             Program.CloseFile();
             Model.Blocks = Blocks;
+            FileLoaded?.Invoke(this,false);
         }
 
         public void Open()
@@ -267,7 +268,11 @@ namespace CNC.Controls
 
             using (new UIUtils.WaitCursor())
             {
-                Program.LoadFile(filename);
+
+                if (Program.LoadFile(filename))
+                {
+                    FileLoaded?.Invoke(this,true);
+                }
             }
 
             Model.Blocks = Blocks;

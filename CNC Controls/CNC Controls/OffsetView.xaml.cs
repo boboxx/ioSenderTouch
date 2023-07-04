@@ -52,7 +52,7 @@ namespace CNC.Controls
     public partial class OffsetView : UserControl, ICNCView
     {
         CoordinateSystem selectedOffset = null;
-        private GrblViewModel parameters = new GrblViewModel();
+        private GrblViewModel parameters;
         private volatile bool awaitCoord = false;
         private Action<string> GotPosition;
 
@@ -61,9 +61,21 @@ namespace CNC.Controls
             InitializeComponent();
 
             parameters.WorkPositionOffset.PropertyChanged += Parameters_PropertyChanged;
-            if(!GrblInfo.IsGrblHAL)
+            if (!GrblInfo.IsGrblHAL)
                 parameters.PropertyChanged += Parameters_PropertyChanged;
         }
+        public OffsetView(GrblViewModel grblViewModel)
+        {
+            InitializeComponent();
+            parameters = grblViewModel;
+         
+            dgrOffsets.ItemsSource = GrblWorkParameters.CoordinateSystems;
+            parameters.WorkPositionOffset.PropertyChanged += Parameters_PropertyChanged;
+            if (!GrblInfo.IsGrblHAL)
+                parameters.PropertyChanged += Parameters_PropertyChanged;
+        }
+
+      
 
         public AxisFlags AxisEnabledFlags { get { return GrblInfo.AxisFlags; } }
         public CoordinateSystem Offset { get; private set; } = new CoordinateSystem();
@@ -123,16 +135,19 @@ namespace CNC.Controls
             switch (e.PropertyName)
             {
                 case nameof(GrblViewModel.MachinePosition):
-                    if (!(awaitCoord = double.IsNaN(parameters.MachinePosition.Values[0])))
+                    awaitCoord = !double.IsNaN(parameters.MachinePosition.Values[0]);
+                    if (awaitCoord)
                     {
                         Offset.Set(parameters.MachinePosition);
-                        parameters.SuspendPositionNotifications = true;
-                        parameters.Clear();
-                        parameters.MachinePosition.Clear();
-                        parameters.SuspendPositionNotifications = false;
+                        //parameters.SuspendPositionNotifications = true;
+                        //parameters.Clear();
+                        //parameters.MachinePosition.Clear();
+                        //parameters.SuspendPositionNotifications = false;
+                        awaitCoord = false;
                     }
                     break;
             }
+
         }
 
         #region UIEvents
@@ -190,7 +205,8 @@ namespace CNC.Controls
                     cmd = selectedOffset.Code == "G43.1" ? "G49" : selectedOffset.Code + ".1";
                 else
                     cmd = string.Format("G90{0}{1}", code, newpos.ToString(axis == "All" ? GrblInfo.AxisFlags : GrblInfo.AxisLetterToFlag(axis)));
-            } else
+            }
+            else
                 cmd = string.Format("G90G10L2P{0}{1}", selectedOffset.Id, newpos.ToString(axis == "All" || axis == "ClearAll" ? GrblInfo.AxisFlags : GrblInfo.AxisLetterToFlag(axis)));
 
             Comms.com.WriteCommand(cmd);
@@ -230,9 +246,9 @@ namespace CNC.Controls
             }
         }
 
-        private void RequestStatus ()
+        private void RequestStatus()
         {
-            parameters.WorkPositionOffset.Z = double.NaN;
+            //parameters.WorkPositionOffset.Z = double.NaN;
             if (double.IsNaN(parameters.WorkPosition.X) || true) // If not NaN then MPG is polling
                 Comms.com.WriteByte(GrblLegacy.ConvertRTCommand(GrblConstants.CMD_STATUS_REPORT_ALL));
         }
@@ -245,7 +261,8 @@ namespace CNC.Controls
             awaitCoord = true;
 
             parameters.OnRealtimeStatusProcessed += DataReceived;
-
+            parameters.Clear();
+            parameters.MachinePosition.Clear();
             new Thread(() =>
             {
                 res = WaitFor.AckResponse<string>(
@@ -258,7 +275,6 @@ namespace CNC.Controls
 
             while (res == null)
                 EventUtils.DoEvents();
-
             parameters.OnRealtimeStatusProcessed -= DataReceived;
         }
 
@@ -270,7 +286,9 @@ namespace CNC.Controls
             {
                 Thread.Sleep(50);
                 Comms.com.WriteByte(GrblLegacy.ConvertRTCommand(GrblConstants.CMD_STATUS_REPORT));
-            } else
+              
+            }
+            else
                 GotPosition?.Invoke("ok");
         }
     }

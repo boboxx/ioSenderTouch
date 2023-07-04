@@ -47,6 +47,7 @@ using System.Threading;
 using System.Windows.Threading;
 using CNC.Core;
 using CNC.Controls;
+using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
 
 namespace GCode_Sender
@@ -61,13 +62,31 @@ namespace GCode_Sender
         private GrblViewModel model;
         private IInputElement focusedControl = null;
         private Controller Controller = null;
+        private readonly GrblViewModel _model;
+        private readonly GrblConfigView _grblSettingView;
+        private readonly AppConfigView _grblAppSettings;
+        private readonly ProbingView _probeView;
+        private readonly RenderControl _renderView;
+        private readonly OffsetView _offsetView;
 
-        public HomeView()
+        public HomeView(GrblViewModel model)
         {
             InitializeComponent();
-
+            _model = model;
+            _renderView = new RenderControl(_model);
+            _grblSettingView = new GrblConfigView();
+            _grblAppSettings = new AppConfigView(model);
+            _probeView = new ProbingView(model);
+            _offsetView = new OffsetView(model);
+            FillBorder.Child = _renderView;
+            AppConfig.Settings.SetupAndOpen(model, Application.Current.Dispatcher);
+            DataContext = _model;
+            Grbl.GrblViewModel = _model;
             DRO.DROEnabledChanged += DRO_DROEnabledChanged;
+           
             DataContextChanged += View_DataContextChanged;
+
+             InitSystem();
         }
 
         private void View_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -83,44 +102,46 @@ namespace GCode_Sender
 
         private void OnDataContextPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is GrblViewModel) switch (e.PropertyName)
+            if (sender is GrblViewModel viewModel)
+            {
+                switch (e.PropertyName)
                 {
                     case nameof(GrblViewModel.GrblState):
                         if (Controller != null && !Controller.ResetPending)
                         {
-                            if (isBooted && initOK == false && (sender as GrblViewModel).GrblState.State != GrblStates.Alarm)
+                            if (isBooted && initOK == false && viewModel.GrblState.State != GrblStates.Alarm)
                                 Dispatcher.BeginInvoke(new System.Action(() => InitSystem()), DispatcherPriority.ApplicationIdle);
                         }
                         break;
 
                     case nameof(GrblViewModel.IsGCLock):
-                        MainWindow.ui.JobRunning = (sender as GrblViewModel).IsJobRunning;
+                        MainWindow.ui.JobRunning = viewModel.IsJobRunning;
                         //             MainWindow.EnableView(!(sender as GrblViewModel).IsGCLock, ViewType.Probing);
                         break;
 
                     case nameof(GrblViewModel.IsSleepMode):
-                        EnableUI(!(sender as GrblViewModel).IsSleepMode);
+                        EnableUI(!viewModel.IsSleepMode);
                         break;
 
                     case nameof(GrblViewModel.IsJobRunning):
-                        MainWindow.ui.JobRunning = (sender as GrblViewModel).IsJobRunning;
+                        MainWindow.ui.JobRunning = viewModel.IsJobRunning;
                         if (GrblInfo.ManualToolChange)
-                            GrblCommand.ToolChange = (sender as GrblViewModel).IsJobRunning ? "T{0}M6" : "M61Q{0}";
+                            GrblCommand.ToolChange = viewModel.IsJobRunning ? "T{0}M6" : "M61Q{0}";
                         break;
 
                     case nameof(GrblViewModel.IsToolChanging):
-                        MainWindow.ui.JobRunning = (sender as GrblViewModel).IsToolChanging || (sender as GrblViewModel).IsJobRunning;
+                        MainWindow.ui.JobRunning = viewModel.IsToolChanging || viewModel.IsJobRunning;
                         break;
 
                     case nameof(GrblViewModel.Tool):
-                        if (GrblInfo.ManualToolChange && (sender as GrblViewModel).Tool != GrblConstants.NO_TOOL)
+                        if (GrblInfo.ManualToolChange && viewModel.Tool != GrblConstants.NO_TOOL)
                             GrblWorkParameters.RemoveNoTool();
                         break;
 
                     case nameof(GrblViewModel.GrblReset):
-                        if ((sender as GrblViewModel).IsReady)
+                        if (viewModel.IsReady)
                         {
-                            if (!Controller.ResetPending && (sender as GrblViewModel).GrblReset)
+                            if (!Controller.ResetPending && viewModel.GrblReset)
                             {
                                 initOK = null;
                                 Dispatcher.BeginInvoke(new System.Action(() => Activate(true, ViewType.GRBL)), DispatcherPriority.ApplicationIdle);
@@ -129,20 +150,20 @@ namespace GCode_Sender
                         break;
 
                     case nameof(GrblViewModel.ParserState):
-                        if (!Controller.ResetPending && (sender as GrblViewModel).GrblReset)
+                        if (!Controller.ResetPending && viewModel.GrblReset)
                         {
                             EnableUI(true);
-                            (sender as GrblViewModel).GrblReset = false;
+                            viewModel.GrblReset = false;
                         }
                         break;
 
                     case nameof(GrblViewModel.FileName):
-                        string filename = (sender as GrblViewModel).FileName;
+                        string filename = viewModel.FileName;
                         MainWindow.ui.WindowTitle = filename;
 
                         if (string.IsNullOrEmpty(filename))
                             MainWindow.CloseFile();
-                        else if ((sender as GrblViewModel).IsSDCardJob)
+                        else if (viewModel.IsSDCardJob)
                         {
                             MainWindow.EnableView(false, ViewType.GCodeViewer);
                         }
@@ -151,20 +172,26 @@ namespace GCode_Sender
                             if (MainWindow.IsViewVisible(ViewType.GCodeViewer))
                             {
                                 MainWindow.EnableView(true, ViewType.GCodeViewer);
-                                gcodeRenderer.Open(GCode.File.Tokens);
+                                _renderView.Open(GCode.File.Tokens);
                             }
                         }
                         else if (!string.IsNullOrEmpty(filename) && AppConfig.Settings.GCodeViewer.IsEnabled)
                         {
                             MainWindow.GCodeViewer?.Open(GCode.File.Tokens);
                             MainWindow.EnableView(true, ViewType.GCodeViewer);
-                            
+
                             GCodeSender.EnablePolling(false);
-                            gcodeRenderer.Open(GCode.File.Tokens);
+                            _renderView.Open(GCode.File.Tokens);
                             GCodeSender.EnablePolling(true);
                         }
                         break;
                 }
+            }
+        }
+
+        private void RenderGCode()
+        {
+            _renderView.Open(GCode.File.Tokens);
         }
 
         #region Methods and properties required by CNCView interface
@@ -268,7 +295,7 @@ namespace GCode_Sender
 
         public void CloseFile()
         {
-            gcodeRenderer.Close();
+            _renderView.Close();
         }
 
         public void Setup(UIViewModel model, AppConfig profile)
@@ -282,15 +309,15 @@ namespace GCode_Sender
         {
             double height;
 
-            if (limitsControl.Visibility == Visibility.Collapsed)
-            {
-                limitsControl.Visibility = Visibility.Hidden;
-                limitsControl.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                height = limitsControl.DesiredSize.Height;
-                limitsControl.Visibility = Visibility.Collapsed;
-            }
-            else
-                height = limitsControl.ActualHeight;
+            //if (limitsControl.Visibility == Visibility.Collapsed)
+            //{
+            //    limitsControl.Visibility = Visibility.Hidden;
+            //    limitsControl.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            //    height = limitsControl.DesiredSize.Height;
+            //    limitsControl.Visibility = Visibility.Collapsed;
+            //}
+            //else
+            //    height = limitsControl.ActualHeight;
 
             //limitsControl.Visibility = (dp.ActualHeight - t1.ActualHeight - t2.ActualHeight + limitsControl.ActualHeight) > height ? Visibility.Visible : Visibility.Collapsed;
             //coolantControl.Visibility = rhGrid.ActualHeight > 600 ? Visibility.Visible : Visibility.Collapsed;
@@ -423,10 +450,10 @@ namespace GCode_Sender
                 MainWindow.ShowView(false, ViewType.Tools);
 
             if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
-                MainWindow.EnableView(true, ViewType.Probing);
+            //    MainWindow.EnableView(true, ViewType.Probing);
 
-            MainWindow.EnableView(true, ViewType.Offsets);
-            MainWindow.EnableView(true, ViewType.GRBLConfig);
+            //MainWindow.EnableView(true, ViewType.Offsets);
+            //MainWindow.EnableView(true, ViewType.GRBLConfig);
 
             if (!string.IsNullOrEmpty(GrblInfo.TrinamicDrivers))
                 MainWindow.EnableView(true, ViewType.TrinamicTuner);
@@ -493,9 +520,41 @@ namespace GCode_Sender
 
         protected bool ProcessKeyPreview(KeyEventArgs e)
         {
-            return model.Keyboard.ProcessKeypress(e, !(mdiControl.IsFocused || DRO.IsFocused || spindleControl.IsFocused || workParametersControl.IsFocused));
+            return _model.Keyboard.ProcessKeypress(e, !(mdiControl.IsFocused || DRO.IsFocused || spindleControl.IsFocused || workParametersControl.IsFocused));
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _grblSettingView;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _probeView;
+            _probeView.Activate(true, ViewType.Probing);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _renderView;
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _grblAppSettings;
+            
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _offsetView;
+        }
+
+        public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
+        {
+            _grblAppSettings.Setup(uiViewModel,settings);
+        }
     }
 }

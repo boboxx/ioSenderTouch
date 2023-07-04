@@ -232,6 +232,9 @@
     <Compile Include="MachinePositionFlyout.xaml.cs">
       <DependentUpon>MachinePositionFlyout.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WorkParametersControl Touch.xaml.cs">
+      <DependentUpon>WorkParametersControl Touch.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkParametersControl.xaml.cs">
       <DependentUpon>WorkParametersControl.xaml</DependentUpon>
     </Compile>
@@ -464,6 +467,10 @@
     <Page Include="MachinePositionFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WorkParametersControl Touch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="WorkParametersControl.xaml">
       <Generator>MSBuild:Compile</Generator>

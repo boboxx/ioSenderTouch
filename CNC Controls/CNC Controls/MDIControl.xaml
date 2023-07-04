@@ -9,10 +9,10 @@
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
     </UserControl.Resources>
-    <GroupBox x:Uid="grp_mdi" x:Name="grpMDI" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Header="MDI" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="352" Height="112">
+    <GroupBox x:Uid="grp_mdi" x:Name="grpMDI" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Header="MDI" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="120">
         <StackPanel Orientation="Horizontal">
             <ComboBox x:Name="txtMDI" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
-                      Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False" HorizontalAlignment="Left" Height="30" Margin="3,0" VerticalAlignment="Center" Width="Auto" MinWidth="200" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
+                      Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False" HorizontalAlignment="Left" Height="30" Margin="3,0" VerticalAlignment="Center" Width="Auto" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
             <Button x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" Content="Send" Focusable="False" Grid.Column="1" HorizontalAlignment="Right" Margin="3,4" VerticalAlignment="Center" Width="73" Height="30" Click="Send_Click"/>
         </StackPanel>
     </GroupBox>

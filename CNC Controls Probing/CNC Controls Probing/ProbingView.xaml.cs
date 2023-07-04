@@ -59,22 +59,33 @@ namespace CNC.Controls.Probing
         private bool jogEnabled = false, probeTriggered = false, probeDisconnected = false, cycleStartSignal = false, wasMetric = true;
         private ProbingViewModel model = null;
         private ProbingProfiles profiles = new ProbingProfiles();
-        private GrblViewModel grbl = null;
         private IInputElement focusedControl = null;
+        private  GrblViewModel _grblViewModel;
 
         public ProbingView()
         {
             InitializeComponent();
-
             profiles.Load();
+          
         }
+        public ProbingView(GrblViewModel grbl)
+        {
+            _grblViewModel = grbl;
+            InitializeComponent();
+            profiles.Load();
+            DataContext = model = new ProbingViewModel(_grblViewModel, profiles);
+            DRO.DataContext = _grblViewModel;
+        }
+
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+           
+
             if (!keyboardMappingsOk && DataContext is GrblViewModel)
             {
-                grbl = (DataContext as GrblViewModel);
-                KeypressHandler keyboard = grbl.Keyboard;
+                
+                KeypressHandler keyboard = _grblViewModel.Keyboard;
 
                 keyboardMappingsOk = true;
 
@@ -82,18 +93,23 @@ namespace CNC.Controls.Probing
                 keyboard.AddHandler(Key.S, ModifierKeys.Alt, StopProbe, this);
                 keyboard.AddHandler(Key.C, ModifierKeys.Alt, ProbeConnectedToggle, this);
 
-                DRO.DataContext = grbl;
-                DataContext = model = new ProbingViewModel(DataContext as GrblViewModel, profiles);
+                DRO.DataContext = _grblViewModel;
+                DataContext = model = new ProbingViewModel(_grblViewModel, profiles);
 
-                grbl.OnCameraProbe += addCameraPosition;
+                _grblViewModel.OnCameraProbe += addCameraPosition;
 
+                //showDRO();
+            }
+
+            if (_grblViewModel != null)
+            {
                 showDRO();
             }
         }
 
         private void addCameraPosition(Position position)
         {
-            if (grbl.IsProbing)
+            if (_grblViewModel.IsProbing)
             {
                 if(model.CameraPositions == 0)
                 {
@@ -239,7 +255,8 @@ namespace CNC.Controls.Probing
 
         public void Activate(bool activate, ViewType chgMode)
         {
-            if ((grbl.IsProbing = activate))
+            _grblViewModel.IsProbing = activate;
+            if (activate)
             {
                 if (model.CoordinateSystems.Count == 0)
                 {
@@ -321,7 +338,7 @@ namespace CNC.Controls.Probing
             }
 
             model.Message = string.Empty;
-            model.Grbl.Poller.SetState(activate ? AppConfig.Settings.Base.PollInterval : 0);
+            //model.Grbl.Poller.SetState(activate ? AppConfig.Settings.Base.PollInterval : 0);
         }
 
         public void CloseFile()
@@ -392,18 +409,18 @@ namespace CNC.Controls.Probing
         }
         protected bool ProcessKeyPreview(KeyEventArgs e)
         {
-            if (grbl.Keyboard == null)
+            if (_grblViewModel.Keyboard == null)
                 return false;
 
-            return grbl.Keyboard.ProcessKeypress(e, Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) || jogEnabled, this);
+            return _grblViewModel.Keyboard.ProcessKeypress(e, Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) || jogEnabled, this);
         }
 
         private void Jog_FocusedChanged(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
-            if (grbl.Keyboard.IsJogging)
-                grbl.Keyboard.JogCancel();
-            jogEnabled = btn.IsFocused && grbl.Keyboard.CanJog2;
+            if (_grblViewModel.Keyboard.IsJogging)
+                _grblViewModel.Keyboard.JogCancel();
+            jogEnabled = btn.IsFocused && _grblViewModel.Keyboard.CanJog2;
             btn.Content = (string)FindResource(jogEnabled ? "JogActive" : "JogDisabled");
         }
 
@@ -437,20 +454,20 @@ namespace CNC.Controls.Probing
         // https://stackoverflow.com/questions/5707143/how-to-get-the-width-height-of-a-collapsed-control-in-wpf
         private void showDRO()
         {
-            double width;
+            //double width;
 
-            if (droPanel.Visibility == Visibility.Collapsed)
-            {
-                droPanel.Visibility = Visibility.Hidden;
-                droPanel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                width = droPanel.DesiredSize.Width;
-                droPanel.Visibility = Visibility.Collapsed;
-            }
-            else
-                width = droPanel.ActualWidth;
+            //if (droPanel.Visibility == Visibility.Collapsed)
+            //{
+            //    droPanel.Visibility = Visibility.Hidden;
+            //    droPanel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            //    width = droPanel.DesiredSize.Width;
+            //    droPanel.Visibility = Visibility.Collapsed;
+            //}
+            //else
+            //    width = droPanel.ActualWidth;
 
-            droPanel.Visibility = (tab.ActualWidth + width + t1.ActualWidth + 20) < ActualWidth ? Visibility.Visible : Visibility.Collapsed;
-            dp.Width = droPanel.Visibility == Visibility.Visible  ? 460 : 240;
+            //droPanel.Visibility = (tab.ActualWidth + width + t1.ActualWidth + 20) < ActualWidth ? Visibility.Visible : Visibility.Collapsed;
+            //dp.Width = droPanel.Visibility == Visibility.Visible  ? 460 : 240;
         }
     }
 }

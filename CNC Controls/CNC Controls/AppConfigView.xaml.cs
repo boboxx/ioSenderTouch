@@ -39,6 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using CNC.Controls;
 using CNC.Core;
 
 namespace CNC.Controls
@@ -48,12 +49,21 @@ namespace CNC.Controls
         private UIViewModel model;
         private GrblViewModel grblmodel;
 
+        public AppConfigView(GrblViewModel grblViewModel)
+        {
+
+            InitializeComponent();
+            grblmodel = grblViewModel;
+            var appsettings = AppConfig.Settings;
+        }
+
+
         public AppConfigView()
         {
             InitializeComponent();
         }
 
-        ObservableCollection<UserControl> ConfigControls { get { return model == null ? null : model.ConfigControls;  } }
+        ObservableCollection<UserControl> ConfigControls { get { return model == null ? null : model.ConfigControls; } }
 
         #region Methods and properties required by CNCView interface
 
@@ -62,15 +72,22 @@ namespace CNC.Controls
 
         public void Activate(bool activate, ViewType chgMode)
         {
-            if(activate) foreach(var control in model.ConfigControls) // TODO: use callback!
+            if (activate)
             {
-                if (control is JogConfigControl) {
-                    if (GrblSettings.GetString(grblHALSetting.JogStepSpeed) != null)
+               
+                foreach (var control in model.ConfigControls) // TODO: use callback!
+                {
+                    if (control is JogConfigControl)
+                    {
+                        if (GrblSettings.GetString(grblHALSetting.JogStepSpeed) != null)
+                            control.Visibility = Visibility.Collapsed;
+                        else
+                            (control as JogConfigControl).IsGrbl = !GrblInfo.IsGrblHAL;
+                    }
+                    else if (control is ICameraConfig && model.Camera != null && !model.Camera.HasCamera)
                         control.Visibility = Visibility.Collapsed;
-                    else
-                        (control as JogConfigControl).IsGrbl = !GrblInfo.IsGrblHAL;
-                } else if (control is ICameraConfig && model.Camera != null && !model.Camera.HasCamera)
-                    control.Visibility = Visibility.Collapsed;
+                }
+
             }
             grblmodel.Message = activate ? (string)FindResource("RestartMessage") : string.Empty;
         }
@@ -81,18 +98,13 @@ namespace CNC.Controls
 
         public void Setup(UIViewModel model, AppConfig profile)
         {
-            if (this.model == null)
+            this.model = model;
+            
             {
                 this.model = model;
-                grblmodel = DataContext as GrblViewModel;
+                if(profile.Base == null)return;
                 DataContext = profile.Base;
                 xx.ItemsSource = model.ConfigControls;
-                model.ConfigControls.Add(new BasicConfigControl());
-                if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)
-                    model.ConfigControls.Add(new JogUiConfigControl());
-                if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI)
-                    model.ConfigControls.Add(new JogConfigControl());
-                model.ConfigControls.Add(new StripGCodeConfigControl());
             }
         }
 
@@ -100,14 +112,14 @@ namespace CNC.Controls
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if(AppConfig.Settings.Save())
+            if (AppConfig.Settings.Save())
                 Grbl.GrblViewModel.Message = LibStrings.FindResource("SettingsSaved");
         }
 
         private void btnSaveKeyMap_Click(object sender, RoutedEventArgs e)
         {
             string filename = CNC.Core.Resources.Path + string.Format("KeyMap{0}.xml", (int)AppConfig.Settings.Jog.Mode);
-            if(Grbl.GrblViewModel.Keyboard.SaveMappings(filename))
+            if (Grbl.GrblViewModel.Keyboard.SaveMappings(filename))
                 Grbl.GrblViewModel.Message = string.Format(LibStrings.FindResource("KeymappingsSaved"), filename);
         }
     }

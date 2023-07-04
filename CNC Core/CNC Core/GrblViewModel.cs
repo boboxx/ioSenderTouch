@@ -43,8 +43,9 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading;
-using System.Windows.Forms;
 using CNC.GCode;
+using GCode_Sender.Commands;
+using Color = System.Windows.Media.Color;
 
 namespace CNC.Core
 {
@@ -81,8 +82,38 @@ namespace CNC.Core
         public Action<string> OnRealtimeStatusProcessed;
         public Action<string> OnWCOUpdated;
         public Action<Position> OnCameraProbe;
+        private string _grblCurrentState;
+        private SolidColorBrush _currentStateColor;
+        private  string _alarmConText;
+        private  bool _showAlarmButton;
+
+        public ICommand ClearAlarmCommand { get; }
+        public ICommand SettingsCommand { get; }
 
         public delegate void GrblResetHandler();
+
+
+        public string AlarmConText
+        {
+            get => _alarmConText;
+            set
+            {
+                if (value == _alarmConText) return;
+                _alarmConText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowAlarmButton
+        {
+            get => _showAlarmButton;
+            set
+            {
+                if (value == _showAlarmButton) return;
+                _showAlarmButton = value;
+                OnPropertyChanged();
+            }
+        }
 
         public GrblViewModel()
         {
@@ -109,6 +140,26 @@ namespace CNC.Core
             WorkPositionOffset.PropertyChanged += WorkPositionOffset_PropertyChanged;
             ProbePosition.PropertyChanged += ProbePosition_PropertyChanged;
             ToolOffset.PropertyChanged += ToolOffset_PropertyChanged;
+
+            SettingsCommand = new Command(_ =>
+            {
+                ShowSettingsView();;
+            });
+            
+            ClearAlarmCommand = new Command(_ =>
+            {
+                ClearAlarm();
+            });
+        
+        }
+        private void ClearAlarm()
+        {
+            if (GrblState.State != GrblStates.Alarm) return;
+            Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK);;
+        }
+        private void ShowSettingsView()
+        {
+            
         }
 
         private void Axisletter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -277,7 +328,16 @@ namespace CNC.Core
                 OnPropertyChanged();
             }
         }
-
+        public SolidColorBrush CurrentStateColor
+        {
+            get { return _currentStateColor; }
+            set
+            {
+                if (_currentStateColor == value) return;
+                _currentStateColor = value;
+                OnPropertyChanged();
+            }
+        }
         public void ExecuteCommand(string command)
         {
             if (command != null)
@@ -382,6 +442,7 @@ namespace CNC.Core
         //        public bool CanReset { get { return _canReset; } private set { if(value != _canReset) { _canReset = value; OnPropertyChanged(); } } }
         public bool GrblReset { get { return _reset; } set { if ((_reset = value)) { _grblState.Error = 0; OnPropertyChanged(); Message = ""; } } }
         public GrblState GrblState { get { return _grblState; } set { _grblState = value; OnPropertyChanged(); } }
+        public string GrblCurentState { get { return _grblCurrentState; } set { _grblCurrentState = value; OnPropertyChanged(); } }
         public bool IsGCLock { get { return _grblState.State == GrblStates.Alarm; } }
         public bool IsCheckMode { get { return _grblState.State == GrblStates.Check; } }
         public bool IsSleepMode { get { return _grblState.State == GrblStates.Sleep; } }
@@ -416,10 +477,32 @@ namespace CNC.Core
         public EnumFlags<Signals> Signals { get; private set; } = new EnumFlags<Signals>(Core.Signals.Off);
         public EnumFlags<Signals> OptionalSignals { get; set; } = new EnumFlags<Signals>(Core.Signals.Off);
         public EnumFlags<AxisFlags> AxisScaled { get; private set; } = new EnumFlags<AxisFlags>(AxisFlags.None);
-        public string FileName { get { return _fileName; } set { _fileName = value; SDRewind = false; OnPropertyChanged(); OnPropertyChanged(nameof(IsFileLoaded)); OnPropertyChanged(nameof(IsPhysicalFileLoaded)); } }
+
+        public string FileName
+        {
+            get
+            {
+                return _fileName;
+            } 
+            set
+            { 
+                _fileName = value; SDRewind = false; 
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsFileLoaded)); 
+                OnPropertyChanged(nameof(IsPhysicalFileLoaded));
+
+            }
+        }
         public bool IsSDCardJob { get { return FileName.StartsWith("SDCard:"); } }
         public bool SDRewind { get; set; }
-        public bool IsFileLoaded { get { return _fileName != string.Empty; } }
+
+        public bool IsFileLoaded
+        {
+            get
+            {
+                return _fileName != string.Empty;
+            }
+        }
         public int Blocks
         {
             get { return _blocks; }
@@ -432,7 +515,15 @@ namespace CNC.Core
             }
         }
         public int BlockExecuting { get { return _executingBlock; } set { _executingBlock = value; OnPropertyChanged(); } }
-        public bool IsPhysicalFileLoaded { get { return _fileName != string.Empty && (_fileName.StartsWith(@"\\") || _fileName[1] == ':'); } }
+
+        public bool IsPhysicalFileLoaded
+        {
+            get
+            {
+                return _fileName != string.Empty && (_fileName.StartsWith(@"\\") || _fileName[1] == ':');
+            }
+        }
+
         public bool? IsMPGActive { get { return _mpg; } private set { if (_mpg != value) { _mpg = value; OnPropertyChanged(); } } }
         public string Scaling { get { return _sc; } private set { _sc = value; OnPropertyChanged(); } }
         public string SDCardStatus { get { return _sd; } private set { _sd = value; OnPropertyChanged(); } }
@@ -644,25 +735,33 @@ namespace CNC.Core
 
         public bool IsParserStateLive { get { return _isParserStateLive; } set { _isParserStateLive = value; OnPropertyChanged(); } }
 
+      
+
         #endregion
 
-        public bool SetGRBLState(string newState, int substate, bool force)
+        public bool SetGRBLState(string incoming, int substate, bool force)
         {
+            GrblCurentState = incoming;
             GrblStates newstate = _grblState.State;
 
-            Enum.TryParse(newState, true, out newstate);
+            Enum.TryParse(incoming, true, out newstate);
 
             if (newstate != _grblState.State || substate != _grblState.Substate || force)
             {
+                
                 bool checkChanged = _grblState.State == GrblStates.Check || newstate == GrblStates.Check;
                 bool sleepChanged = _grblState.State == GrblStates.Sleep || newstate == GrblStates.Sleep;
                 bool alarmChanged = _grblState.State == GrblStates.Alarm || newstate == GrblStates.Alarm;
 
                 if (_grblState.State == GrblStates.Door && newstate != GrblStates.Door)
                     Message = string.Empty;
-
+                ShowAlarmButton = newstate == GrblStates.Alarm;
                 if (newstate == GrblStates.Alarm && substate > 0)
+                {
                     _grblState.LastAlarm = substate;
+                    AlarmConText = $" Clear Alarm: {substate}";
+                }
+                    
 
                 _grblState.State = newstate;
                 _grblState.Substate = substate;
@@ -678,6 +777,7 @@ namespace CNC.Core
 
                     case GrblStates.Alarm:
                         _grblState.Color = Colors.Red;
+                        
                         break;
 
                     case GrblStates.Jog:
@@ -685,7 +785,7 @@ namespace CNC.Core
                         break;
 
                     case GrblStates.Tool:
-                        _grblState.Color = Colors.LightSalmon;
+                        _grblState.Color =Colors.LightSalmon;
                         break;
 
                     case GrblStates.Hold:
@@ -711,6 +811,8 @@ namespace CNC.Core
                         break;
                 }
 
+                CurrentStateColor = new SolidColorBrush(_grblState.Color);
+                StateColor = _grblState.Color;
                 OnPropertyChanged(nameof(GrblState));
 
 //                CanReset = canReset();
@@ -1258,6 +1360,7 @@ namespace CNC.Core
 
             OnResponseReceived?.Invoke(data);
         }
+
     }
 }
 

@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -47,11 +48,34 @@ namespace CNC.Controls.Viewer
 {
     public partial class RenderControl : UserControl
     {
+        private readonly GrblViewModel _grblViewModel;
         private static bool keyboardMappingsOk = false;
 
         public RenderControl()
         {
             InitializeComponent();
+        }
+        public RenderControl(GrblViewModel grblViewModel)
+        {
+            _grblViewModel = grblViewModel;
+            DataContext = _grblViewModel;
+            InitializeComponent();
+          
+            GCode.File.FileLoaded += File_FileLoaded;
+        }
+
+        private void File_FileLoaded(object sender, bool fileLoaded)
+        {
+            
+            if (fileLoaded)
+            {
+                Open(GCode.File.Tokens);
+            }
+            else
+            {
+                Close();
+            }
+          
         }
 
         private void SettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -126,7 +150,7 @@ namespace CNC.Controls.Viewer
 
             if (!keyboardMappingsOk && DataContext is GrblViewModel)
             {
-                KeypressHandler keyboard = (DataContext as GrblViewModel).Keyboard;
+                KeypressHandler keyboard = _grblViewModel.Keyboard;
 
                 keyboardMappingsOk = true;
 

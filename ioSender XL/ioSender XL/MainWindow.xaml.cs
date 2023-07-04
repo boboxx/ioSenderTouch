@@ -47,6 +47,7 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
+using System.Windows.Media.Imaging;
 #if ADD_CAMERA
 using CNC.Controls.Camera;
 #endif
@@ -61,7 +62,11 @@ namespace GCode_Sender
         public static CNC.Controls.Viewer.Viewer GCodeViewer = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
 
+
+
         private bool saveWinSize = false;
+        private readonly GrblViewModel _viewModel;
+        private readonly HomeView _homeView;
 
         public MainWindow()
         {
@@ -70,16 +75,21 @@ namespace GCode_Sender
             InitializeComponent();
 
             ui = this;
-//            GCodeViewer = viewer;
+            //            GCodeViewer = viewer;
             Title = string.Format(Title, version);
 
             int res;
-            if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
-                Environment.Exit(res);
+            //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
+            //    Environment.Exit(res);
 
             BaseWindowTitle = Title;
+            _viewModel = new GrblViewModel();
+            DataContext = _viewModel;
+            _homeView = new HomeView(_viewModel);
+            DockPanel.SetDock(_homeView, Dock.Left);
+            DockPanel.Children.Add(_homeView);
 
-            CNC.Core.Grbl.GrblViewModel = (GrblViewModel)DataContext;
+            //CNC.Core.Grbl.GrblViewModel = (GrblViewModel)DataContext;
             GrblInfo.LatheModeEnabled = AppConfig.Settings.Lathe.IsEnabled;
 
             //       SDCardControl.FileSelected += new CNC_Controls.SDCardControl.FileSelectedHandler(SDCardControl_FileSelected);
@@ -87,6 +97,7 @@ namespace GCode_Sender
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
             AppConfig.Settings.Base.PropertyChanged += Base_PropertyChanged;
+
         }
 
         public string BaseWindowTitle { get; set; }
@@ -104,14 +115,15 @@ namespace GCode_Sender
         public bool JobRunning
         {
             get { return menuFile.IsEnabled != true; }
-            set {
-       //         menuFile.IsEnabled = xx.IsEnabled = !value;
-                foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
-                {
-                    var view = getView(tabitem);
-                    if (view != null)
-                        tabitem.IsEnabled = (!value && view.CanEnable) || tabitem == ui.tabMode.SelectedItem;
-                }
+            set
+            {
+                //         menuFile.IsEnabled = xx.IsEnabled = !value;
+                //foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
+                //{
+                //    var view = getView(tabitem);
+                //    if (view != null)
+                //        tabitem.IsEnabled = (!value && view.CanEnable) || tabitem == ui.tabMode.SelectedItem;
+                //}
             }
         }
 
@@ -133,29 +145,43 @@ namespace GCode_Sender
                         Top = 0d;
                 }
             }
-            saveWinSize = AppConfig.Settings.Base.KeepWindowSize;
-            var appconf = getView(getTab(ViewType.AppConfig));
 
-            appconf.Setup(UIViewModel, AppConfig.Settings);
+            //saveWinSize = AppConfig.Settings.Base.KeepWindowSize;
+            //var appconf = GetView(getTab(ViewType.AppConfig));
 
-            foreach (TabItem tab in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
-            {
-                ICNCView view = getView(tab);
-                if (view != null && view != appconf)
-                {
-                    view.Setup(UIViewModel, AppConfig.Settings);
-                    tab.IsEnabled = view.ViewType == ViewType.GRBL || view.ViewType == ViewType.AppConfig;
-                }
-            }
+
+            //_homeView.Setup(,ac);
+
+
+            //foreach (TabItem tab in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
+            //{
+            //    ICNCView view = GetView(tab);
+            //    if (view != null && view != appconf)
+            //    {
+            //        view.Setup(UIViewModel.CurrentView, AppConfig.Settings);
+            //        tab.IsEnabled = view.ViewType == ViewType.GRBL || view.ViewType == ViewType.AppConfig;
+            //    }
+            //}
 #if ADD_CAMERA
             enableCamera(this);
 #else
             menuCamera.Visibility = Visibility.Hidden;
 #endif
-            if (!AppConfig.Settings.GCodeViewer.IsEnabled)
-                ShowView(false, ViewType.GCodeViewer);
+            
+            UIViewModel.ConfigControls.Add(new BasicConfigControl());
+            if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)
+                UIViewModel.ConfigControls.Add(new JogUiConfigControl());
+            if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI)
+            {
+                UIViewModel.ConfigControls.Add(new JogConfigControl());
+            }
 
-            UIViewModel.ConfigControls.Add(new CNC.Controls.Viewer.ConfigControl());
+            UIViewModel.ConfigControls.Add(new StripGCodeConfigControl());
+            if (AppConfig.Settings.GCodeViewer.IsEnabled)
+            {
+                UIViewModel.ConfigControls.Add( new CNC.Controls.Viewer.ConfigControl());
+            }
+
 
             xx.ItemsSource = UIViewModel.SidebarItems;
             UIViewModel.SidebarItems.Add(new SidebarItem(macroControl));
@@ -164,10 +190,10 @@ namespace GCode_Sender
             UIViewModel.SidebarItems.Add(new SidebarItem(mposFlyout));
             UIViewModel.SidebarItems.Add(new SidebarItem(thcControl));
 
-            UIViewModel.CurrentView = getView((TabItem)tabMode.Items[tabMode.SelectedIndex = 0]);
+            //UIViewModel.CurrentView =;
             System.Threading.Thread.Sleep(50);
             Comms.com.PurgeQueue();
-            UIViewModel.CurrentView.Activate(true, ViewType.Startup);
+            //UIViewModel.CurrentView.Activate(true, ViewType.Startup);
 
             if (!string.IsNullOrEmpty(AppConfig.Settings.FileName))
             {
@@ -187,11 +213,15 @@ namespace GCode_Sender
             GCode.File.AddTransformer(typeof(ArcsToLines), (string)FindResource("MenuArcsToLines"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(GCodeCompress), (string)FindResource("MenuCompress"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(CNC.Controls.DragKnife.DragKnifeViewModel), (string)FindResource("MenuDragKnife"), UIViewModel.TransformMenuItems);
+
+            _homeView.ConfiguationLoaded(UIViewModel, AppConfig.Settings);
+
+
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if(saveWinSize && !(AppConfig.Settings.Base.WindowWidth == e.NewSize.Width && AppConfig.Settings.Base.WindowHeight == e.NewSize.Height))
+            if (saveWinSize && !(AppConfig.Settings.Base.WindowWidth == e.NewSize.Width && AppConfig.Settings.Base.WindowHeight == e.NewSize.Height))
             {
                 AppConfig.Settings.Base.WindowWidth = WindowState == WindowState.Maximized ? -1 : e.NewSize.Width;
                 AppConfig.Settings.Base.WindowHeight = WindowState == WindowState.Maximized ? -1 : e.NewSize.Height;
@@ -203,7 +233,7 @@ namespace GCode_Sender
         {
             if (!(e.Cancel = !menuFile.IsEnabled))
             {
-                UIViewModel.CurrentView.Activate(false, ViewType.Shutdown);
+                //UIViewModel.CurrentView.Activate(false, ViewType.Shutdown);
 
                 if (UIViewModel.Console != null)
                     UIViewModel.Console.Close();
@@ -215,7 +245,6 @@ namespace GCode_Sender
                 }
 #endif
                 Comms.com.DataReceived -= (DataContext as GrblViewModel).DataReceived;
-
                 using (new UIUtils.WaitCursor())
                 {
                     Comms.com.Close(); // disconnecting from websocket may take some time...
@@ -268,9 +297,9 @@ namespace GCode_Sender
 
         private void Base_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(Config.KeepWindowSize))
+            if (e.PropertyName == nameof(Config.KeepWindowSize))
             {
-                if((sender as Config).KeepWindowSize)
+                if ((sender as Config).KeepWindowSize)
                 {
                     AppConfig.Settings.Base.WindowWidth = Width;
                     AppConfig.Settings.Base.WindowHeight = Height;
@@ -280,7 +309,7 @@ namespace GCode_Sender
 
         private void Pipe_FileTransfer(string filename)
         {
-            if(!JobRunning)
+            if (!JobRunning)
                 GCode.File.Load(filename);
         }
 
@@ -306,7 +335,7 @@ namespace GCode_Sender
 
             if (Equals(e.OriginalSource, sender) && UIViewModel.CurrentView != null && e.AddedItems.Count == 1)
             {
-                ICNCView prevView = UIViewModel.CurrentView, nextView = getView((TabItem)e.AddedItems[0]);
+                ICNCView prevView = UIViewModel.CurrentView, nextView = GetView((TabItem)e.AddedItems[0]);
                 if (nextView != null && nextView != UIViewModel.CurrentView)
                 {
                     UIViewModel.CurrentView = nextView;
@@ -318,35 +347,36 @@ namespace GCode_Sender
 
         private void SDCardView_FileSelected(string filename, bool rewind)
         {
-            if((ui.DataContext as GrblViewModel).FileName != filename.Substring(filename.IndexOf(':') + 1))
+            if ((ui.DataContext as GrblViewModel).FileName != filename.Substring(filename.IndexOf(':') + 1))
                 GCode.File.Close();
             (ui.DataContext as GrblViewModel).FileName = filename;
             (ui.DataContext as GrblViewModel).SDRewind = rewind;
-            Dispatcher.BeginInvoke((System.Action)(() => ui.tabMode.SelectedItem = getTab(ViewType.GRBL)));
+            //Dispatcher.BeginInvoke((System.Action)(() => ui.tabMode.SelectedItem = getTab(ViewType.GRBL)));
         }
 
         #endregion
 
-        public static void CloseFile ()
+        public static void CloseFile()
         {
-            ICNCView view, grbl = getView(getTab(ViewType.GRBL));
+            //ICNCView view, grbl = GetView(ta));
 
-            grbl.CloseFile();
+            //grbl.CloseFile();
 
-            foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
-            {
-                if ((view = getView(tabitem)) != null && view != grbl)
-                    view.CloseFile();
-            }
+            //foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
+            //{
+            //    if ((view = getView(tabitem)) != null && view != grbl)
+            //        view.CloseFile();
+            //}
+            GCode.File.Close();
         }
 
         private static TabItem getTab(ViewType mode)
         {
             TabItem tab = null;
 
-            foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
+            foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui))
             {
-                var view = getView(tabitem);
+                var view = GetView(tabitem);
                 if (view != null && view.ViewType == mode)
                 {
                     tab = tabitem;
@@ -368,9 +398,9 @@ namespace GCode_Sender
 
         public static void ShowView(bool show, ViewType view)
         {
-            TabItem tab = getTab(view);
-            if (tab != null && !show)
-                ui.tabMode.Items.Remove(tab);
+            //TabItem tab = getTab(view);
+            //if (tab != null && !show)
+            //    ui.tabMode.Items.Remove(tab);
         }
 
         public static bool IsViewVisible(ViewType view)
@@ -421,13 +451,14 @@ namespace GCode_Sender
         }
 #endif
 
-        private static ICNCView getView(TabItem tab)
+        private static ICNCView GetView(TabItem tab)
         {
             ICNCView view = null;
 
             foreach (UserControl uc in UIUtils.FindLogicalChildren<UserControl>(tab))
             {
-                if (uc is ICNCView) {
+                if (uc is ICNCView)
+                {
                     view = (ICNCView)uc;
                     break;
                 }

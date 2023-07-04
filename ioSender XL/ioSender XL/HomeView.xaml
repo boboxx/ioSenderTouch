@@ -30,44 +30,44 @@
         <system:String x:Uid="str_msgNoResponse" x:Key="MsgNoResponse">Controller is not responding!</system:String>
         <cnccontrols:BoolToVisibleConverter x:Key="IsVisibleConverter" />
     </UserControl.Resources>
-    <DockPanel Background="Transparent" MouseDown="outside_MouseDown" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <TextBlock Text="{Binding Path=ParserState}" Visibility="{Binding Path=IsParserStateLive, Converter={StaticResource IsVisibleConverter}}" TextWrapping="NoWrap" Margin="5,0,0,2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="23"/>
-        </StackPanel>
-        <DockPanel x:Name="dp" DockPanel.Dock="Left" Margin="5,5,5,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Top" Height="807">  
-            <StackPanel x:Name="t1" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
-                <cnccontrols:ConsoleControl MinHeight="400" Height="588"/>
-                <cnccontrols:MDIControl x:Name="mdiControl" HorizontalAlignment="Left" VerticalAlignment="Center" Width="Auto" Height="212"/>
-                <cnccontrols:LimitsControl x:Name="limitsControl" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"/>
+    <DockPanel Name="DockPanelMain"  LastChildFill="True">
+        <Border Height="35"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Home" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_2"  ></Button>
+                <Button Content="Probe" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1" ></Button>
+                <Button Content="Offset" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_4" ></Button>
+                <Button Content="Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click" ></Button>
+                <Button Content="App Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_3" ></Button>
             </StackPanel>
-        </DockPanel>
-        <DockPanel DockPanel.Dock="Bottom"   HorizontalAlignment="Stretch" Height="240" VerticalAlignment="Stretch" Margin="-357,0,18,5">
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
-                <cnccontrols:JobControl x:Name="GCodeSender" Margin="0,6,0,28" Width="133"/>
-                <cnccontrols:JogControl x:Name="jogControl" Margin="0,5,5,-5" MinHeight="300" HorizontalAlignment="Right" Width="261"/>
-                <cnccontrols:FeedControl Grid.Column="3" x:Name="feedControl"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="260" MinHeight="275" Margin="7,8,0,5" Grid.RowSpan="3" />
-                <cnccontrols:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,15,0,7" Width="250"/>
-                <cnccontrols:CoolantControl x:Name="coolantControl" Margin="12,88,11,196"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="16" Width="248"/>
-                <cnccontrols:WorkParametersControl x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="10,160,10,17"/>
-                <cnccontrols:SignalsControl x:Name="signalsControl" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <cnccontrols:StatusControl x:Name="statusControl" Margin="0,5,0,0" VerticalAlignment="Bottom"/>
-                <cnccontrols:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            </StackPanel>
-        </DockPanel>
-        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,5,0,0" >
+        </Border>
 
-            <cncviewer:RenderControl x:Name="gcodeRenderer"/>
-            <!--<TabControl x:Name="tabGCode"  TabStripPlacement="Bottom" DockPanel.Dock="Top" materialDesign:ColorZoneAssist.Mode="PrimaryDark"> 
-                <TabItem x:Uid="tab_program" Header="Program">
-                    <cnccontrols:GCodeListControl/>
-                </TabItem>
-                <TabItem x:Uid="tab_3DView" x:Name="tab3D" Header="3D View">
-                    <cncviewer:RenderControl x:Name="gcodeRenderer"/>
-                </TabItem>
-                <TabItem x:Uid="tab_console" x:Name="tabConsole" Header="Console">
-                    <cnccontrols:ConsoleControl/>
-                </TabItem>
-            </TabControl>-->
-        </DockPanel>
+        <Border Height="350"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
+                <cnccontrols:MDIControl x:Name="mdiControl" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="125"/>
+                <cnccontrols:JobControl x:Name="GCodeSender" Margin="0,-2,0,5" Width="244" RenderTransformOrigin="0.5,0.766"/>
+                
+                <cnccontrols:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Top" Height="340" Margin="3,0,0,0"/>
+                <cnccontrols:FeedControl Grid.Column="3" x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="260" MinHeight="275" Margin="7,8,0,5" Grid.RowSpan="3" />
+                <cnccontrols:JogControl x:Name="jogControl" Margin="0,5,5,-5" MinHeight="300" HorizontalAlignment="Right" Width="400"/>
+                <cnccontrols:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="22,0,0,7" Width="250"/>
+                <cnccontrols:CoolantControl x:Name="coolantControl" Margin="12,122,11,95"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="126" Width="158"/>
+                <cnccontrols:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="10,0,0,0"/>
+                <!--cnccontrols:SignalsControl x:Name="signalsControl" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
+                <cnccontrols:StatusControl x:Name="statusControl" Margin="0,5,0,0" VerticalAlignment="Bottom"/>
+
+            </StackPanel>
+        </Border>
+        <Border Width="400" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+            <StackPanel x:Name="t1" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                <cnccontrols:ConsoleControl MinHeight="400" Height="588"/>
+
+                <!--<cnccontrols:LimitsControl x:Name="limitsControl" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"/>-->
+            </StackPanel>
+        </Border>
+        <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
+            <!--<cncviewer:RenderControl x:Name="gcodeRenderer"/>-->
+        </Border>
+
+
     </DockPanel>
 </UserControl>

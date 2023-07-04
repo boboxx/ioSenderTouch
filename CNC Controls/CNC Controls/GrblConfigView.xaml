@@ -98,7 +98,7 @@
             </DockPanel>
             <StackPanel x:Name="details" DockPanel.Dock="Top" HorizontalAlignment="Left" Height="Auto" Margin="5,15,0,0" VerticalAlignment="Top">
                 <StackPanel x:Name="canvas" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Center" Width="455"/>
-                <TextBox x:Name="txtDescription" Background="#FFF8F8F8" IsReadOnly="True" HorizontalAlignment="Left" Height="225" TextWrapping="Wrap" VerticalAlignment="Top" Width="550"/>
+                <TextBox x:Name="txtDescription"  IsReadOnly="True" HorizontalAlignment="Left" Height="225" TextWrapping="Wrap" VerticalAlignment="Top" Width="550"/>
             </StackPanel>
         </DockPanel>
     </DockPanel>

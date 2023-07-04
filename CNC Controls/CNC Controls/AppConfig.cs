@@ -273,7 +273,7 @@ namespace CNC.Controls
     {
         private string configfile = null;
         private bool? MPGactive = null;
-
+     
         public string FileName { get; private set; }
 
         private static readonly Lazy<AppConfig> settings = new Lazy<AppConfig>(() => new AppConfig());
@@ -382,7 +382,7 @@ namespace CNC.Controls
             Base.PortParams = port;
         }
 
-        public int SetupAndOpen(string appname, GrblViewModel model, System.Windows.Threading.Dispatcher dispatcher)
+        public int SetupAndOpen(GrblViewModel model, System.Windows.Threading.Dispatcher dispatcher)
         {
             int status = 0;
             bool selectPort = false;
@@ -442,11 +442,11 @@ namespace CNC.Controls
 
             if (!Load(CNC.Core.Resources.IniFile))
             {
-                if (MessageBox.Show(LibStrings.FindResource("CreateConfig"), appname, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show(LibStrings.FindResource("CreateConfig"),"IoSender", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     if (!Save(CNC.Core.Resources.IniFile))
                     {
-                        MessageBox.Show(LibStrings.FindResource("CreateConfigFail"), appname);
+                        MessageBox.Show(LibStrings.FindResource("CreateConfigFail"), "IoSender");
                         status = 1;
                     }
                 }
@@ -544,7 +544,7 @@ namespace CNC.Controls
             }
             else if (status != 2)
             {
-                MessageBox.Show(string.Format(LibStrings.FindResource("ConnectFailed"), Base.PortParams), appname, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(LibStrings.FindResource("ConnectFailed"), Base.PortParams), "", MessageBoxButton.OK, MessageBoxImage.Error);
                 status = 2;
             }
 

@@ -10,7 +10,7 @@
                   SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" CanUserAddRows="False">
         <DataGrid.Columns>
-            <DataGridTextColumn x:Uid="hdr_alarmCode" Header="Code" Binding="{Binding Key}" Width="40"/>
+            <DataGridTextColumn x:Uid="hdr_alarmCode" Header="Code" Binding="{Binding Key}" Width="70"/>
             <DataGridTextColumn x:Uid="hdr_alarmMessage" Header="Message" Binding="{Binding Value}" Width="70*"/>
         </DataGrid.Columns>
     </DataGrid>

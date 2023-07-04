@@ -60,7 +60,6 @@ namespace CNC.Controls
         private static bool keyboardMappingsOk = false;
 
         private const Key xplus = Key.J, xminus = Key.H, yplus = Key.K, yminus = Key.L, zplus = Key.I, zminus = Key.M, aplus = Key.U, aminus = Key.N;
-
         public JogBaseControl()
         {
             InitializeComponent();

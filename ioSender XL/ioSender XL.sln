@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ioSender XL", "ioSender XL\ioSender XL.csproj", "{9492A88B-066D-42AE-9244-3369BE99F37F}"
 EndProject
@@ -119,5 +119,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90FDF8BC-1454-4633-A288-CE5F38AD2AF8}
 	EndGlobalSection
 EndGlobal
