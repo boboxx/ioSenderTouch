@@ -91,15 +91,15 @@ namespace CNC.Core
             serialPort.WriteBufferSize = Comms.TXBUFFERSIZE;
 
             if (parameter.Count() > 4) switch (parameter[4])
-            {
-                case "P": // Cannot be used With ESP32!
-                    serialPort.Handshake = Handshake.RequestToSend;
-                    break;
+                {
+                    case "P": // Cannot be used With ESP32!
+                        serialPort.Handshake = Handshake.RequestToSend;
+                        break;
 
-                case "X":
-                    serialPort.Handshake = Handshake.XOnXOff;
-                    break;
-            }
+                    case "X":
+                        serialPort.Handshake = Handshake.XOnXOff;
+                        break;
+                }
 
             try
             {
@@ -128,7 +128,7 @@ namespace CNC.Core
                         serialPort.RtsEnable = true;
                         System.Threading.Thread.Sleep(5);
                         serialPort.RtsEnable = false;
-                        if(ResetDelay > 0)
+                        if (ResetDelay > 0)
                             System.Threading.Thread.Sleep(ResetDelay);
                         break;
 
@@ -144,13 +144,13 @@ namespace CNC.Core
 
 #if RESPONSELOG
                 if (Resources.DebugFile != string.Empty) try
-                {
-                    log = new StreamWriter(Resources.DebugFile);
-                }
-                catch
-                {
-                    MessageBox.Show("Unable to open log file: " + Resources.DebugFile, "ioSender");
-                }
+                    {
+                        log = new StreamWriter(Resources.DebugFile);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Unable to open log file: " + Resources.DebugFile, "ioSender");
+                    }
 #endif
             }
         }
@@ -158,12 +158,12 @@ namespace CNC.Core
         ~SerialStream()
         {
 #if RESPONSELOG
-    if(log != null) try
-    {
-        log.Close();
-        log = null;
-    }
-    catch { }
+            if (log != null) try
+                {
+                    log.Close();
+                    log = null;
+                }
+                catch { }
 #endif
             if (!IsClosing && IsOpen)
                 Close();
@@ -182,8 +182,11 @@ namespace CNC.Core
         {
             if (serialPort != null)
             {
-                serialPort.DiscardInBuffer();
-                serialPort.DiscardOutBuffer();
+                if (serialPort.IsOpen)
+                {
+                    serialPort.DiscardInBuffer();
+                    serialPort.DiscardOutBuffer();
+                }
             }
             Reply = string.Empty;
             if (!EventMode)
@@ -249,7 +252,7 @@ namespace CNC.Core
 
         public void WriteByte(byte data)
         {
-            if(serialPort != null)
+            if (serialPort != null)
                 serialPort.BaseStream.Write(new byte[1] { data }, 0, 1);
         }
 
@@ -267,14 +270,14 @@ namespace CNC.Core
         public void WriteCommand(string command)
         {
             state = Comms.State.AwaitAck;
-
+            if(serialPort == null   )return;
             if (command.Length == 1 && command != GrblConstants.CMD_PROGRAM_DEMARCATION)
                 WriteByte((byte)command.ToCharArray()[0]);
             else
             {
                 command += "\r";
                 byte[] bytes = System.Text.Encoding.UTF8.GetBytes(command);
-                if(serialPort != null)
+                if (serialPort.IsOpen)
                     serialPort.BaseStream.Write(bytes, 0, bytes.Length);
             }
         }
@@ -418,7 +421,7 @@ namespace CNC.Core
 
     public class ComPort
     {
-        public ComPort ()
+        public ComPort()
         {
         }
 
@@ -456,7 +459,7 @@ namespace CNC.Core
             SelectedMode = ConnectModes[0];
         }
 
-        public void Refresh ()
+        public void Refresh()
         {
             var _portnames = SerialPort.GetPortNames();
 
@@ -466,29 +469,30 @@ namespace CNC.Core
             {
                 Array.Sort(_portnames);
 
-                if (_portnames.Contains("COM1")) {
+                if (_portnames.Contains("COM1"))
+                {
                     var pn = _portnames.ToList();
                     pn.Remove("COM1");
                     _portnames = pn.ToArray();
                 }
 
                 using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE Caption like '%(COM%'")) try
-                {
-                    var ports = searcher.Get().Cast<ManagementBaseObject>().ToList().Select(p => p["Caption"].ToString());
-                    var portList = _portnames.Select(n => ports.FirstOrDefault(s => s.Contains('(' + n + ')'))).ToList();
-                    foreach (var fullname in portList)
                     {
-                        var name = fullname.Substring(fullname.IndexOf("(COM") + 1).Trim().TrimEnd(')');
-                        var port = new ComPort(name);
+                        var ports = searcher.Get().Cast<ManagementBaseObject>().ToList().Select(p => p["Caption"].ToString());
+                        var portList = _portnames.Select(n => ports.FirstOrDefault(s => s.Contains('(' + n + ')'))).ToList();
+                        foreach (var fullname in portList)
+                        {
+                            var name = fullname.Substring(fullname.IndexOf("(COM") + 1).Trim().TrimEnd(')');
+                            var port = new ComPort(name);
 
-                        port.FullName = name + " - " + fullname.Replace('(' + name + ')', string.Empty).Trim();
+                            port.FullName = name + " - " + fullname.Replace('(' + name + ')', string.Empty).Trim();
 
-                        Ports.Add(port);
+                            Ports.Add(port);
+                        }
                     }
-                }
-                catch
-                {
-                }
+                    catch
+                    {
+                    }
 
                 if (Ports.Count != _portnames.Length)
                 {

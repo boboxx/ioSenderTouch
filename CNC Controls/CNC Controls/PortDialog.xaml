@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CNC.Controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         x:Uid="dlg_connection"
-        Title="Sender connection" Height="198" Width="400" Icon="App.ico" ResizeMode="NoResize">
+        Title="Sender connection" 
+        Height="250" Width="400" Icon="App.ico" ResizeMode="NoResize"  
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14">
     <Window.Resources>
         <Style x:Key="PortErrorStyle" TargetType="local:NumericTextBox">
             <Style.Triggers>
@@ -29,10 +35,10 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Grid>
         <TabControl x:Name="tab" Width="Auto" Height="125" Margin="5,0" VerticalAlignment="Top">
             <TabItem x:Uid="tab_serial" Header="Serial">
-                <StackPanel>
+                <StackPanel Margin="0,0,0,-48">
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                         <Label  x:Uid="lbl_serialPort" Content="Port:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80" VerticalAlignment="Center"/>
                         <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" Width="285"
@@ -62,7 +68,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem x:Uid="tab_network" Header="Network">
-                <StackPanel>
+                <StackPanel Margin="0,0,0,-43">
                     <CheckBox x:Uid="lbl_websocket" Content="WebSocket" IsChecked="{Binding Path=IsWebSocket, Mode=TwoWay}" Margin="80,5,0,0"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <Label x:Uid="lbl_netPort" Content="Port:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80"/>
@@ -76,7 +82,7 @@
                             </local:NumericTextBox.Value>
                         </local:NumericTextBox>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="37">
                         <Label x:Uid="lbl_ipAddress" Content="IP address:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80"/>
                         <TextBox Style="{StaticResource Ip4ErrorStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Bottom" Height="24" Width="95" MaxLength="15">
                             <TextBox.Text>
@@ -91,9 +97,9 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <StackPanel Height="23" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,110,0,5">
-            <Button x:Uid="btn_ok" x:Name="btnOk" Content="Ok" Height="23" Width="70" Click="btnOk_Click"/>
-            <Button x:Uid="btn_cancel" x:Name="btnCancel" Content="Cancel" Margin="5,0,0,0" Height="23" Width="70" Click="btnCancel_Click"/>
+        <StackPanel Height="23" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,110,0,10">
+            <Button x:Uid="btn_ok" x:Name="btnOk" Content="Ok" Height="23" Width="75" Click="btnOk_Click"/>
+            <Button x:Uid="btn_cancel" x:Name="btnCancel" Content="Cancel" Margin="5,0,0,0" Height="23" Width="75" Click="btnCancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

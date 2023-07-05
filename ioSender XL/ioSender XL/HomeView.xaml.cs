@@ -59,7 +59,6 @@ namespace GCode_Sender
     {
         private bool? initOK = null;
         private bool isBooted = false;
-        private GrblViewModel model;
         private IInputElement focusedControl = null;
         private Controller Controller = null;
         private readonly GrblViewModel _model;
@@ -93,7 +92,7 @@ namespace GCode_Sender
         {
             if (e.NewValue is GrblViewModel)
             {
-                model = (GrblViewModel)e.NewValue;
+               var model = (GrblViewModel)e.NewValue;
                 model.PropertyChanged += OnDataContextPropertyChanged;
                 DataContextChanged -= View_DataContextChanged;
                 //          model.OnGrblReset += Model_OnGrblReset;
@@ -204,12 +203,12 @@ namespace GCode_Sender
             if (activate)
             {
                 GCodeSender.RewindFile();
-                GCodeSender.CallHandler(GCode.File.IsLoaded ? StreamingState.Idle : (model.IsSDCardJob ? StreamingState.Start : StreamingState.NoFile), false);
+                GCodeSender.CallHandler(GCode.File.IsLoaded ? StreamingState.Idle : (_model.IsSDCardJob ? StreamingState.Start : StreamingState.NoFile), false);
 
-                model.ResponseLogFilterOk = AppConfig.Settings.Base.FilterOkResponse;
+                _model.ResponseLogFilterOk = AppConfig.Settings.Base.FilterOkResponse;
 
                 if (Controller == null)
-                    Controller = new Controller(model);
+                    Controller = new Controller(_model);
 
                 if (initOK != true)
                 {
@@ -232,7 +231,7 @@ namespace GCode_Sender
                             break;
                     }
 
-                    model.Message = Controller.Message;
+                    _model.Message = Controller.Message;
                 }
 
                 if (initOK == null)
@@ -252,17 +251,17 @@ namespace GCode_Sender
                 if (GCode.File.IsLoaded)
                     MainWindow.ui.WindowTitle = ((GrblViewModel)DataContext).FileName;
 
-                model.Keyboard.JogStepDistance = AppConfig.Settings.Jog.LinkStepJogToUI ? AppConfig.Settings.JogUiMetric.Distance0 : AppConfig.Settings.Jog.StepDistance;
-                model.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowDistance;
-                model.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastDistance;
-                model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Step] = AppConfig.Settings.Jog.StepFeedrate;
-                model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowFeedrate;
-                model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastFeedrate;
+                _model.Keyboard.JogStepDistance = AppConfig.Settings.Jog.LinkStepJogToUI ? AppConfig.Settings.JogUiMetric.Distance0 : AppConfig.Settings.Jog.StepDistance;
+                _model.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowDistance;
+                _model.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastDistance;
+                _model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Step] = AppConfig.Settings.Jog.StepFeedrate;
+                _model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowFeedrate;
+                _model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastFeedrate;
 
-                model.Keyboard.IsJoggingEnabled = AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI;
+                _model.Keyboard.IsJoggingEnabled = AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI;
 
                 if (!GrblInfo.IsGrblHAL)
-                    model.Keyboard.IsContinuousJoggingEnabled = AppConfig.Settings.Jog.KeyboardEnable;
+                    _model.Keyboard.IsContinuousJoggingEnabled = AppConfig.Settings.Jog.KeyboardEnable;
             }
             else if (ViewType != ViewType.Shutdown)
             {
@@ -327,7 +326,7 @@ namespace GCode_Sender
 #if ADD_CAMERA
         void Camera_Opened()
         {
-            model.IsCameraVisible = MainWindow.UIViewModel.Camera.IsVisible;
+            _model.IsCameraVisible = MainWindow.UIViewModel.Camera.IsVisible;
             Focus();
         }
 
@@ -370,7 +369,7 @@ namespace GCode_Sender
             string filename = CNC.Core.Resources.Path + string.Format("KeyMap{0}.xml", (int)AppConfig.Settings.Jog.Mode);
 
             if (System.IO.File.Exists(filename))
-                model.Keyboard.LoadMappings(filename);
+                _model.Keyboard.LoadMappings(filename);
 
             if (GrblInfo.NumAxes > 3)
                 GCode.File.AddTransformer(typeof(GCodeWrapViewModel), "Wrap to rotary (WIP)", MainWindow.UIViewModel.TransformMenuItems);
@@ -388,7 +387,7 @@ namespace GCode_Sender
                 {
                     if (--timeout == 0)
                     {
-                        model.Message = (string)FindResource("MsgNoResponse");
+                        _model.Message = (string)FindResource("MsgNoResponse");
                         return false;
                     }
                     Thread.Sleep(500);

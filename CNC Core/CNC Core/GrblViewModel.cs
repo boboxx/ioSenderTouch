@@ -86,6 +86,7 @@ namespace CNC.Core
         private SolidColorBrush _currentStateColor;
         private  string _alarmConText;
         private  bool _showAlarmButton;
+        private string _toolNumber;
 
         public ICommand ClearAlarmCommand { get; }
         public ICommand SettingsCommand { get; }
@@ -454,6 +455,7 @@ namespace CNC.Core
         public int GrblError { get { return _grblState.Error; } set { _grblState.Error = value; OnPropertyChanged(); } }
         public StreamingState StreamingState { get { return _streamingState; } set { if (_streamingState != value) { _streamingState = value; OnPropertyChanged(); } } }
         public string WorkCoordinateSystem { get { return _wcs; } private set { _wcs = value; OnPropertyChanged(); } }
+        public string ToolNumber { get { return _toolNumber; } private set { _toolNumber = value; OnPropertyChanged(); } }
         public Position MachinePosition { get; private set; } = new Position();
         public Position WorkPosition { get; private set; } = new Position();
         public Position Position { get; private set; } = new Position();

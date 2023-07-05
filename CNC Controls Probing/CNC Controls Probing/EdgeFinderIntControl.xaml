@@ -6,8 +6,7 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:local="clr-namespace:CNC.Controls.Probing"
-             mc:Ignorable="d" Height="370"
-             d:DesignHeight="370" d:DesignWidth="500">
+             mc:Ignorable="d" Height="425" d:DesignWidth="500">
     <UserControl.Resources>
         <system:String x:Uid="str_edgeIntFinderInstructions" x:Key="Instructions">Click edge, corner or center in image above to select probing action.\nMove the probe to above the position indicated by green dot before start.</system:String>
         <system:String x:Uid="str_edgeIntFinderType" x:Key="SelectType">Select edge or corner to probe by clicking on the relevant part of the image above.</system:String>
@@ -80,7 +79,7 @@
                 <CheckBox x:Uid="lbl_probeZ" Content="Probe Z" IsChecked="{Binding Path=ProbeZ}" IsEnabled="{Binding ElementName=probez, Path=IsChecked, Converter={StaticResource IsNotRunningConverter}}"/>
                 <CheckBox x:Uid="lbl_preview" Content="Preview" Margin="15,0,0,0" IsChecked="{Binding Path=PreviewEnable}"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Height="216">
                 <Grid x:Uid="grd_action" ToolTip="Click edge, corner or center to select probing action." Width="180" Height="180" Margin="5,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60" />
@@ -175,7 +174,7 @@
                     </Rectangle>
                 </Grid>
                 <GroupBox Header="Preview" Margin="30,0,0,0" Visibility="{Binding Path=PreviewEnable, Converter={StaticResource ToVisibleConverter}}" VerticalAlignment="Top">
-                    <TextBox IsReadOnly="True" Text="{Binding Path=PreviewText, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="245" Height="180"
+                    <TextBox IsReadOnly="True" Text="{Binding Path=PreviewText, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="245" Height="151"
                          FontSize="10" FontFamily="Verdana"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Auto">

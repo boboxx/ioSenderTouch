@@ -48,6 +48,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Media.Imaging;
+using CNC.Controls.Probing;
+using ConfigControl = CNC.Controls.Probing.ConfigControl;
 #if ADD_CAMERA
 using CNC.Controls.Camera;
 #endif
@@ -167,19 +169,22 @@ namespace GCode_Sender
 #else
             menuCamera.Visibility = Visibility.Hidden;
 #endif
-            
+
             UIViewModel.ConfigControls.Add(new BasicConfigControl());
+            UIViewModel.ConfigControls.Add(new ConfigControl());
             if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)
+            {
                 UIViewModel.ConfigControls.Add(new JogUiConfigControl());
+            }
+            
             if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI)
             {
                 UIViewModel.ConfigControls.Add(new JogConfigControl());
             }
-
             UIViewModel.ConfigControls.Add(new StripGCodeConfigControl());
             if (AppConfig.Settings.GCodeViewer.IsEnabled)
             {
-                UIViewModel.ConfigControls.Add( new CNC.Controls.Viewer.ConfigControl());
+                UIViewModel.ConfigControls.Add(new CNC.Controls.Viewer.ConfigControl());
             }
 
 

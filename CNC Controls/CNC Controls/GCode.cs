@@ -83,7 +83,7 @@ namespace CNC.Controls
 
         private bool Program_ToolChanged(int toolNumber)
         {
-            return ToolChanged == null ? true : ToolChanged(toolNumber);
+            return ToolChanged?.Invoke(toolNumber) ?? true;
         }
 
         private void Program_FileChanged(string filename)

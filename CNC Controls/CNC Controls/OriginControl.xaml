@@ -5,20 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="42" d:DesignWidth="42">
+             d:DesignHeight="52" d:DesignWidth="52">
     <UserControl.Resources>
         <local:EnumValueToBooleanConverter x:Key="EnumToEdgeConverter" />
     </UserControl.Resources>
-    <Grid Width="42" Height="42" HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Grid Width="52" Height="52" HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid.RowDefinitions>
-            <RowDefinition Height="14" />
-            <RowDefinition Height="14" />
-            <RowDefinition Height="14" />
+            <RowDefinition Height="17" />
+            <RowDefinition Height="17" />
+            <RowDefinition Height="17" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="14" />
-            <ColumnDefinition Width="14" />
-            <ColumnDefinition Width="14" />
+            <ColumnDefinition Width="17" />
+            <ColumnDefinition Width="17" />
+            <ColumnDefinition Width="17" />
         </Grid.ColumnDefinitions>
         <RadioButton IsChecked="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, Converter={StaticResource EnumToEdgeConverter}, ConverterParameter=D}" />
         <RadioButton Grid.Column="1" IsChecked="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, Converter={StaticResource EnumToEdgeConverter}, ConverterParameter=CD}" />

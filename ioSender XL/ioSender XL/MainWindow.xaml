@@ -12,11 +12,12 @@
         xmlns:local="clr-namespace:GCode_Sender"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Sender ({0})" Height="1080" Width="1920" MinHeight="700" MinWidth="1250"
+        Title="Sender ({0})" Height="1080" Width="1920" MinHeight="1024" MinWidth="1600" 
         Loaded="Window_Load"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
-        Closed="Window_Closed" Icon="App.ico" TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Closed="Window_Closed" Icon="App.ico" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
@@ -73,6 +74,8 @@
                 <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
                 <Label  Name="Signals" Content="Signal Status:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="3,0,0,0"/>
                 <cnccontrols:SignalsControl></cnccontrols:SignalsControl>
+                <Label  Name="Tool" Content="Tool Number:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="15,0,0,0"/>
+                <Label  Name="ToolNumber" Content="{Binding Tool}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
                 <Button Margin="50,0,0,0"
                         materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
