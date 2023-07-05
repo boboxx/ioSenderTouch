@@ -464,11 +464,11 @@ namespace GCode_Sender
 
         void EnableUI(bool enable)
         {
-            foreach (UserControl control in UIUtils.FindFirstLogicalChildren<UserControl>(this))
-            {
-                if (control.Name != nameof(statusControl))
-                    control.IsEnabled = enable;
-            }
+            //foreach (UserControl control in UIUtils.FindFirstLogicalChildren<UserControl>(this))
+            //{
+            //    if (control.Name != nameof(statusControl))
+            //        control.IsEnabled = enable;
+            //}
             // disable ui components when in sleep mode
         }
         #region UIevents

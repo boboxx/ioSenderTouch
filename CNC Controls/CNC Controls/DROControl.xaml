@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              xmlns:gcode="clr-namespace:CNC.GCode;assembly=CNC.Core"
-             mc:Ignorable="d" 
-             d:DesignHeight="216" d:DesignWidth="216"
-             Loaded="DRO_Loaded">
+             mc:Ignorable="d"
+             Loaded="DRO_Loaded" Width="275" Height="Auto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,12 +19,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <GroupBox x:Uid="grp_dro" x:Name="grpDRO" Header="DRO" HorizontalAlignment="Center" VerticalAlignment="Top" Width="216">
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,5,0,5">
-            <Label x:Name="lblXMode" Content="{Binding Path=LatheMode, Mode=OneWay, Converter={StaticResource LatheModeConverter}}" Visibility="{Binding Path=LatheModeEnabled, Mode=OneWay, Converter={StaticResource IsVisibleConverter}}" Height="25" HorizontalContentAlignment="Right" Margin="20,0,65,0"/>
+    <GroupBox x:Uid="grp_dro" x:Name="grpDRO" Header="DRO" HorizontalAlignment="Center" VerticalAlignment="Top" Width="275" Height="268" >
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Width="260">
+            <Button Content="Home All" Height="28" Click="Button_Click" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}"  Margin="2,5"></Button>
+            <Label x:Name="lblXMode" Content="{Binding Path=LatheMode, Mode=OneWay, Converter={StaticResource LatheModeConverter}}" Visibility="{Binding Path=LatheModeEnabled, Mode=OneWay, Converter={StaticResource IsVisibleConverter}}" 
+                   Height="25" HorizontalContentAlignment="Right" Margin="20,0,65,0"/>
             <local:DROBaseControl x:Name="axisX" Label="X"
                 Value="{Binding Path=Position.X, Mode=TwoWay}"
-                IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)X], Mode=OneWay}"
+                IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)X], Mode=OneWay}" Width="260"
             />
             <local:DROBaseControl x:Name="axisY" Label="Y" Style="{StaticResource YAxisVisibleStyle}"
                 Value="{Binding Path=Position.Y, Mode=TwoWay}"
@@ -39,7 +40,7 @@
                 Value="{Binding Path=Position.A, Mode=TwoWay}"
                 IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)A], Mode=OneWay}"
             />
-            <Button x:Uid="btn_zeroAll" x:Name="btnZeroAll" Content="Zero all" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Focusable="False" Height="28" Width="180" HorizontalAlignment="Center" Margin="2,3" Click="btnZeroAll_Click"/>
+            <Button x:Uid="btn_zeroAll" x:Name="btnZeroAll" Content="Zero all" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Focusable="False" Height="28" HorizontalAlignment="Stretch" Margin="2,5" Click="btnZeroAll_Click"/>
         </StackPanel>
     </GroupBox>
 </UserControl>

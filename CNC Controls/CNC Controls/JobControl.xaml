@@ -23,9 +23,9 @@
         </Style>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical">
-        <Button x:Uid="btn_cycleStart" x:Name="btnStart" Content="Cycle Start" ToolTip="Alt+R"  Click="btnStart_Click" Margin="5,0,0,0"/>
-        <Button x:Uid="btn_feedHold" x:Name="btnHold" Content="Feed Hold" ToolTip="Space"  Margin="5,0,0,0" Click="btnHold_Click"/>
-        <Button x:Uid="btn_stop" x:Name="btnStop" Content="Stop" ToolTip="Alt+S"  Margin="5,0,0,0" Click="btnStop_Click"/>
-        <Button x:Uid="btn_rewind" x:Name="btnRewind" Content="Rewind"  Margin="5,0,0,0" Click="btnRewind_Click"/>
+        <Button x:Uid="btn_cycleStart" x:Name="btnStart" Content="Cycle Start" ToolTip="Alt+R"  Click="btnStart_Click" />
+        <Button x:Uid="btn_feedHold" x:Name="btnHold" Content="Feed Hold" ToolTip="Space"   Click="btnHold_Click"/>
+        <Button x:Uid="btn_stop" x:Name="btnStop" Content="Stop" ToolTip="Alt+S" Click="btnStop_Click"/>
+        <Button x:Uid="btn_rewind" x:Name="btnRewind" Content="Rewind"  Click="btnRewind_Click"/>
     </StackPanel>
 </UserControl>

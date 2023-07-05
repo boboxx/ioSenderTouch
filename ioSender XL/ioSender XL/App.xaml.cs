@@ -97,7 +97,7 @@ namespace GCode_Sender
             args.Handled = true;
 
             MessageBox.Show("Unhandled exception occured: " + (args.Exception as Exception).Message, "DispatcherException");
-            //Environment.Exit(-1);
+            Environment.Exit(-1);
         }
 
         private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs args)

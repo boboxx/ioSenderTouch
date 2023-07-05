@@ -43,6 +43,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CNC.Core;
 using System.Windows;
+using GCode_Sender.Commands;
 
 namespace CNC.Controls
 {
@@ -53,28 +54,12 @@ namespace CNC.Controls
         {
             
             InitializeComponent();
-
-            //cbxTool.SelectionChangeCommitted += new EventHandler(cbxTool_TextChanged);
-            //cbxOffset.SelectionChangeCommitted += new EventHandler(cbxOffset_TextChanged);
-            
-            
+          
         }
-
-        private void SetupButtons()
-        {
-            
-        }
-        void button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
-
 
         #region Properties
-        
 
+       
         public new bool IsFocused { get { return cbxTool.IsFocused || cbxOffset.IsFocused; } }
 
         public static readonly DependencyProperty IsToolChangingProperty = DependencyProperty.Register(nameof(IsToolChanging), typeof(bool), typeof(WorkParametersControlTouch), new PropertyMetadata(false, new PropertyChangedCallback(IsToolChangingChanged)));
@@ -93,6 +78,7 @@ namespace CNC.Controls
 
         #region UIEvents
 
+     
         void cbxTool_KeyPress(object sender, KeyEventArgs e)
         {
             // UIUtils.ProcessMask((Control)sender, e);

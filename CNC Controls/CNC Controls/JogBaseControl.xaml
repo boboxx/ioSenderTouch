@@ -9,8 +9,7 @@
              xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
              mc:Ignorable="d"
              FocusVisualStyle="{x:Null}"
-             Loaded="JogControl_Loaded"
-             d:DesignHeight="Auto" MinHeight="325" Width="Auto">
+             Loaded="JogControl_Loaded" MinHeight="302" Width="Auto" Height="302">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -47,7 +46,7 @@
                 <Binding Path="GrblState" Converter="{StaticResource IsJoggingConverter}"/>
             </MultiBinding>
         </Grid.IsEnabled>
-        <StackPanel Margin="0,0,0,17">
+        <StackPanel Margin="0,0,0,0">
             <GroupBox x:Uid="grp_jogDistance" Header="Distance" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Height="140" Width="80">
                 <StackPanel>
                     <RadioButton Tag="3" Content="{Binding Path=JogData.Distance3, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.StepSize, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step3}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Click="distance_Click"/>
@@ -57,7 +56,7 @@
                     <Label Content="{Binding Path=Unit}" Height="20" FontSize="8"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox x:Uid="grp_jogFeedrate" Header="Feed rate" HorizontalAlignment="Left" Margin="5,0,0,4" VerticalAlignment="Top" Height="Auto" MinHeight="140" Width="80">
+            <GroupBox x:Uid="grp_jogFeedrate" Header="Feed rate" HorizontalAlignment="Left" Margin="5,0,0,1" VerticalAlignment="Top" Height="Auto" MinHeight="140" Width="80">
                 <StackPanel>
                     <RadioButton Tag="3" Content="{Binding Path=JogData.Feedrate3, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.Feed, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed3}"  HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
                     <RadioButton Tag="2" Content="{Binding Path=JogData.Feedrate2, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="{Binding Path=JogData.Feed, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed2}" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
@@ -67,7 +66,7 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="90,10,5,0" Width="Auto" Height="Auto">
+        <StackPanel Orientation="Horizontal" Margin="90,0,5,0" Width="Auto" Height="Auto">
             <StackPanel Orientation="Horizontal" Width="Auto" Height="287" Visibility="{Binding Path=LatheModeEnabled, Converter={StaticResource IsNotVisibleConverter}}" VerticalAlignment="Bottom" Margin="15,0,0,28">
                 <StackPanel VerticalAlignment="Center">
                     <Button Content="X-" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>

@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -70,8 +71,11 @@ namespace CNC.Controls
                 axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
                 axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
                 axis.btnZero.Click += btnZero_Click;
+                axis.btnHome.Click += BtnHome_Click;
             }
         }
+
+     
 
         public new bool IsFocused { get { return hasFocus; } }
         public bool IsFocusable { get; set; }
@@ -102,7 +106,12 @@ namespace CNC.Controls
             }
 
             foreach (DROBaseControl axis in UIUtils.FindLogicalChildren<DROBaseControl>(this))
+            {
                 axis.Tag = GrblInfo.AxisLetterToIndex(axis.Label);
+                axis.btnZero.Content = $"0{axis.Label}";
+                axis.btnHome.Tag = axis.Label;
+                axis.btnHome.Content = $"H{axis.Label}";
+            }
         }
 
         private void txtReadout_GotFocus(object sender, RoutedEventArgs e)
@@ -165,7 +174,7 @@ namespace CNC.Controls
         {
             AxisPositionChanged(GrblInfo.AxisIndexToLetter((int)(sender as Button).Tag), 0.0d);
         }
-
+        
         void btnZeroAll_Click(object sender, EventArgs e)
         {
             AxisPositionChanged("ALL", 0.0d);
@@ -215,18 +224,29 @@ namespace CNC.Controls
 
             return true;
         }
+        private void BtnHome_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                var axis = button.Tag.ToString();
+                (DataContext as GrblViewModel)?.ExecuteCommand($"$H{axis}");
+            }
+        }
 
         void AxisPositionChanged(string axis, double position)
         {
             if (axis == "ALL")
             {
-                string s = "G90G10L20P0";
-                foreach (int i in GrblInfo.AxisFlags.ToIndices())
-                    s += GrblInfo.AxisIndexToLetter(i) + "{0}";
-                (DataContext as GrblViewModel).ExecuteCommand(string.Format(s, position.ToInvariantString("F3")));
+                var s = GrblInfo.AxisFlags.ToIndices().Aggregate("G90G10L20P0", (current, i) => current + GrblInfo.AxisIndexToLetter(i) + "{0}");
+                (DataContext as GrblViewModel)?.ExecuteCommand(string.Format(s, position.ToInvariantString("F3")));
             }
             else
-                (DataContext as GrblViewModel).ExecuteCommand(string.Format("G10L20P0{0}{1}", axis, position.ToInvariantString("F3")));
+                (DataContext as GrblViewModel)?.ExecuteCommand($"G10L20P0{axis}{position.ToInvariantString("F3")}");
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            (DataContext as GrblViewModel)?.ExecuteCommand("$H");
         }
     }
 }

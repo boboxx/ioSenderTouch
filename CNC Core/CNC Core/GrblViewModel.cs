@@ -43,6 +43,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading;
+using System.Windows.Controls;
 using CNC.GCode;
 using GCode_Sender.Commands;
 using Color = System.Windows.Media.Color;
@@ -115,7 +116,7 @@ namespace CNC.Core
                 OnPropertyChanged();
             }
         }
-
+        public ICommand WcsCommand { get; }
         public GrblViewModel()
         {
             _a = _pn = _fs = _sc = _tool = string.Empty;
@@ -142,6 +143,7 @@ namespace CNC.Core
             ProbePosition.PropertyChanged += ProbePosition_PropertyChanged;
             ToolOffset.PropertyChanged += ToolOffset_PropertyChanged;
 
+
             SettingsCommand = new Command(_ =>
             {
                 ShowSettingsView();;
@@ -151,7 +153,16 @@ namespace CNC.Core
             {
                 ClearAlarm();
             });
-        
+            WcsCommand = new Command(SetWcs);
+
+        }
+        private void SetWcs(object x)
+        {
+            if (!(x is Button button)) return;
+            var command = button.Name;
+            Comms.com.WriteCommand(command.Trim());
+
+
         }
         private void ClearAlarm()
         {

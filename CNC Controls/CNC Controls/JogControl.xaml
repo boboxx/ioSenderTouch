@@ -5,18 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d"
-             FocusVisualStyle="{x:Null}"
-             d:DesignHeight="Auto" MinHeight="275" Width="Auto">
-    <GroupBox x:Uid="grp_uijog" Header="Jogging" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto" Height="350">
-        <local:JogBaseControl x:Name="jogBase" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0" Width="588">
-            <local:JogBaseControl.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleY="0.068"/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="0.591"/>
-                </TransformGroup>
-            </local:JogBaseControl.RenderTransform>
+             FocusVisualStyle="{x:Null}" MinHeight="350" Width="452">
+    <GroupBox x:Uid="grp_uijog" Header="Jogging" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto" Height="355">
+        <local:JogBaseControl x:Name="jogBase" Margin="0,0,0,2" Width="431">
         </local:JogBaseControl>
     </GroupBox>
 </UserControl>

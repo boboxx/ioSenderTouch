@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -49,6 +50,10 @@ namespace CNC.Controls
 
         public delegate void ZeroClickHandler(object sender, RoutedEventArgs e);
         public event ZeroClickHandler ZeroClick;
+
+        public event EventHandler OnAxisHomeClick;
+        //public delegate void HomeClickHandler(object sender, RoutedEventArgs e);
+        //public event HomeClickHandler HomeClick;
 
         public DROBaseControl()
         {
@@ -63,7 +68,7 @@ namespace CNC.Controls
             get { return (string)GetValue(LabelProperty); }
             set { SetValue(LabelProperty, value); }
         }
-
+     
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(DROBaseControl), new PropertyMetadata());
         public double Value
         {
@@ -93,7 +98,10 @@ namespace CNC.Controls
             get { return txtReadout.Tag; }
             set { txtReadout.Tag = btnZero.Tag = value; }
         }
-
+        private void btnHome_Click(object sender, RoutedEventArgs e)
+        {
+            OnAxisHomeClick?.Invoke(sender, e);
+        }
         private void btnZero_Click(object sender, RoutedEventArgs e)
         {
             ZeroClick?.Invoke(sender, e);
