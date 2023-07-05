@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="90" d:DesignWidth="255">
+             d:DesignHeight="100" d:DesignWidth="255">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
         <local:BoolToVisibleConverter x:Key="IsVisibleConverter" />
@@ -40,7 +40,7 @@
                 <local:LEDControl x:Uid="lbl_tlo" Grid.Row="1" Grid.Column="1" Label="TLO" IsSet="{Binding Path=IsToolOffsetActive, Mode=OneWay}" Visibility="{Binding Path=IsParserStateLive, Converter={StaticResource IsVisibleConverter}}" Margin="8,0,1,0"/>
                 <local:LEDControl x:Uid="lbl_tlo_refd" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Label="TLO ref'd" IsSet="{Binding Path=IsTloReferenceSet, Mode=OneWay}" Margin="6,0,8,0"/>
             </Grid>
-            <StackPanel Grid.Row="1" Orientation="Vertical">
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,-10">
                 <Button Name="G54" Content="G54"  Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,1"></Button>
                 <Button Name="G55" Content="G55"  Command="{Binding Path= WcsCommand}"  CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,1"></Button>
                 <Button Name="G56" Content="G56"  Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,1"></Button>

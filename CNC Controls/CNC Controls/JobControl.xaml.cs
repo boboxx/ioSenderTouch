@@ -302,7 +302,7 @@ namespace CNC.Controls
                     SendCommand("$RTC=" + DateTime.Now.ToLocalTime().ToString("s"));
             }
 
-            EnablePolling(activate);
+            //EnablePolling(activate);
 
             isActive = activate;
 

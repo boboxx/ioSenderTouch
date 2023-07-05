@@ -4,16 +4,68 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" Width="354.641" MinWidth="320
-             " Height="123.543">
+             mc:Ignorable="d" Width="354.641" MinWidth="350" Height="445">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
     </UserControl.Resources>
-    <GroupBox x:Uid="grp_mdi" x:Name="grpMDI" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Header="MDI" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="120">
-        <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="txtMDI" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
-                      Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False" HorizontalAlignment="Left" Height="30" Margin="3,0" VerticalAlignment="Center" Width="Auto" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
-            <Button x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" Content="Send" Focusable="False" Grid.Column="1" HorizontalAlignment="Right" Margin="3,4" VerticalAlignment="Center" Width="73" Height="30" Click="Send_Click"/>
-        </StackPanel>
+
+    <GroupBox x:Uid="grp_mdi" x:Name="grpMDI" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Header="MDI"
+              HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto" MinHeight="440" Margin="0,0,0,0">
+        <Grid Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Name="Panel" Margin="0,0,0,0">
+                <ComboBox x:Name="txtMDI" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
+                      Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False"
+                      HorizontalAlignment="Left" Height="30" Margin="3,0" VerticalAlignment="Center" Width="Auto" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
+                <Button x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                        Content="Send" Focusable="False" Grid.Column="1" HorizontalAlignment="Right" Margin="3,4" VerticalAlignment="Center" Width="73" Height="30" Click="Send_Click"/>
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="65" ></ColumnDefinition>
+                    <ColumnDefinition Width="65"></ColumnDefinition>
+                    <ColumnDefinition Width="65"></ColumnDefinition>
+                    <ColumnDefinition Width="65"></ColumnDefinition>
+                    <ColumnDefinition Width="65"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="65"></RowDefinition>
+                    <RowDefinition Height="65"></RowDefinition>
+                    <RowDefinition Height="65"></RowDefinition>
+                    <RowDefinition Height="65"></RowDefinition>
+                    <RowDefinition Height="65"></RowDefinition>
+
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="7" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="1" Grid.Column="0" Content="4" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="2" Grid.Column="0" Content="1" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="3" Grid.Column="0" Content="." Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="0" Grid.Column="1" Content="8" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="1" Grid.Column="1" Content="5" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="2" Grid.Column="1" Content="2" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="3" Grid.Column="1" Content="0" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="0" Grid.Column="2" Content="9" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="1" Grid.Column="2" Content="6" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="2" Grid.Column="2" Content="3" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="3" Grid.Column="2" Content="Del" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="0" Grid.Column="3" Content="+" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="1" Grid.Column="3" Content="-" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="2" Grid.Column="3" Grid.RowSpan="2"  Content="Enter" Height="Auto" Width=" Auto" Margin="1"></Button>
+
+                <Button Grid.Row="0" Grid.Column="4" Content="X" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="1" Grid.Column="4" Content="Y" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="2" Grid.Column="4" Content="Z" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="3" Grid.Column="4" Content="H" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="4" Grid.Column="0" Content="M" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="4" Grid.Column="1" Content="T" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Content="BackSpace" Height="Auto" Width="Auto" Margin="1"></Button>
+                <Button Grid.Row="4" Grid.Column="4" Content="$" Height="Auto" Width="Auto" Margin="1"></Button>
+
+            </Grid>
+        </Grid>
     </GroupBox>
 </UserControl>

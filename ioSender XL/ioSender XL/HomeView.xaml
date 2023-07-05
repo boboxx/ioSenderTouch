@@ -41,16 +41,16 @@
             </StackPanel>
         </Border>
 
-        <Border Height="350"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+        <Border Height="450"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
-                <cnccontrols:MDIControl x:Name="mdiControl" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="125" Margin="3,3,0,0"/>
+                <cnccontrols:MDIControl x:Name="mdiControl" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto" Margin="3,3,0,0"/>
                 <cnccontrols:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Top" Height="276" Margin="3,3,0,0" Width="Auto"/>
                 <cnccontrols:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
                 <cnccontrols:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Top" Width="Auto" MinWidth="270" Margin="3,3,0,0" Height="300" />
                 <cnccontrols:JogControl x:Name="jogControl" Margin="3,3,0,9" MinHeight="315" HorizontalAlignment="Center" Width="390" VerticalAlignment="Top"/>
                 <cnccontrols:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,5" Width="252" VerticalAlignment="Top"/>
                 <cnccontrols:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,0" Height="Auto" Width="255" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                
+
 
                 <!--cnccontrols:SignalsControl x:Name="signalsControl" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
                 <!--<cnccontrols:StatusControl x:Name="statusControl" Margin="0,5,0,0" VerticalAlignment="Bottom"/>-->
@@ -60,7 +60,7 @@
         <Border Width="400" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
             <StackPanel x:Name="t1" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal">
-                    <Button Name="GrblConsole"> </Button>
+                    <Button Name="GrblConsole"></Button>
                     <Button Name ="JobConsle"></Button>
                 </StackPanel>
                 <cnccontrols:ConsoleControl MinHeight="400" Height="588"/>
@@ -74,7 +74,7 @@
         <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
             <!--<cncviewer:RenderControl x:Name="gcodeRenderer"/>-->
         </Border>
-       
+
 
     </DockPanel>
 </UserControl>
