@@ -514,19 +514,13 @@
     <Resource Include="Resources\Symbols_Stop_32xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\close.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\reload.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\edit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\open.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\StatusAnnotations_Warning_16xLG_color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+    <Resource Include="Resources\edit.png" />
+    <Resource Include="Resources\open.png" />
+    <Resource Include="Resources\reload.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
