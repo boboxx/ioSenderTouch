@@ -12,7 +12,11 @@
         xmlns:local="clr-namespace:GCode_Sender"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Sender ({0})" Height="1080" Width="1920" MinHeight="1024" MinWidth="1600" 
+        Title="Sender ({0})" 
+        Width="1920"
+        Height="1080"
+        WindowState="Maximized"
+        WindowStyle="None"
         Loaded="Window_Load"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
@@ -60,7 +64,6 @@
                     <MenuItem x:Uid="mnu_about" Header="_About" Click="aboutMenuItem_Click"/>
                 </MenuItem>
             </Menu>
-
         </Border>
 
         <Border Height="45" BorderThickness="1" DockPanel.Dock="Top">
@@ -139,10 +142,6 @@
                 </ToolBar>
             </ToolBarTray>
         </Border>
-        
-        <!--<Border Height="25" Background="LemonChiffon" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
-            <TextBlock Foreground="Black">Dock = "Bottom"</TextBlock>
-        </Border>-->
 
         <Border  Name="BorderLeft" BorderThickness="1" DockPanel.Dock="Left">
 

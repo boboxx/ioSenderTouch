@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="331" d:DesignWidth="400">
+             mc:Ignorable="d" d:DesignWidth="400" MinHeight="500" Height="Auto">
     <UserControl.Resources>
         <local:StringCollectionToTextConverter x:Key="OcToString" />
     </UserControl.Resources>
@@ -15,19 +14,23 @@
             <CheckBox x:Uid="lbl_verbose" Content="Verbose" IsChecked="{Binding Path=ResponseLogVerbose}" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
             <CheckBox x:Uid="lbl_filterRT" Content="Filter realtime responses" IsChecked="{Binding Path=ResponseLogFilterRT}" IsEnabled="{Binding Path=ResponseLogVerbose}" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
             <CheckBox x:Uid="lbl_showAll" Content="Show all responses" IsChecked="{Binding Path=ResponseLogShowRTAll}" IsEnabled="{Binding Path=ResponseLogVerbose}" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
-            <Button x:Uid="btn_clear" Content="Clear" HorizontalAlignment="Right" Margin="0,5,5,0" VerticalAlignment="Top" Width="75" Click="btn_Clear"/>
+            
         </DockPanel>
-        <TextBox IsReadOnly="True" TextWrapping="NoWrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                 local:TextBoxUtilities.AlwaysScrollToEnd="True" FontSize="10" FontFamily="Verdana"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Visible">
-            <TextBox.Text>
-                <MultiBinding Converter="{StaticResource OcToString}">
-                    <Binding Path="ResponseLog" Mode="OneWay"/>
-                    <Binding Path="ResponseLog.Count" Mode="OneWay" />
-                </MultiBinding>
-            </TextBox.Text>
-        </TextBox>
+        <StackPanel Height="Auto" VerticalAlignment="Stretch">
+            <TextBox IsReadOnly="True" TextWrapping="NoWrap" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch"
+                     local:TextBoxUtilities.AlwaysScrollToEnd="True" FontSize="10" FontFamily="Verdana"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.HorizontalScrollBarVisibility="Visible" Height="Auto" MinHeight="425">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource OcToString}">
+                        <Binding Path="ResponseLog" Mode="OneWay"/>
+                        <Binding Path="ResponseLog.Count" Mode="OneWay" />
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+            <Button x:Uid="btn_clear" Width="Auto" Content="Clear" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Bottom"  Click="btn_Clear"/>
+        </StackPanel>
+       
     </DockPanel>
     <!--> </GroupBox> </!-->
 </UserControl>
