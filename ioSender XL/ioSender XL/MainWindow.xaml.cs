@@ -109,14 +109,14 @@ namespace GCode_Sender
             set
             {
                 ui.Title = BaseWindowTitle + (string.IsNullOrEmpty(value) ? "" : " - " + value);
-                ui.menuCloseFile.IsEnabled = ui.menuSaveFile.IsEnabled = !(string.IsNullOrEmpty(value) || value.StartsWith("SDCard:"));
-                ui.menuTransform.IsEnabled = ui.menuCloseFile.IsEnabled && UIViewModel.TransformMenuItems.Count > 0;
+                //ui.menuCloseFile.IsEnabled = ui.menuSaveFile.IsEnabled = !(string.IsNullOrEmpty(value) || value.StartsWith("SDCard:"));
+                //ui.menuTransform.IsEnabled = ui.menuCloseFile.IsEnabled && UIViewModel.TransformMenuItems.Count > 0;
             }
         }
 
         public bool JobRunning
         {
-            get { return menuFile.IsEnabled != true; }
+            get => _viewModel.IsJobRunning;
             set
             {
                 //         menuFile.IsEnabled = xx.IsEnabled = !value;
@@ -236,7 +236,7 @@ namespace GCode_Sender
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!(e.Cancel = !menuFile.IsEnabled))
+            //if (!(e.Cancel = !menuFile.IsEnabled))
             {
                 //UIViewModel.CurrentView.Activate(false, ViewType.Shutdown);
 
@@ -423,7 +423,7 @@ namespace GCode_Sender
                 UIViewModel.Camera = new Camera();
                 UIViewModel.Camera.Setup(UIViewModel);
                 //        Camera.Owner = owner;
-                owner.menuCamera.IsEnabled = UIViewModel.Camera.HasCamera;
+                //owner.menuCamera.IsEnabled = UIViewModel.Camera.HasCamera;
             }
 
             return UIViewModel.Camera != null;

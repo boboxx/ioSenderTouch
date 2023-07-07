@@ -271,12 +271,12 @@ namespace CNC.Controls
 
         private void distance_Click(object sender, RoutedEventArgs e)
         {
-            distance = int.Parse((string)(sender as RadioButton).Tag);
+            distance = int.Parse((string)(sender as Button).Tag);
         }
 
         private void feedrate_Click(object sender, RoutedEventArgs e)
         {
-            feedrate = int.Parse((string)(sender as RadioButton).Tag);
+            feedrate = int.Parse((string)(sender as Button).Tag);
         }
 
         private bool EndJog(Key key)

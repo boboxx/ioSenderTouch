@@ -41,12 +41,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CNC.Core;
 
 namespace CNC.Controls
 {
     public partial class MDIControl : UserControl
     {
+        private ICommand SendCommand { get; }
         public MDIControl()
         {
             InitializeComponent();
@@ -110,5 +112,41 @@ namespace CNC.Controls
             if(mdi != null)
                 mdi.Tag = "MDI";
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button button)) return;
+            var item = button.Content.ToString();
+            var txt = txtMDI.Text;
+            switch (item)
+            {
+                        
+                case "Enter":
+                    ProcessEnterAndCommand(txt);
+                    break;
+                case "Del":
+                    if(string.IsNullOrEmpty(txt))return;
+                    var remove = txt.Remove(txt.Length - 1, 1);
+                    txtMDI.Text = remove;
+                    break;
+                case "Spc":
+                    txtMDI.Text = txt + " ";
+                    break;
+                default:
+                    txtMDI.Text = txt + item;
+                    break;
+
+
+            }
+        }
+
+        private void ProcessEnterAndCommand(string txt)
+        {
+            var command = txtMDI.Text;
+            if(string.IsNullOrEmpty(txtMDI.Text))return;
+            Grbl.GrblViewModel.ExecuteCommand(command.ToUpper().Trim());
+            txtMDI.Text = string.Empty;
+        }
+
     }
 }

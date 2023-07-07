@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d"
-             FocusVisualStyle="{x:Null}" MinHeight="350" Width="452">
-    <GroupBox x:Uid="grp_uijog" Header="Jogging" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto" Height="355">
-        <local:JogBaseControl x:Name="jogBase" Margin="0,0,0,2" Width="431">
-        </local:JogBaseControl>
+             FocusVisualStyle="{x:Null}">
+    <GroupBox x:Uid="grp_uijog" Header="Jogging" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto" Height="Auto">
+        <local:JogBaseControl x:Name="jogBase" Margin="0,0,10,0" Width="310"></local:JogBaseControl>
     </GroupBox>
 </UserControl>

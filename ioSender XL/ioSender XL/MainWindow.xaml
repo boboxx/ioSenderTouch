@@ -16,7 +16,6 @@
         Width="1920"
         Height="1080"
         WindowState="Maximized"
-        WindowStyle="None"
         Loaded="Window_Load"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
@@ -41,7 +40,7 @@
         <cnccore:GrblViewModel />
     </Window.DataContext>
     <DockPanel LastChildFill="True" Name="DockPanel">
-        <Border Height="40"  BorderThickness="1" DockPanel.Dock="Top">
+        <!--<Border Height="40"  BorderThickness="1" DockPanel.Dock="Top">
             <Menu IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}">
                 <MenuItem x:Uid="mnu_file" x:Name="menuFile" Header="_File">
                     <MenuItem x:Uid="mnu_load" Header="_Load" Click="fileOpenMenuItem_Click"/>
@@ -64,7 +63,7 @@
                     <MenuItem x:Uid="mnu_about" Header="_About" Click="aboutMenuItem_Click"/>
                 </MenuItem>
             </Menu>
-        </Border>
+        </Border>-->
 
         <Border Height="45" BorderThickness="1" DockPanel.Dock="Top">
             <StackPanel  Name="Panel" Orientation="Horizontal"  Margin="0,0,0,0" HorizontalAlignment="Center">
