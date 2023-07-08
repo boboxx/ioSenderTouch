@@ -53,7 +53,7 @@ using CNC.Controls.Probing;
 using GCode_Sender.Commands;
 using ConfigControl = CNC.Controls.Probing.ConfigControl;
 #if ADD_CAMERA
-using CNC.Controls.Camera;
+
 #endif
 
 namespace GCode_Sender
@@ -219,7 +219,8 @@ namespace GCode_Sender
             GCode.File.AddTransformer(typeof(GCodeRotateViewModel), (string)FindResource("MenuRotate"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(ArcsToLines), (string)FindResource("MenuArcsToLines"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(GCodeCompress), (string)FindResource("MenuCompress"), UIViewModel.TransformMenuItems);
-            GCode.File.AddTransformer(typeof(CNC.Controls.DragKnife.DragKnifeViewModel), (string)FindResource("MenuDragKnife"), UIViewModel.TransformMenuItems);
+            //TODO remove dragKnife
+            //GCode.File.AddTransformer(typeof(CNC.Controls.DragKnife.DragKnifeViewModel), (string)FindResource("MenuDragKnife"), UIViewModel.TransformMenuItems);
 
             _homeView.ConfiguationLoaded(UIViewModel, AppConfig.Settings);
 
@@ -420,15 +421,15 @@ namespace GCode_Sender
 #if ADD_CAMERA
         private static bool enableCamera(MainWindow owner)
         {
-            if (UIViewModel.Camera == null)
-            {
-                UIViewModel.Camera = new Camera();
-                UIViewModel.Camera.Setup(UIViewModel);
-                //        Camera.Owner = owner;
-                //owner.menuCamera.IsEnabled = UIViewModel.Camera.HasCamera;
-            }
+            //if (UIViewModel.Camera == null)
+            //{
+            //    UIViewModel.Camera = new Camera();
+            //    UIViewModel.Camera.Setup(UIViewModel);
+            //    //        Camera.Owner = owner;
+            //    //owner.menuCamera.IsEnabled = UIViewModel.Camera.HasCamera;
+            //}
 
-            return UIViewModel.Camera != null;
+           return false;
         }
 
         private void CameraOpen_Click(object sender, RoutedEventArgs e)
