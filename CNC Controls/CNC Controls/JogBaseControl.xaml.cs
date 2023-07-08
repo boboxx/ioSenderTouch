@@ -59,7 +59,8 @@ namespace CNC.Controls
         private KeypressHandler keyboard;
         private static bool keyboardMappingsOk = false;
 
-        private const Key xplus = Key.J, xminus = Key.H, yplus = Key.K, yminus = Key.L, zplus = Key.I, zminus = Key.M, aplus = Key.U, aminus = Key.N;
+        private const Key xplus = Key.J, xminus = Key.H, yplus = Key.K, yminus = Key.L, zplus = Key.I, 
+            zminus = Key.M, aplus = Key.U, aminus = Key.N;
         public JogBaseControl()
         {
             InitializeComponent();
@@ -79,6 +80,9 @@ namespace CNC.Controls
                 case nameof(JogViewModel.Distance):
                     if (AppConfig.Settings.Jog.Mode == JogConfig.JogMode.UI || (AppConfig.Settings.Jog.LinkStepJogToUI && JogData.StepSize != JogViewModel.JogStep.Step3))
                         (DataContext as GrblViewModel).JogStep = JogData.Distance;
+                    break;
+                case nameof(JogViewModel.FeedRate):
+                    (DataContext as GrblViewModel).JogRate = JogData.FeedRate;
                     break;
             }
         }
@@ -271,12 +275,21 @@ namespace CNC.Controls
 
         private void distance_Click(object sender, RoutedEventArgs e)
         {
-            distance = int.Parse((string)(sender as Button).Tag);
+            if (!(sender is Button button)) return;
+            if (Enum.TryParse(button.Tag.ToString(), true, out JogViewModel.JogStep step))
+            {
+                JogData.StepSize = step;
+            }
+
         }
 
         private void feedrate_Click(object sender, RoutedEventArgs e)
         {
-            feedrate = int.Parse((string)(sender as Button).Tag);
+            if (!(sender is Button button)) return;
+            if (Enum.TryParse(button.Tag.ToString(), true, out JogViewModel.JogFeed feed))
+            {
+                JogData.Feed = feed;
+            }
         }
 
         private bool EndJog(Key key)
@@ -377,7 +390,7 @@ namespace CNC.Controls
 
             else {
 
-                var distance = cmd[1] == '-' ? -JogData.Distance : JogData.Distance;
+                var jogDataDistance = cmd[1] == '-' ? -JogData.Distance : JogData.Distance;
 
                 if (softLimits)
                 {
@@ -387,9 +400,12 @@ namespace CNC.Controls
                         return;
 
                     if (axis != jogAxis)
-                        position = distance + model.MachinePosition.Values[axis];
+                    {
+                        if (model != null) 
+                            position = jogDataDistance + model.MachinePosition.Values[axis];
+                    }
                     else
-                        position += distance;
+                        position += jogDataDistance;
 
                     if (GrblInfo.ForceSetOrigin)
                     {
@@ -421,9 +437,11 @@ namespace CNC.Controls
 
                     jogAxis = axis;
 
-                    cmd = string.Format("$J=G53{0}{1}{2}F{3}", mode, cmd.Substring(0, 1), position.ToInvariantString(), Math.Ceiling(JogData.FeedRate).ToInvariantString());
+                    cmd =
+                        $"$J=G53{mode}{cmd.Substring(0, 1)}{position.ToInvariantString()}F{Math.Ceiling(JogData.FeedRate).ToInvariantString()}";
                 } else
-                    cmd = string.Format("$J=G91{0}{1}{2}F{3}", mode, cmd.Substring(0, 1), distance.ToInvariantString(), Math.Ceiling(JogData.FeedRate).ToInvariantString());
+                    cmd =
+                        $"$J=G91{mode}{cmd.Substring(0, 1)}{jogDataDistance.ToInvariantString()}F{Math.Ceiling(JogData.FeedRate).ToInvariantString()}";
             }
 
             model.ExecuteCommand(cmd);
@@ -432,26 +450,6 @@ namespace CNC.Controls
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             JogCommand((string)(sender as Button).Tag == "stop" ? "stop" : (string)(sender as Button).Content);
-        }
-    }
-
-    internal class ArrayValues<T> : ViewModelBase
-    {
-        private T[] arr = new T[4];
-
-        public int Length { get { return arr.Length; } }
-
-        public T this[int i]
-        {
-            get { return arr[i]; }
-            set
-            {
-                if (!value.Equals(arr[i]))
-                {
-                    arr[i] = value;
-                    OnPropertyChanged(i.ToString());
-                }
-            }
         }
     }
 

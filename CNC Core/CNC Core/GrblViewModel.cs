@@ -88,6 +88,7 @@ namespace CNC.Core
         private  string _alarmConText;
         private  bool _showAlarmButton;
         private string _toolNumber;
+        private double _jogRate;
 
         public ICommand ClearAlarmCommand { get; }
         public ICommand SettingsCommand { get; }
@@ -748,7 +749,18 @@ namespace CNC.Core
 
         public bool IsParserStateLive { get { return _isParserStateLive; } set { _isParserStateLive = value; OnPropertyChanged(); } }
 
-      
+        public double JogRate
+
+        {
+            get => _jogRate;
+            set
+            {
+                if (_jogRate == value) return;
+                _jogRate = value;
+
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 

@@ -6,20 +6,18 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
         xmlns:cnccontrols="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
-        xmlns:cncviewer="clr-namespace:CNC.Controls.Viewer;assembly=CNC.Controls.Viewer"
-        xmlns:cnclathecontrols="clr-namespace:CNC.Controls.Lathe;assembly=CNC.Controls.Lathe"
-        xmlns:cncprobingcontrols="clr-namespace:CNC.Controls.Probing;assembly=CNC.Controls.Probing"
-        xmlns:local="clr-namespace:GCode_Sender"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Sender ({0})" 
-        Width="1920"
-        Height="1080"
+        WindowStyle="None"
         WindowState="Maximized"
+        MinWidth="1600"
+        MinHeight="720"
         Loaded="Window_Load"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
-        Closed="Window_Closed" Icon="App.ico" 
+        Closed="Window_Closed" 
+        Icon="App.ico" 
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
@@ -67,18 +65,23 @@
 
         <Border Height="45" BorderThickness="1" DockPanel.Dock="Top">
             <StackPanel  Name="Panel" Orientation="Horizontal"  Margin="0,0,0,0" HorizontalAlignment="Center">
-                <Label  Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center"/>
-                <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-                <Label  Name = "GRBLState" Content="GRBL State:"  FontSize=" 20" HorizontalContentAlignment="Center" />
-                <Label  Name = "StateLabel" Content="{Binding GrblCurentState}"  FontSize=" 20" HorizontalContentAlignment="Center" />
-                <Label Name ="StateColorLabel" Background="{Binding Path =GrblState, Converter={StaticResource StateColorConverter}}" Width="25" Height="25" VerticalAlignment="top" HorizontalContentAlignment="Center"/>
-                <Label  Name="WCSLabel" Content="WCS:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="15,0,0,0"/>
-                <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
-                <Label  Name="Signals" Content="Signal Status:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="3,0,0,0"/>
-                <cnccontrols:SignalsControl></cnccontrols:SignalsControl>
-                <Label  Name="Tool" Content="Tool Number:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  Margin="15,0,0,0"/>
-                <Label  Name="ToolNumber" Content="{Binding Tool}"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
-                <Button Margin="50,0,0,0"
+                <Label  Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Label  Name = "GRBLState" Content="GRBL State:"  FontSize=" 20" HorizontalContentAlignment="Center"  VerticalAlignment="Center"/>
+                <Label  Name = "StateLabel" Content="{Binding GrblCurentState}"  FontSize=" 20" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
+                <Label Name ="StateColorLabel" Background="{Binding Path =GrblState, Converter={StaticResource StateColorConverter}}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Label  Name="JogDistanceLabel" Content="Jog Distance:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <Label  Name="JogDistance" Content="{Binding JogStep}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
+                <Label  Name="JogFeedLabel" Content="Jog Feed:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <Label  Name="JogFeed" Content="{Binding JogRate}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
+
+                <Label  Name="WCSLabel" Content="WCS:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
+                <Label  Name="Signals" Content="Signal Status:"  BorderThickness="1" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="20,0,0,0"/>
+                <cnccontrols:SignalsControl VerticalAlignment="Top"></cnccontrols:SignalsControl>
+                <Label  Name="Tool" Content="Tool Number:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <Label  Name="ToolNumber" Content="{Binding Tool}" VerticalAlignment="Center"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
+                <Button Margin="50,1,1,1"
                         materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                         materialDesign:ButtonProgressAssist.Value="-1" Width="175" Height="40" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Center" 
@@ -87,6 +90,7 @@
                         Background="Red" Command="{ Binding ClearAlarmCommand}"
                         Visibility="{Binding ShowAlarmButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Style="{StaticResource MaterialDesignRaisedButton}" />
+                <Button Content="ShutDown" VerticalAlignment="Center" HorizontalAlignment="Right" Height="Auto" Width="100" Click="ButtonBase_OnClick" Margin="20,1,1,1"></Button>
             </StackPanel>
         </Border>
 

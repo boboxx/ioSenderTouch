@@ -5,24 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="255">
+             d:DesignWidth="255">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
         <local:BoolToVisibleConverter x:Key="IsVisibleConverter" />
     </UserControl.Resources>
-    <GroupBox x:Uid="grp_workparams" x:Name="grpWorkParams" Header="Work Parameters" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="323" Width="250" Margin="0,0,-87,-233">
-        <Grid Name="Main" Margin="0,0,0,5">
+    <GroupBox x:Uid="grp_workparams" x:Name="grpWorkParams" Header="Work Parameters" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="Auto" Width="250">
+        <Grid Name="Main" Height="Auto" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Left" Height="Auto" Margin="0,4,0,0" VerticalAlignment="Top" Width="235">
+            <Grid HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Stretch"  Width="235">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="55"/>
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="45"/>
                     <ColumnDefinition Width="75"/>
-
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -40,7 +39,7 @@
                 <local:LEDControl x:Uid="lbl_tlo" Grid.Row="1" Grid.Column="1" Label="TLO" IsSet="{Binding Path=IsToolOffsetActive, Mode=OneWay}" Visibility="{Binding Path=IsParserStateLive, Converter={StaticResource IsVisibleConverter}}" Margin="8,0,1,0"/>
                 <local:LEDControl x:Uid="lbl_tlo_refd" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Label="TLO ref'd" IsSet="{Binding Path=IsTloReferenceSet, Mode=OneWay}" Margin="6,0,8,0"/>
             </Grid>
-            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,-10">
+            <StackPanel Grid.Row="1" Orientation="Vertical" >
                 <Button Name="G54" Content="G54"  Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,1"></Button>
                 <Button Name="G55" Content="G55"  Command="{Binding Path= WcsCommand}"  CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,1"></Button>
                 <Button Name="G56" Content="G56"  Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,1"></Button>

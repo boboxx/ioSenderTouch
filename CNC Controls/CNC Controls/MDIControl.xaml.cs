@@ -103,7 +103,11 @@ namespace CNC.Controls
                 (DataContext as GrblViewModel).ExecuteCommand("");
 
             if (!string.IsNullOrEmpty(Command) && !Commands.Contains(Command))
+            {
                 Commands.Insert(0, Command);
+            }
+            Grbl.GrblViewModel.ExecuteCommand(Command.ToUpper().Trim());
+            txtMDI.SelectedIndex = -1;
         }
 
         private void MDIControl_Loaded(object sender, RoutedEventArgs e)
@@ -146,6 +150,7 @@ namespace CNC.Controls
             if(string.IsNullOrEmpty(txtMDI.Text))return;
             Grbl.GrblViewModel.ExecuteCommand(command.ToUpper().Trim());
             txtMDI.Text = string.Empty;
+            txtMDI.SelectedIndex = -1;
         }
 
     }

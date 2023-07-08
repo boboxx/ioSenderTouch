@@ -47,8 +47,10 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CNC.Controls.Probing;
+using GCode_Sender.Commands;
 using ConfigControl = CNC.Controls.Probing.ConfigControl;
 #if ADD_CAMERA
 using CNC.Controls.Camera;
@@ -64,7 +66,7 @@ namespace GCode_Sender
         public static CNC.Controls.Viewer.Viewer GCodeViewer = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
 
-
+       
 
         private bool saveWinSize = false;
         private readonly GrblViewModel _viewModel;
@@ -470,6 +472,12 @@ namespace GCode_Sender
             }
 
             return view;
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+
         }
     }
 }
