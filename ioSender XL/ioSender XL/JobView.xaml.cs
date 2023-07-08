@@ -232,6 +232,9 @@ namespace GCode_Sender
 
                 model.Keyboard.IsJoggingEnabled = AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI;
 
+
+              
+
                 if (!GrblInfo.IsGrblHAL)
                     model.Keyboard.IsContinuousJoggingEnabled = AppConfig.Settings.Jog.KeyboardEnable;
             }

@@ -89,6 +89,7 @@ namespace CNC.Core
         private  bool _showAlarmButton;
         private string _toolNumber;
         private double _jogRate;
+        private bool _hasProbing;
 
         public ICommand ClearAlarmCommand { get; }
         public ICommand SettingsCommand { get; }
@@ -581,7 +582,29 @@ namespace CNC.Core
             }
         }
         public int ScrollPosition { get { return _scrollpos; } set { _scrollpos = value;  OnPropertyChanged(); } }
-        public double JogStep { get { return _jogStep; } set { _jogStep = value; OnPropertyChanged(); } }
+
+        public double JogStep
+        {
+            get { return _jogStep; }
+            set
+            {
+                _jogStep = value; 
+                OnPropertyChanged();
+            }
+        }
+
+        public double JogRate
+
+        {
+            get => _jogRate;
+            set
+            {
+                if (_jogRate == value) return;
+                _jogRate = value;
+
+                OnPropertyChanged();
+            }
+        }
         public GrblEncoderMode OverrideEncoderMode { get { return _encoder_ovr; } set { _encoder_ovr = value; OnPropertyChanged(); } }
 
         public string RunTime { get { return JobTimer.RunTime; } set { OnPropertyChanged(); } } // Cannot be set...
@@ -749,15 +772,13 @@ namespace CNC.Core
 
         public bool IsParserStateLive { get { return _isParserStateLive; } set { _isParserStateLive = value; OnPropertyChanged(); } }
 
-        public double JogRate
-
+        public bool HasProbing
         {
-            get => _jogRate;
+            get => _hasProbing;
             set
             {
-                if (_jogRate == value) return;
-                _jogRate = value;
-
+                if (value == _hasProbing) return;
+                _hasProbing = value;
                 OnPropertyChanged();
             }
         }

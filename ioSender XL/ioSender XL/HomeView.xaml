@@ -14,6 +14,7 @@
              IsVisibleChanged="JobView_IsVisibleChanged"
              FocusVisualStyle="{x:Null}"
              SizeChanged="JobView_SizeChanged">
+
     <UserControl.Resources>
         <system:String x:Uid="str_msgWait" x:Key="MsgWaiting">Waiting for controller ({0})...</system:String>
         <system:String x:Uid="str_msgNoCommAlarm" x:Key="MsgNoCommAlarm">Controller is not able to communicate due to alarm {0}, attempting a soft reset.</system:String>
@@ -33,7 +34,7 @@
         <Border Height="35"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Job" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_2"  Width="140" Margin="1,0,1,0" ></Button>
-                <Button Content="Probe" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"  Width="140" Margin="1,0,1,0" ></Button>
+                <Button Content="Probe" Visibility="{Binding  Path= HasProbing,Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"  Width="140" Margin="1,0,1,0" ></Button>
                 <Button Content="Offset" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_4" Width="140" Margin="1,0,1,0" ></Button>
                 <Button Content="Grbl Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click" Width="140" Margin="1,0,1,0"  ></Button>
                 <Button Content="App Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_3" Width="140" Margin="1,0,1,0" ></Button>
@@ -47,28 +48,35 @@
                 <cnccontrols:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="Auto" MinWidth="270" Margin="3,3,0,5" Height="Auto" />
                 <cnccontrols:JogControl x:Name="jogControl" Margin="3,3,0,5" MinHeight="300" HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Top" />
                 <cnccontrols:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,5" Width="252" VerticalAlignment="Top"/>
-            
+
             </StackPanel>
         </Border>
         <!--<Border Width="400" BorderBrush="Black" BorderThickness="1"  VerticalAlignment="Top" DockPanel.Dock="Left">-->
-            <Grid DockPanel.Dock="Left" Width="425">
-            
-                <cnccontrols:ConsoleControl HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Margin="2,5,0,5" />
-            
-                <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">-->
-                    <!--<Button Name="GrblConsole"></Button>-->
-                    <!--<Button Name ="JobConsle"></Button>-->
-                <!--</StackPanel>-->
-               
-            </Grid>
+        <Grid DockPanel.Dock="Left" Width="425">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" VerticalAlignment ="Top"  HorizontalAlignment="Stretch" Height="35" >
+                <Button  Name="btnShowConsole" Content="Console" Click="ButtonBase_OnClick"   Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource BooleanToVisibilityConverter}}"></Button>
+            </StackPanel>
+            <cnccontrols:ConsoleControl Grid.Row="1" Name="ConsoleControl" HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Margin="2,5,0,5" />
+            <cnccontrols:GCodeListControl Grid.Row="1" Name ="CodeListControl"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,5,0,10" Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource BooleanToVisibilityConverter}}"></cnccontrols:GCodeListControl>
+
+            <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">-->
+            <!--<Button Name="GrblConsole"></Button>-->
+            <!--<Button Name ="JobConsle"></Button>-->
+            <!--</StackPanel>-->
+
+        </Grid>
         <!--</Border>-->
         <Border Name="RightMenuBorder" BorderBrush="Black" BorderThickness="1" Width="250" DockPanel.Dock="Right">
             <StackPanel>
                 <cnccontrols:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
-             
+
                 <cnccontrols:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Bottom" Height="125" Width="145"/>
             </StackPanel>
-           
+
         </Border>
         <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
             <!--<cncviewer:RenderControl x:Name="gcodeRenderer"/>-->

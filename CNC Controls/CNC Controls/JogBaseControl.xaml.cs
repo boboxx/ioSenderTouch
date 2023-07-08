@@ -68,6 +68,7 @@ namespace CNC.Controls
             JogData = new JogViewModel();
 
             Focusable = true;
+            JogData.Feed = (JogViewModel.JogFeed)feedrate;
         }
 
         public static JogViewModel JogData { get; private set; }
@@ -98,14 +99,15 @@ namespace CNC.Controls
 
         private void JogControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is GrblViewModel)
+            if (DataContext is GrblViewModel viewModel)
             {
                 mode = GrblSettings.GetInteger(GrblSetting.ReportInches) == 0 ? "G21" : "G20";
                 softLimits = !(GrblInfo.IsGrblHAL && GrblSettings.GetInteger(grblHALSetting.SoftLimitJogging) == 1) && GrblSettings.GetInteger(GrblSetting.SoftLimitsEnable) == 1;
                 limitSwitchesClearance = GrblSettings.GetDouble(GrblSetting.HomingPulloff);
-
+                
+              
                 JogData.SetMetric(mode == "G21");
-
+                viewModel.JogRate = JogData.FeedRate;
                 if (!keyboardMappingsOk)
                 {
                     if (!GrblInfo.HasFirmwareJog || AppConfig.Settings.Jog.LinkStepJogToUI)

@@ -64,9 +64,10 @@ namespace GCode_Sender
         private readonly GrblViewModel _model;
         private readonly GrblConfigView _grblSettingView;
         private readonly AppConfigView _grblAppSettings;
-        private readonly ProbingView _probeView;
+        private  ProbingView _probeView;
         private readonly RenderControl _renderView;
         private readonly OffsetView _offsetView;
+        private bool _hasProbing;
 
         public HomeView(GrblViewModel model)
         {
@@ -82,10 +83,9 @@ namespace GCode_Sender
             DataContext = _model;
             Grbl.GrblViewModel = _model;
             DRO.DROEnabledChanged += DRO_DROEnabledChanged;
-           
             DataContextChanged += View_DataContextChanged;
-
-             InitSystem();
+            InitSystem();
+         
         }
 
         private void View_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -421,8 +421,6 @@ namespace GCode_Sender
                 if (GrblInfo.LatheModeEnabled)
                 {
                     MainWindow.EnableView(true, ViewType.Turning);
-                    //      MainWindow.EnableView(true, ViewType.Parting);
-                    //      MainWindow.EnableView(true, ViewType.Facing);
                     MainWindow.EnableView(true, ViewType.G76Threading);
                 }
                 else
@@ -432,7 +430,7 @@ namespace GCode_Sender
                     MainWindow.ShowView(false, ViewType.Facing);
                     MainWindow.ShowView(false, ViewType.G76Threading);
                 }
-
+           
             if (GrblInfo.HasSDCard)
                 MainWindow.EnableView(true, ViewType.SDCard);
             else
@@ -449,7 +447,14 @@ namespace GCode_Sender
                 MainWindow.ShowView(false, ViewType.Tools);
 
             if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
-            //    MainWindow.EnableView(true, ViewType.Probing);
+            {
+                _probeView = new ProbingView(_model);
+                _probeView.Activate(true, ViewType.Probing);
+
+            }
+
+            _model.HasProbing = GrblInfo.HasProbe;
+            
 
             //MainWindow.EnableView(true, ViewType.Offsets);
             //MainWindow.EnableView(true, ViewType.GRBLConfig);
@@ -461,6 +466,8 @@ namespace GCode_Sender
 
             return true;
         }
+
+    
 
         void EnableUI(bool enable)
         {
@@ -532,7 +539,7 @@ namespace GCode_Sender
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             FillBorder.Child = _probeView;
-            _probeView.Activate(true, ViewType.Probing);
+            
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -554,6 +561,23 @@ namespace GCode_Sender
         public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
         {
             _grblAppSettings.Setup(uiViewModel,settings);
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (CodeListControl.Visibility == Visibility.Visible)
+            {
+                CodeListControl.Visibility = Visibility.Hidden;
+                ConsoleControl.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CodeListControl.Visibility = Visibility.Visible;
+                ConsoleControl.Visibility = Visibility.Hidden;
+            }
+            
+           
+            btnShowConsole.Content = ConsoleControl.Visibility == Visibility.Hidden ? "Console" : "GCode Viewer";
         }
     }
 }

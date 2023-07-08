@@ -74,7 +74,6 @@ namespace CNC.Controls.Probing
             InitializeComponent();
             profiles.Load();
             DataContext = model = new ProbingViewModel(_grblViewModel, profiles);
-            DRO.DataContext = _grblViewModel;
         }
 
 
@@ -84,27 +83,18 @@ namespace CNC.Controls.Probing
 
             if (!keyboardMappingsOk && DataContext is GrblViewModel)
             {
-                
                 KeypressHandler keyboard = _grblViewModel.Keyboard;
-
                 keyboardMappingsOk = true;
-
                 keyboard.AddHandler(Key.R, ModifierKeys.Alt, StartProbe, this);
                 keyboard.AddHandler(Key.S, ModifierKeys.Alt, StopProbe, this);
                 keyboard.AddHandler(Key.C, ModifierKeys.Alt, ProbeConnectedToggle, this);
 
-                DRO.DataContext = _grblViewModel;
-                DataContext = model = new ProbingViewModel(_grblViewModel, profiles);
-
                 _grblViewModel.OnCameraProbe += addCameraPosition;
 
-                //showDRO();
+                
             }
 
-            if (_grblViewModel != null)
-            {
-                showDRO();
-            }
+          
         }
 
         private void addCameraPosition(Position position)
@@ -227,7 +217,6 @@ namespace CNC.Controls.Probing
 
         private void ProbingView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            showDRO();
             showProbeProperties();
         }
 
@@ -452,22 +441,5 @@ namespace CNC.Controls.Probing
         }
 
         // https://stackoverflow.com/questions/5707143/how-to-get-the-width-height-of-a-collapsed-control-in-wpf
-        private void showDRO()
-        {
-            //double width;
-
-            //if (droPanel.Visibility == Visibility.Collapsed)
-            //{
-            //    droPanel.Visibility = Visibility.Hidden;
-            //    droPanel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            //    width = droPanel.DesiredSize.Width;
-            //    droPanel.Visibility = Visibility.Collapsed;
-            //}
-            //else
-            //    width = droPanel.ActualWidth;
-
-            //droPanel.Visibility = (tab.ActualWidth + width + t1.ActualWidth + 20) < ActualWidth ? Visibility.Visible : Visibility.Collapsed;
-            //dp.Width = droPanel.Visibility == Visibility.Visible  ? 460 : 240;
-        }
     }
 }

@@ -252,7 +252,8 @@ namespace CNC.Core
 
         public void WriteByte(byte data)
         {
-            if (serialPort != null)
+            if (serialPort != null && serialPort.IsOpen)
+
                 serialPort.BaseStream.Write(new byte[1] { data }, 0, 1);
         }
 

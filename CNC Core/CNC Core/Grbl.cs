@@ -1056,7 +1056,7 @@ namespace CNC.Core
             model.Keyboard.SoftLimits = GrblSettings.GetInteger(GrblSetting.SoftLimitsEnable) == 1;
             model.Keyboard.LimitSwitchesClearance = GrblSettings.GetDouble(GrblSetting.HomingPulloff);
             model.GrblState = model.GrblState; // Temporary hack to enable the Home button when homing is enabled
-
+         
             HomingDirection = (AxisFlags)GrblSettings.GetInteger(GrblSetting.HomingDirMask);
 
             if (AxisFlags == AxisFlags.None)

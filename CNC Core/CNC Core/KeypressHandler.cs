@@ -107,6 +107,7 @@ namespace CNC.Core
         public bool CanJog2 { get { return grbl.GrblState.State == GrblStates.Idle || grbl.GrblState.State == GrblStates.Tool || grbl.GrblState.State == GrblStates.Jog; } }
         public bool CanJog { get { return allowJog && (grbl.GrblState.State == GrblStates.Idle || grbl.GrblState.State == GrblStates.Tool || grbl.GrblState.State == GrblStates.Jog); } }
         public bool IsJogging { get { return jogMode != JogMode.None || grbl.GrblState.State == GrblStates.Jog; } }
+       
 
         public bool SaveMappings (string filename)
         {
@@ -342,6 +343,7 @@ namespace CNC.Core
                         preCancel = !(jogMode == JogMode.Step || jogMode == JogMode.None);
                         jogMode = JogMode.Step;
                         JogDistances[(int)jogMode] = grbl.JogStep;
+                      
                     }
                     else if (IsContinuousJoggingEnabled)
                     {
