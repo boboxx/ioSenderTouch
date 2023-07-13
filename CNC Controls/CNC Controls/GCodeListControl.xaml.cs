@@ -52,11 +52,15 @@ namespace CNC.Controls
             {
                 case nameof(GrblViewModel.ScrollPosition):
                     int sp = ((GrblViewModel)sender).ScrollPosition;
-                    if (sp == 0)
-                        scroll.ScrollToTop();
-                    else
-                        scroll.ScrollToVerticalOffset(sp);
-                    break;
+                    grdGCode.SelectedIndex = sp;
+                    grdGCode.UpdateLayout();
+                    grdGCode.ScrollIntoView(grdGCode.SelectedItem);
+                        break;
+                    //if (sp == 0)
+                    //    scroll.ScrollToTop();
+                    //else
+                    //    scroll.ScrollToVerticalOffset(sp);
+                    //break;
             }
         }
     }
