@@ -26,3 +26,6 @@ obj/
 # =========================
 # Operating System Files
 # =========================
+/ioSender XL/packages/Microsoft.Bcl.AsyncInterfaces.8.0.0-preview.6.23329.7
+/ioSender XL/packages/Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0-preview.6.23329.7/buildTransitive
+/ioSender XL/packages/*
