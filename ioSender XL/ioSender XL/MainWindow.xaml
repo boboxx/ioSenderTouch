@@ -11,9 +11,9 @@
         Title="Sender ({0})" 
         WindowStyle="None"
         WindowState="Maximized"
-        MinWidth="1600"
-        MinHeight="720"
         Loaded="Window_Load"
+        Width="1920"
+        Height="1080"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
         Closed="Window_Closed" 
@@ -64,34 +64,44 @@
         </Border>-->
 
         <Border Height="45" BorderThickness="1" DockPanel.Dock="Top">
-            <StackPanel  Name="Panel" Orientation="Horizontal"  Margin="0,0,0,0" HorizontalAlignment="Center">
-                <Label  Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
-                <Label  Name = "GRBLState" Content="GRBL State:"  FontSize=" 20" HorizontalContentAlignment="Center"  VerticalAlignment="Center"/>
-                <Label  Name = "StateLabel" Content="{Binding GrblCurentState}"  FontSize=" 20" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
-                <Label Name ="StateColorLabel" Background="{Binding Path =GrblState, Converter={StaticResource StateColorConverter}}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
-                <Label  Name="JogDistanceLabel" Content="Jog Distance:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
-                <Label  Name="JogDistance" Content="{Binding JogStep}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
-                <Label  Name="JogFeedLabel" Content="Jog Feed:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
-                <Label  Name="JogFeed" Content="{Binding JogRate}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
+            <Grid  Name="Panel" Margin="0,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="IO Sender Touch" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Label>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label  Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label  Name = "GRBLState" Content="GRBL State:"  FontSize=" 20" HorizontalContentAlignment="Center"  VerticalAlignment="Center"/>
+                    <Label  Name = "StateLabel" Content="{Binding GrblCurentState}"  FontSize=" 20" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
+                    <Label Name ="StateColorLabel" Background="{Binding Path =GrblState, Converter={StaticResource StateColorConverter}}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label  Name="JogDistanceLabel" Content="Jog Distance:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Label  Name="JogDistance" Content="{Binding JogStep}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
+                    <Label  Name="JogFeedLabel" Content="Jog Feed:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Label  Name="JogFeed" Content="{Binding JogRate}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
 
-                <Label  Name="WCSLabel" Content="WCS:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
-                <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
-                <Label  Name="Signals" Content="Signal Status:"  BorderThickness="1" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="20,0,0,0"/>
-                <cnccontrols:SignalsControl VerticalAlignment="Top"></cnccontrols:SignalsControl>
-                <Label  Name="Tool" Content="Tool Number:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
-                <Label  Name="ToolNumber" Content="{Binding Tool}" VerticalAlignment="Center"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
-                <Button Margin="50,1,1,1"
+                    <Label  Name="WCSLabel" Content="WCS:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  BorderThickness="1" FontSize="20"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
+                    <Label  Name="Signals" Content="Signal Status:"  BorderThickness="1" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="20,0,0,0"/>
+                    <cnccontrols:SignalsControl VerticalAlignment="Top"></cnccontrols:SignalsControl>
+                    <Label  Name="Tool" Content="Tool Number:"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"  VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Label  Name="ToolNumber" Content="{Binding Tool}" VerticalAlignment="Center"  BorderThickness="1" FontSize="20" HorizontalContentAlignment="Center"/>
+                   
+                </StackPanel>
+                <Button Grid.Column="2"  Margin="0,0,20,0"
                         materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                        materialDesign:ButtonProgressAssist.Value="-1" Width="175" Height="40" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Center" 
+                        materialDesign:ButtonProgressAssist.Value="-1" Width="150" Height="40" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" 
                         BorderBrush="Red"
                         Content="{Binding AlarmConText}"
                         Background="Red" Command="{ Binding ClearAlarmCommand}"
                         Visibility="{Binding ShowAlarmButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Style="{StaticResource MaterialDesignRaisedButton}" />
-                <Button Content="ShutDown" VerticalAlignment="Center" HorizontalAlignment="Right" Height="Auto" Width="100" Click="ButtonBase_OnClick" Margin="20,1,1,1"></Button>
-            </StackPanel>
+                <Button Grid.Column="3" Content="Shut Down" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="40" Width="110" Click="ButtonBase_OnClick" ></Button>
+            </Grid>
         </Border>
 
         <Border Height="25"  BorderThickness="1" DockPanel.Dock="Top">

@@ -3,16 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              x:Name="root" d:DesignWidth="275">
     <UserControl.Resources>
-
         <ResourceDictionary>
-            
-
-            <local:LogicalNotConverter x:Key="LogicalNotConverter" />
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+                <local:LogicalNotConverter x:Key="LogicalNotConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -41,12 +41,17 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  Content="&lt;materialDesign:PackIcon Kind=&quot;Plus&quot; /&gt;"  Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0"></Button>
-                <Button Grid.Column="1" Name ="DecreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" ></Button>
-                <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"  Margin="0,0,10,0"></Button>
-                
+                <Button Grid.Column="0"  Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" Command="{ Binding SpindleOverRide}">
+                    <materialDesign:PackIcon  Height="30" Width="30" Kind="Plus" />
+                </Button>
+                <Button Grid.Column="1" Name ="DecreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" Command="{ Binding SpindleOverRide}">
+                    <materialDesign:PackIcon Height="30" Width="30" Kind="MinusThick" />
+                </Button>
+                <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"  Margin="0,0,10,0" Command="{ Binding SpindleOverRideReset}" >
+                    <materialDesign:PackIcon Height="25" Width="25" Kind="Cached" />
+                </Button>
             </Grid>
-            <!--<materialDesign:PackIcon Kind="Magnify" Opacity=".56" />-->
+           
             <Slider Grid.Row="5"
                         Style="{StaticResource MaterialDesignDiscreteSlider}"
                         Maximum="500"
@@ -56,8 +61,8 @@
                         SelectionStart="50"
                         TickFrequency="50"
                         TickPlacement="BottomRight"
-                        Value="40" 
-                        Margin="10,10,15,0"/>
+                        Value="{Binding SpindleOverRideValue, Mode=TwoWay}" 
+                        Margin="10,15,15,0"/>
             <!--<local:OverrideControl x:Name="overrideControl" Value="{Binding Path=RPMOverride, Mode=OneWay}" Grid.Row="4"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" EncoderMode="SpindleRPM" Height="Auto" Width="Auto"/>-->
         </Grid>
     </GroupBox>

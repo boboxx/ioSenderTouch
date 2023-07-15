@@ -53,6 +53,7 @@
             />
             <Button Grid.Row="6" x:Uid="btn_zeroAll" x:Name="btnZeroAll" Content="Zero all" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
                     Focusable="False"  HorizontalAlignment="Stretch" Margin="2,5" Height="Auto" Click="btnZeroAll_Click" VerticalAlignment="Stretch"/>
+          
         </Grid>
     </GroupBox>
 </UserControl>
