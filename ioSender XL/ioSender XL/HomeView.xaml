@@ -43,13 +43,12 @@
         </Border>
         <Border Height="325"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
-                <cnccontrols:MDIControl x:Name="mdiControl" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto" Margin="3,3,0,5"/>
+                <cnccontrols:MDIControl x:Name="MdiControl" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto" Margin="5,3,0,5"/>
                 <cnccontrols:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5" Width="Auto" VerticalContentAlignment="Stretch"/>
                 <cnccontrols:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,5" Height="Auto" Width="255" VerticalAlignment="Top" HorizontalAlignment="Center"/>
                 <cnccontrols:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="Auto" MinWidth="270" Margin="3,3,0,5" Height="Auto" />
                 <cnccontrols:JogControl x:Name="jogControl" Margin="3,3,0,5" MinHeight="300" HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Top" />
-                <cnccontrols:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,5" Width="252" VerticalAlignment="Top"/>
-
+                <cnccontrols:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,3" Width="252" VerticalAlignment="Top"/>
             </StackPanel>
         </Border>
         <!--<Border Width="400" BorderBrush="Black" BorderThickness="1"  VerticalAlignment="Top" DockPanel.Dock="Left">-->

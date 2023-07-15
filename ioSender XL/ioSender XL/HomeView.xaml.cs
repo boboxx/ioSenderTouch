@@ -522,7 +522,7 @@ namespace GCode_Sender
 
         protected bool ProcessKeyPreview(KeyEventArgs e)
         {
-            return _model.Keyboard.ProcessKeypress(e, !(mdiControl.IsFocused || DRO.IsFocused || spindleControl.IsFocused || workParametersControl.IsFocused));
+            return _model.Keyboard.ProcessKeypress(e, !(MdiControl.IsFocused || DRO.IsFocused || spindleControl.IsFocused || workParametersControl.IsFocused));
         }
 
         #endregion

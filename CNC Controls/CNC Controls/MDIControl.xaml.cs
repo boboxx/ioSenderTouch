@@ -54,9 +54,11 @@ namespace CNC.Controls
             InitializeComponent();
 
             Commands = new ObservableCollection<string>();
+            DataContext = Grbl.GrblViewModel
+                ;
         }
 
-        public new bool IsFocused { get { return txtMDI.IsKeyboardFocusWithin; } }
+        public new bool IsFocused { get { return TxtMdi.IsKeyboardFocusWithin; } }
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(string), typeof(MDIControl), new PropertyMetadata(""));
         public string Command
@@ -107,12 +109,12 @@ namespace CNC.Controls
                 Commands.Insert(0, Command);
             }
             Grbl.GrblViewModel.ExecuteCommand(Command.ToUpper().Trim());
-            txtMDI.SelectedIndex = -1;
+            TxtMdi.SelectedIndex = -1;
         }
 
         private void MDIControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var mdi = txtMDI.Template.FindName("PART_EditableTextBox", txtMDI) as TextBox;
+            var mdi = TxtMdi.Template.FindName("PART_EditableTextBox", TxtMdi) as TextBox;
             if(mdi != null)
                 mdi.Tag = "MDI";
         }
@@ -121,7 +123,7 @@ namespace CNC.Controls
         {
             if (!(sender is Button button)) return;
             var item = button.Content.ToString();
-            var txt = txtMDI.Text;
+            var txt = TxtMdi.Text;
             switch (item)
             {
                         
@@ -131,13 +133,13 @@ namespace CNC.Controls
                 case "Del":
                     if(string.IsNullOrEmpty(txt))return;
                     var remove = txt.Remove(txt.Length - 1, 1);
-                    txtMDI.Text = remove;
+                    TxtMdi.Text = remove;
                     break;
                 case "Spc":
-                    txtMDI.Text = txt + " ";
+                    TxtMdi.Text = txt + " ";
                     break;
                 default:
-                    txtMDI.Text = txt + item;
+                    TxtMdi.Text = txt + item;
                     break;
 
 
@@ -146,11 +148,11 @@ namespace CNC.Controls
 
         private void ProcessEnterAndCommand(string txt)
         {
-            var command = txtMDI.Text;
-            if(string.IsNullOrEmpty(txtMDI.Text))return;
+            var command = TxtMdi.Text;
+            if(string.IsNullOrEmpty(TxtMdi.Text))return;
             Grbl.GrblViewModel.ExecuteCommand(command.ToUpper().Trim());
-            txtMDI.Text = string.Empty;
-            txtMDI.SelectedIndex = -1;
+            TxtMdi.Text = string.Empty;
+            TxtMdi.SelectedIndex = -1;
         }
 
     }

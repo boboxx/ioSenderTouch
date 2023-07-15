@@ -3,34 +3,62 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:CNC.Controls"
-             xmlns:gcode="clr-namespace:CNC.GCode;assembly=CNC.Core"
              mc:Ignorable="d"
-             x:Name="root" d:DesignWidth="250">
+             x:Name="root" d:DesignWidth="275">
     <UserControl.Resources>
-        <local:LogicalNotConverter x:Key="LogicalNotConverter" />
+
+        <ResourceDictionary>
+            
+
+            <local:LogicalNotConverter x:Key="LogicalNotConverter" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
-    <GroupBox x:Uid="grp_spindle" x:Name="grpSpindle" Header="Spindle" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="250">
+    <GroupBox x:Uid="grp_spindle" x:Name="grpSpindle" Header="Spindle" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto">
         <Grid HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="240">
             <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
                 <RowDefinition Height="45"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            
-                <Button x:Uid="lbl_off" Grid.Row="0" x:Name="rbSpindleOff" Content="Off"  Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="0,2,0,2" Click="rbSpindle_Click"/>
-                <Button x:Uid="lbl_cw" Grid.Row="1" x:Name="rbSpindleCW" Content="CW"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30"  Margin="0,2,0,2" Click="rbSpindle_Click"/>
-                <Button x:Uid="lbl_ccw" Grid.Row="2" x:Name="rbSpindleCCW" Content="CCW"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30"  Margin="0,2,0,2" Click="rbSpindle_Click"/>
-                <StackPanel  Grid.Row="3" Orientation="Horizontal" >
-                    <Label x:Uid="lbl_rpm" x:Name="lblRPM" Content="RPM" HorizontalContentAlignment="Right" VerticalAlignment="Center" Height="28" Width="40"/>
-                    <local:NumericTextBox x:Name="cvRPM" Value="{Binding RPM, Mode=TwoWay}" MinWidth="100" IsEnabled="{Binding IsJobRunning, Converter={StaticResource LogicalNotConverter}}"
+
+            <Button x:Uid="lbl_off" Grid.Row="0" x:Name="rbSpindleOff" Content="Off"  Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="35" Margin="0,2,0,2" Click="rbSpindle_Click"/>
+            <Button x:Uid="lbl_cw" Grid.Row="1" x:Name="rbSpindleCW" Content="CW"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="35"  Margin="0,2,0,2" Click="rbSpindle_Click"/>
+            <Button x:Uid="lbl_ccw" Grid.Row="2" x:Name="rbSpindleCCW" Content="CCW"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="35"  Margin="0,2,0,2" Click="rbSpindle_Click"/>
+            <StackPanel  Grid.Row="3" Orientation="Horizontal" >
+                <Label x:Uid="lbl_rpm" x:Name="lblRPM" Content="RPM" HorizontalContentAlignment="Right" VerticalAlignment="Center" Height="28" Width="40"/>
+                <local:NumericTextBox x:Name="cvRPM" Value="{Binding RPM, Mode=TwoWay}" MinWidth="100" IsEnabled="{Binding IsJobRunning, Converter={StaticResource LogicalNotConverter}}"
                                           Format="####0" HorizontalAlignment="Left" TextWrapping="NoWrap" VerticalAlignment="Center"/>
-                </StackPanel>
-           
-            <local:OverrideControl x:Name="overrideControl" Value="{Binding Path=RPMOverride, Mode=OneWay}" Grid.Row="4"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" EncoderMode="SpindleRPM" Height="Auto" Width="Auto"/>
+            </StackPanel>
+            <Grid Grid.Row="4" Width="Auto" Height="60" Margin="10,0,0,0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"  Content="&lt;materialDesign:PackIcon Kind=&quot;Plus&quot; /&gt;"  Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0"></Button>
+                <Button Grid.Column="1" Name ="DecreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" ></Button>
+                <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"  Margin="0,0,10,0"></Button>
+                
+            </Grid>
+            <!--<materialDesign:PackIcon Kind="Magnify" Opacity=".56" />-->
+            <Slider Grid.Row="5"
+                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                        Maximum="500"
+                        Minimum="50"
+                        Orientation="Horizontal"
+                        SelectionEnd="50"
+                        SelectionStart="50"
+                        TickFrequency="50"
+                        TickPlacement="BottomRight"
+                        Value="40" 
+                        Margin="10,10,15,0"/>
+            <!--<local:OverrideControl x:Name="overrideControl" Value="{Binding Path=RPMOverride, Mode=OneWay}" Grid.Row="4"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" EncoderMode="SpindleRPM" Height="Auto" Width="Auto"/>-->
         </Grid>
     </GroupBox>
 </UserControl>

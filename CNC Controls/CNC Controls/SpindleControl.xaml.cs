@@ -57,14 +57,14 @@ namespace CNC.Controls
             rbSpindleCW.Tag = "M3{0}";
             rbSpindleCCW.Tag = "M4{0}";
 
-            overrideControl.ResetCommand = GrblConstants.CMD_SPINDLE_OVR_RESET;
-            overrideControl.FineMinusCommand = GrblConstants.CMD_SPINDLE_OVR_FINE_MINUS;
-            overrideControl.FinePlusCommand = GrblConstants.CMD_SPINDLE_OVR_FINE_PLUS;
-            overrideControl.CoarseMinusCommand = GrblConstants.CMD_SPINDLE_OVR_COARSE_MINUS;
-            overrideControl.CoarsePlusCommand = GrblConstants.CMD_SPINDLE_OVR_COARSE_PLUS;
+           var resetCommand = GrblConstants.CMD_SPINDLE_OVR_RESET;
+           var fineMinusCommand = GrblConstants.CMD_SPINDLE_OVR_FINE_MINUS;
+           var finePlusCommand = GrblConstants.CMD_SPINDLE_OVR_FINE_PLUS;
+            var coarseMinusCommand = GrblConstants.CMD_SPINDLE_OVR_COARSE_MINUS;
+            var coarsePlusCommand = GrblConstants.CMD_SPINDLE_OVR_COARSE_PLUS;
 
             cvRPM.PreviewKeyUp += txtPos_KeyPress;
-            overrideControl.CommandGenerated += overrideControl_CommandGenerated;
+            //overrideControl.CommandGenerated += overrideControl_CommandGenerated;
         }
 
         private void SpindleControl_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)

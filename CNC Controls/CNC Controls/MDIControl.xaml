@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" Width="395" MinWidth="395" Height="321">
+             mc:Ignorable="d" Width="420" MinWidth="420" Height="321">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
     </UserControl.Resources>
 
-    <Border   BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1" x:Uid="grp_mdi" x:Name="grpMDI" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
+    <Border   BorderBrush="{DynamicResource PrimaryHueMidBrush}" 
+              BorderThickness="1" x:Uid="grp_mdi" x:Name="GrpMdi" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
               HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto"   Margin="0,0,0,0">
-        <Grid Margin="0,0,0,0">
+        <Grid Margin="5,0,5,3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="254"></RowDefinition>
@@ -20,20 +21,21 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" Name="Panel" Margin="0,0,0,0">
-                <ComboBox x:Name="txtMDI" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
+                <ComboBox x:Name="TxtMdi" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
+                          SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
                       Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False"
                       HorizontalAlignment="Left" Height="30" Margin="3,16,3,24" VerticalAlignment="Center" Width="306" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
                 <Button x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                        Content="Send" Focusable="False" Grid.Column="1" HorizontalAlignment="Right" Margin="3,16,3,24" VerticalAlignment="Center" Width="73" Height="30" Click="Send_Click"/>
+                        Content="Send" Focusable="False"  HorizontalAlignment="Right" Margin="3,16,3,24" VerticalAlignment="Center" Width="73" Height="30" Click="Send_Click"/>
             </StackPanel>
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="64" ></ColumnDefinition>
-                    <ColumnDefinition Width="64"></ColumnDefinition>
-                    <ColumnDefinition Width="64"></ColumnDefinition>
-                    <ColumnDefinition Width="64"></ColumnDefinition>
-                    <ColumnDefinition Width="64"></ColumnDefinition>
-                    <ColumnDefinition Width="64"></ColumnDefinition>
+                    <ColumnDefinition Width="67" ></ColumnDefinition>
+                    <ColumnDefinition Width="67"></ColumnDefinition>
+                    <ColumnDefinition Width="67"></ColumnDefinition>
+                    <ColumnDefinition Width="67"></ColumnDefinition>
+                    <ColumnDefinition Width="67"></ColumnDefinition>
+                    <ColumnDefinition Width="67"></ColumnDefinition>
 
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -56,7 +58,7 @@
                 <Button Grid.Row="3" Grid.Column="2" Content="Spc" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Grid.Row="0" Grid.Column="3" Content="+" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Grid.Row="1" Grid.Column="3" Content="-" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="3"  Content="Enter" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
+                <Button Grid.Row="2" Grid.Column="3" Content="Enter" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
                 <Button Grid.Row="3" Grid.Column="3" Content="Del" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
                 <Button Grid.Row="0" Grid.Column="4" Content="G" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Grid.Row="1" Grid.Column="4" Content="X" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
