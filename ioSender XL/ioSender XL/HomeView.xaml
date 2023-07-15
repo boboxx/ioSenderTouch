@@ -34,7 +34,8 @@
         <Border Height="35"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Job" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_2"  Width="140" Margin="1,0,1,0" ></Button>
-                <Button Content="Probe" Visibility="{Binding  Path= HasProbing,Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"  Width="140" Margin="1,0,1,0" ></Button>
+                <Button Content="Probe" Visibility="{Binding  Path= HasProbing,Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center" Click="Button_Click_1"  Width="140" Margin="1,0,1,0" ></Button>
                 <Button Content="Offset" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_4" Width="140" Margin="1,0,1,0" ></Button>
                 <Button Content="Grbl Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click" Width="140" Margin="1,0,1,0"  ></Button>
                 <Button Content="App Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_3" Width="140" Margin="1,0,1,0" ></Button>

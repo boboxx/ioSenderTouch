@@ -246,7 +246,8 @@ namespace CNC.Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            (DataContext as GrblViewModel)?.ExecuteCommand("$H");
+           (DataContext as GrblViewModel)?.ExecuteCommand("$H");
+            
         }
     }
 }

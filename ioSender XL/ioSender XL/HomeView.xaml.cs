@@ -454,10 +454,6 @@ namespace GCode_Sender
             }
 
             _model.HasProbing = GrblInfo.HasProbe;
-            
-
-            //MainWindow.EnableView(true, ViewType.Offsets);
-            //MainWindow.EnableView(true, ViewType.GRBLConfig);
 
             if (!string.IsNullOrEmpty(GrblInfo.TrinamicDrivers))
                 MainWindow.EnableView(true, ViewType.TrinamicTuner);

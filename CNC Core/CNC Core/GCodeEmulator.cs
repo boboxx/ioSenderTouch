@@ -232,7 +232,7 @@ namespace CNC.Core
                                 machinePos[i] = g30.Values[i]; // - offsets[i] - origin[i];
                             action.End = machinePos.Point3D;
 //                            action.Token = new GCLinearMotion(Commands.G0, token.LineNumber, machinePos.Array, AxisFlags.All);
-                            action.Token = new GCAbsLinearMotion(token.Command, Commands.G0, token.LineNumber, machinePos.Array, axisFlags);
+                            action.Token = new  GCAbsLinearMotion(token.Command, Commands.G0, token.LineNumber, machinePos.Array, axisFlags);
                             yield return action;
                             action.Start = action.End;
                         }
