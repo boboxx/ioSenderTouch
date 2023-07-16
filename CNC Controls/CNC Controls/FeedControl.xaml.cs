@@ -51,20 +51,7 @@ namespace CNC.Controls
         {
             InitializeComponent();
 
-            feedOverrideControl.ResetCommand = GrblConstants.CMD_FEED_OVR_RESET;
-            feedOverrideControl.FineMinusCommand = GrblConstants.CMD_FEED_OVR_FINE_MINUS;
-            feedOverrideControl.FinePlusCommand = GrblConstants.CMD_FEED_OVR_FINE_PLUS;
-            feedOverrideControl.CoarseMinusCommand = GrblConstants.CMD_FEED_OVR_COARSE_MINUS;
-            feedOverrideControl.CoarsePlusCommand = GrblConstants.CMD_FEED_OVR_COARSE_PLUS;
-
-            rapidsOverrideControl.ResetCommand = GrblConstants.CMD_RAPID_OVR_RESET;
-            rapidsOverrideControl.FineMinusCommand = GrblConstants.CMD_RAPID_OVR_MEDIUM;
-            rapidsOverrideControl.CoarseMinusCommand = GrblConstants.CMD_RAPID_OVR_LOW;
         }
 
-        void override_CommandGenerated(string command)
-        {
-            (DataContext as GrblViewModel).ExecuteCommand(command);
-        }
     }
 }

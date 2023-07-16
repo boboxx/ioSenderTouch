@@ -91,6 +91,7 @@ namespace CNC.Core
         private double _jogRate;
         private bool _hasProbing;
         private int _spindleOverValue;
+        private int _feedOverRideValue;
 
         public delegate void GrblResetHandler();
 
@@ -100,6 +101,11 @@ namespace CNC.Core
         public ICommand SettingsCommand { get; }
         public ICommand SpindleOverRide { get; }
         public ICommand SpindleOverRideReset { get; }
+        public ICommand RapidOverRide { get; }
+        public ICommand RapidOverRideReset { get; }
+        public ICommand FeedOverRide { get; }
+        public ICommand FeedOverRideReset { get; }
+
         public string AlarmConText
         {
             get => _alarmConText;
@@ -133,7 +139,16 @@ namespace CNC.Core
             }
         }
 
-
+        public int FeedOverRideValue
+        {
+            get => _feedOverRideValue;
+            set
+            {
+                if (value == _feedOverRideValue) return;
+                _feedOverRideValue = value;
+                OnPropertyChanged();
+            }
+        }
         public GrblViewModel()
         {
             _a = _pn = _fs = _sc = _tool = string.Empty;
@@ -178,9 +193,104 @@ namespace CNC.Core
                 SetDefaultSpindleSpeed();
             });
 
+            FeedOverRideReset = new Command(_ =>
+            {
+                SetFeedOverRideReset();
+            });
+            FeedOverRide = new Command(SetFeedOverRide);
+
+            RapidOverRideReset = new Command(_ =>
+            {
+                SetRapidOverRideReset();
+            });
+
+            RapidOverRide = new Command(SetRapidOverRide);
             WcsCommand = new Command(SetWcs);
             SpindleOverRideValue = 10;
+            FeedOverRideValue = 10;
             RPMOverride = 0;
+        }
+        private void SetSpindleOverRideSpeed(object _)
+        {
+            if (!(_ is Button button)) return;
+            if (IsJobRunning && GrblState.State == GrblStates.Hold) return;
+            byte command;
+            switch (SpindleOverRideValue)
+            {
+                case 1:
+                    command = (string)button.Tag == "Plus"
+                        ? GrblConstants.CMD_SPINDLE_OVR_FINE_PLUS
+                        : GrblConstants.CMD_SPINDLE_OVR_FINE_MINUS;
+
+                    break;
+                case 10:
+                    command = (string)button.Tag == "Plus"
+                        ? GrblConstants.CMD_SPINDLE_OVR_COARSE_PLUS
+                        : GrblConstants.CMD_SPINDLE_OVR_COARSE_MINUS;
+
+                    break;
+                default:
+                    return;
+            }
+
+            Comms.com.WriteByte(command);
+        }
+
+        private void SetFeedOverRide(object b)
+        {
+            if (!(b is Button button)) return;
+            if (IsJobRunning && GrblState.State == GrblStates.Hold) return;
+            byte command;
+            switch (FeedOverRideValue)
+            {
+                case 1:
+                    command = (string)button.Tag == "Plus"
+                        ? GrblConstants.CMD_FEED_OVR_FINE_PLUS
+                        : GrblConstants.CMD_FEED_OVR_FINE_MINUS;
+
+                    break;
+                case 10:
+                    command = (string)button.Tag == "Plus"
+                        ? GrblConstants.CMD_FEED_OVR_COARSE_PLUS
+                        : GrblConstants.CMD_FEED_OVR_COARSE_MINUS;
+
+                    break;
+                default:
+                    return;
+            }
+
+            Comms.com.WriteByte(command);
+        }
+
+        private void SetRapidOverRide(object b)
+        {
+            if (!(b is Button button)) return;
+            if (IsJobRunning && GrblState.State == GrblStates.Hold) return;
+            byte command;
+            switch (button.Tag.ToString())
+            {
+                case "Medium":
+                    command = GrblConstants.CMD_RAPID_OVR_MEDIUM;
+                    break;
+                case "Low":
+                    command = GrblConstants.CMD_RAPID_OVR_LOW;
+                    break;
+                default:
+                    return;
+            }
+
+            Comms.com.WriteByte(command);
+        }
+
+        private void SetRapidOverRideReset()
+        {
+
+            Comms.com.WriteByte(GrblConstants.CMD_RAPID_OVR_RESET);
+        }
+        
+        private void SetFeedOverRideReset()
+        {
+            Comms.com.WriteByte(GrblConstants.CMD_FEED_OVR_RESET);
         }
 
         private void SetDefaultSpindleSpeed()
@@ -190,31 +300,7 @@ namespace CNC.Core
         }
 
 
-        private void SetSpindleOverRideSpeed(object _)
-        {
-            if (!(_ is Button button)) return;
-            if (IsJobRunning && GrblState.State == GrblStates.Hold) return;
-            byte command;
-            switch (SpindleOverRideValue)
-            {
-                case 1:
-                    command = (string)button.Tag == "Plus" 
-                        ? GrblConstants.CMD_SPINDLE_OVR_FINE_PLUS 
-                        : GrblConstants.CMD_SPINDLE_OVR_FINE_MINUS;
-                  
-                    break;
-                case 10:
-                    command = (string)button.Tag == "Plus"
-                        ? GrblConstants.CMD_SPINDLE_OVR_COARSE_PLUS
-                        : GrblConstants.CMD_SPINDLE_OVR_COARSE_MINUS;
-                  
-                    break;
-                default:
-                    return;
-            }
 
-            Comms.com.WriteByte(command);
-        }
 
         private void SetWcs(object x)
         {

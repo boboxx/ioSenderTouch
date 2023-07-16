@@ -4,24 +4,74 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" d:DesignWidth="270" >
     <Grid Margin="0,0,0,0">
         <GroupBox x:Uid="grp_feedrate" x:Name="grpFeedRate" Header="Feed rate" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="Auto" Width="270">
-            <Grid HorizontalAlignment="Center" Height="176" VerticalAlignment="Stretch" Width="260" Margin="0,0,0,0">
+            <Grid HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch"  Width="Auto" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <local:NumericTextBox x:Name="cvFeedRate" Value="{Binding Path=FeedRate, Mode=OneWay}" Format="####0" Background="#FFF8F8F8" HorizontalAlignment="Left" Margin="10,5,0,0" IsReadOnly="True" Focusable="False" VerticalAlignment="Top" Width="50" Grid.RowSpan="2"/>
-                <Label x:Name="lblFeedRrate" Content="{Binding Path=FeedrateUnit, Mode=OneWay}" HorizontalAlignment="Left" Margin="62,5,0,0" VerticalAlignment="Top"
-                       Grid.Row="0" RenderTransformOrigin="3.344,0.812" Width="67" Height="23" />
-                <local:OverrideControl x:Name="feedOverrideControl" Value="{Binding Path=FeedOverride, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                                       CommandGenerated="override_CommandGenerated" EncoderMode="FeedRate" Height="102"
-                                       Grid.Row="0" Width="237" Margin="0,0,0,0"/>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,0">
+                    <Label x:Name="lblFeed" Content="Feed Rate:" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
+                    <local:NumericTextBox x:Name="cvFeedRate" Value="{Binding Path=FeedRate, Mode=OneWay}" Format="####0"  HorizontalAlignment="Left"  IsReadOnly="True" Focusable="False" VerticalAlignment="Center" Width="50"/>
+                    <Label x:Name="lblFeedRrate" Content="{Binding Path=FeedrateUnit, Mode=OneWay}" HorizontalAlignment="Left" Margin="3,1" VerticalAlignment="Center" Width="67" Height="23" />
+                </StackPanel>
+                <Grid Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button   Tag="Plus" Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" Command="{ Binding FeedOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                        <materialDesign:PackIcon  Height="30" Width="30" Kind="Plus" />
+                    </Button>
+                    <Button Grid.Column="1" Tag="Minus" Name ="DecreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="10,0,0,0" Command="{ Binding FeedOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                            Grid.Row="0" >
+                        <materialDesign:PackIcon Height="30" Width="30" Kind="MinusThick" />
+                    </Button>
+                    <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"   Command="{ Binding FeedOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                            Grid.Row="0" >
+                        <materialDesign:PackIcon Height="25" Width="25" Kind="Cached" />
+                    </Button>
+                </Grid>
+                <Slider Name ="OverRidePrecent"  Grid.Row="2"
+                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                        Maximum="10"
+                        Minimum="1"
+                        Orientation="Horizontal"
+                        SelectionEnd="10"
+                        SelectionStart="1"
+                        TickFrequency="10"
+                        TickPlacement="BottomRight"
+                        Value="{Binding FeedOverRideValue, Mode=TwoWay}" 
+                        Margin="10,20,15,0"/>
                 <Label x:Uid="lbl_rapids" x:Name="lblRapids" Content="Rapids:" HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Height="22"
-                        Grid.Row="1" />
-                <local:OverrideControl x:Name="rapidsOverrideControl" Value="{Binding Path=RapidsOverride, Mode=OneWay}" MinusOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top"  CommandGenerated="override_CommandGenerated" EncoderMode="RapidRate" Height="69"  Width="233"
-                                       Grid.Row="1" Margin="25,2,2,0"/>
+                               Grid.Row="3" />
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Button  Grid.Column="0"  Tag="Medium" Name ="IncreaseRapidMed" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" Command="{ Binding RapidOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                        <materialDesign:PackIcon  Height="30" Width="30" Kind="Plus" />
+
+                    </Button>
+                    <Button Grid.Column="1" Tag="Low" Name ="IncreaseRapidLow" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="10,0,0,0" Command="{ Binding RapidOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                Grid.Row="0" >
+                        <materialDesign:PackIcon Height="20" Width="20" Kind="Plus" />
+                    </Button>
+                    <Button Grid.Column="2" Name="ResetRapid" Width="55" Height="Auto" HorizontalAlignment="Stretch"   Command="{ Binding RapidOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                Grid.Row="0" >
+                        <materialDesign:PackIcon Height="25" Width="25" Kind="Cached" />
+                    </Button>
+                </Grid>
             </Grid>
         </GroupBox>
     </Grid>

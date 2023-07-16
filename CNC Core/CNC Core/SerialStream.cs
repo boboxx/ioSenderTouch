@@ -340,11 +340,6 @@ namespace CNC.Core
         {
             int pos = 0;
 
-            //Action<string> addEdge = (s) =>
-            //{
-            //    DataReceived(s);
-            //};
-
             lock (input)
             {
                 input.Append(serialPort.ReadExisting());
@@ -372,37 +367,6 @@ namespace CNC.Core
                 else
                     ByteReceived?.Invoke(ReadByte());
 
-                //                if (EventMode)
-                //                {
-                //                    while (serialPort.BytesToRead > 0)
-                //                    {
-                //                        var bytes = Math.Min(serialPort.BytesToRead, buffer.Length);
-                //                        serialPort.Read(buffer, 0, bytes);
-                //                        input.Append(Encoding.ASCII.GetString(buffer, 0, bytes));
-
-                //                        if (EventMode)
-                //                        {
-                //                            while (input.Length > 0 && (pos = gp()) > 0)
-                //                            {
-                //                                Reply = pos == 0 ? string.Empty : input.ToString(0, pos - 1);
-                //                                input.Remove(0, pos + 1);
-                //#if RESPONSELOG
-                //                                if (log != null)
-                //                                {
-                //                                    log.WriteLine(Reply);
-                //                                    log.Flush();
-                //                                }
-                //#endif
-                //                                if (Reply.Length != 0 && DataReceived != null)
-                //                                    Dispatcher.BeginInvoke(DataReceived, Reply);
-
-                //                                state = Reply == "ok" ? Comms.State.ACK : (Reply.StartsWith("error") ? Comms.State.NAK : Comms.State.DataReceived);
-                //                            }
-                //                        }
-                //                        else
-                //                            ByteReceived?.Invoke(ReadByte());
-                //                    }
-                //                }
             }
         }
     }
