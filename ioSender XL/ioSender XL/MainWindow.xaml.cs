@@ -119,16 +119,7 @@ namespace GCode_Sender
         public bool JobRunning
         {
             get => _viewModel.IsJobRunning;
-            set
-            {
-                //         menuFile.IsEnabled = xx.IsEnabled = !value;
-                //foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
-                //{
-                //    var view = getView(tabitem);
-                //    if (view != null)
-                //        tabitem.IsEnabled = (!value && view.CanEnable) || tabitem == ui.tabMode.SelectedItem;
-                //}
-            }
+
         }
 
         #region UIEvents
@@ -150,28 +141,6 @@ namespace GCode_Sender
                 }
             }
 
-            //saveWinSize = AppConfig.Settings.Base.KeepWindowSize;
-            //var appconf = GetView(getTab(ViewType.AppConfig));
-
-
-            //_homeView.Setup(,ac);
-
-
-            //foreach (TabItem tab in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
-            //{
-            //    ICNCView view = GetView(tab);
-            //    if (view != null && view != appconf)
-            //    {
-            //        view.Setup(UIViewModel.CurrentView, AppConfig.Settings);
-            //        tab.IsEnabled = view.ViewType == ViewType.GRBL || view.ViewType == ViewType.AppConfig;
-            //    }
-            //}
-#if ADD_CAMERA
-            enableCamera(this);
-#else
-            menuCamera.Visibility = Visibility.Hidden;
-#endif
-
             UIViewModel.ConfigControls.Add(new BasicConfigControl());
             UIViewModel.ConfigControls.Add(new ConfigControl());
             if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)
@@ -189,15 +158,6 @@ namespace GCode_Sender
                 UIViewModel.ConfigControls.Add(new CNC.Controls.Viewer.ConfigControl());
             }
 
-
-            xx.ItemsSource = UIViewModel.SidebarItems;
-            UIViewModel.SidebarItems.Add(new SidebarItem(macroControl));
-            UIViewModel.SidebarItems.Add(new SidebarItem(gotoControl));
-            UIViewModel.SidebarItems.Add(new SidebarItem(outlineFlyout));
-            UIViewModel.SidebarItems.Add(new SidebarItem(mposFlyout));
-            UIViewModel.SidebarItems.Add(new SidebarItem(thcControl));
-
-            //UIViewModel.CurrentView =;
             System.Threading.Thread.Sleep(50);
             Comms.com.PurgeQueue();
             //UIViewModel.CurrentView.Activate(true, ViewType.Startup);
@@ -321,37 +281,6 @@ namespace GCode_Sender
                 GCode.File.Load(filename);
         }
 
-        private void fileSaveMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            GCode.File.Save();
-        }
-
-        private void fileOpenMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            GCode.File.Open();
-        }
-
-        private void fileCloseMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            GCode.File.Close();
-        }
-
-        private void TabMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!(DataContext as GrblViewModel).IsReady)
-                return;
-
-            if (Equals(e.OriginalSource, sender) && UIViewModel.CurrentView != null && e.AddedItems.Count == 1)
-            {
-                ICNCView prevView = UIViewModel.CurrentView, nextView = GetView((TabItem)e.AddedItems[0]);
-                if (nextView != null && nextView != UIViewModel.CurrentView)
-                {
-                    UIViewModel.CurrentView = nextView;
-                    prevView.Activate(false, nextView.ViewType);
-                    nextView.Activate(true, prevView.ViewType);
-                }
-            }
-        }
 
         private void SDCardView_FileSelected(string filename, bool rewind)
         {
@@ -378,102 +307,6 @@ namespace GCode_Sender
             GCode.File.Close();
         }
 
-        private static TabItem getTab(ViewType mode)
-        {
-            TabItem tab = null;
-
-            foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui))
-            {
-                var view = GetView(tabitem);
-                if (view != null && view.ViewType == mode)
-                {
-                    tab = tabitem;
-                    break;
-                }
-            }
-
-            return tab;
-        }
-
-        public static bool EnableView(bool enable, ViewType view)
-        {
-            TabItem tab = getTab(view);
-            if (tab != null)
-                tab.IsEnabled = enable;
-
-            return tab != null && enable;
-        }
-
-        public static void ShowView(bool show, ViewType view)
-        {
-            //TabItem tab = getTab(view);
-            //if (tab != null && !show)
-            //    ui.tabMode.Items.Remove(tab);
-        }
-
-        public static bool IsViewVisible(ViewType view)
-        {
-            TabItem tab = getTab(view);
-
-            return tab != null;
-        }
-
-#if ADD_CAMERA
-        private static bool enableCamera(MainWindow owner)
-        {
-            //if (UIViewModel.Camera == null)
-            //{
-            //    UIViewModel.Camera = new Camera();
-            //    UIViewModel.Camera.Setup(UIViewModel);
-            //    //        Camera.Owner = owner;
-            //    //owner.menuCamera.IsEnabled = UIViewModel.Camera.HasCamera;
-            //}
-
-           return false;
-        }
-
-        private void CameraOpen_Click(object sender, RoutedEventArgs e)
-        {
-            UIViewModel.Camera.Open();
-        }
-
-        private void openConsoleMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (UIViewModel.Console == null)
-            {
-                UIViewModel.Console = new ConsoleWindow();
-                UIViewModel.Console.DataContext = DataContext;
-                UIViewModel.Console.Show();
-            }
-            else
-            {
-                if (UIViewModel.Console.IsVisible)
-                    UIViewModel.Console.Visibility = Visibility.Hidden;
-                else
-                    UIViewModel.Console.Show();
-            }
-        }
-#else
-        private void CameraOpen_Click(object sender, RoutedEventArgs e)
-        {
-        }
-#endif
-
-        private static ICNCView GetView(TabItem tab)
-        {
-            ICNCView view = null;
-
-            foreach (UserControl uc in UIUtils.FindLogicalChildren<UserControl>(tab))
-            {
-                if (uc is ICNCView)
-                {
-                    view = (ICNCView)uc;
-                    break;
-                }
-            }
-
-            return view;
-        }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {

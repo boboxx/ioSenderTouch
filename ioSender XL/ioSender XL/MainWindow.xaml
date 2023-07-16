@@ -242,7 +242,7 @@
 
 
 
-        <Canvas DockPanel.Dock="Right" Width="22" VerticalAlignment="Stretch" HorizontalAlignment="Right" ClipToBounds="False" Panel.ZIndex="1" Margin="0,34,0,0">
+        <!--Canvas DockPanel.Dock="Right" Width="22" VerticalAlignment="Stretch" HorizontalAlignment="Right" ClipToBounds="False" Panel.ZIndex="1" Margin="0,34,0,0">
             <ItemsControl x:Name="xx" Width="22" VerticalAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -255,7 +255,7 @@
             <cnccontrols:OutlineFlyout x:Name="outlineFlyout" Visibility="Hidden" Canvas.Right="22"/>
             <cnccontrols:MachinePositionFlyout x:Name="mposFlyout" Visibility="Hidden" Canvas.Right="22"/>
             <cnccontrols:THCMonitorControl x:Name="thcControl" Visibility="Hidden" Canvas.Right="22"/>
-        </Canvas>
+        </Canvas>-->
 
     </DockPanel>
 </Window>

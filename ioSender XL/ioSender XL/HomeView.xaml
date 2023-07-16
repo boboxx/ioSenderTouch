@@ -10,8 +10,7 @@
              Focusable="True"
              Loaded="JobView_Load"
              IsVisibleChanged="JobView_IsVisibleChanged"
-             FocusVisualStyle="{x:Null}"
-             SizeChanged="JobView_SizeChanged">
+             FocusVisualStyle="{x:Null}">
 
     <UserControl.Resources>
         <system:String x:Uid="str_msgWait" x:Key="MsgWaiting">Waiting for controller ({0})...</system:String>
@@ -72,12 +71,11 @@
             <StackPanel>
                 <cnccontrols:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
 
-                <cnccontrols:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Bottom" Height="125" Width="145"/>
+                <cnccontrols:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Top" Height="125" Width="Auto"/>
             </StackPanel>
 
         </Border>
         <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
-            <!--<cncviewer:RenderControl x:Name="gcodeRenderer"/>-->
         </Border>
 
 
