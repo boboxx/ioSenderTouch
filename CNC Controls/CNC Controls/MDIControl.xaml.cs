@@ -101,8 +101,8 @@ namespace CNC.Controls
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
-            if ((DataContext as GrblViewModel).GrblError != 0)
-                (DataContext as GrblViewModel).ExecuteCommand("");
+            //if ((DataContext as GrblViewModel).GrblError != 0)
+            //    (DataContext as GrblViewModel).ExecuteCommand("");
 
             if (!string.IsNullOrEmpty(Command) && !Commands.Contains(Command))
             {

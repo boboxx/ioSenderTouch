@@ -90,7 +90,7 @@ namespace CNC.Core
         private string _toolNumber;
         private double _jogRate;
         private bool _hasProbing;
-        private string _spindleOverValue;
+        private int _spindleOverValue;
 
         public delegate void GrblResetHandler();
 
@@ -122,7 +122,7 @@ namespace CNC.Core
             }
         }
 
-        public string SpindleOverRideValue
+        public int SpindleOverRideValue
         {
             get => _spindleOverValue;
             set
@@ -171,10 +171,7 @@ namespace CNC.Core
                 ClearAlarm();
             });
 
-            SpindleOverRide = new Command(_ =>
-            {
-                SetSpindleSpeed();
-            });
+            SpindleOverRide = new Command(SetSpindleOverRideSpeed);
 
             SpindleOverRideReset = new Command(_ =>
             {
@@ -182,25 +179,41 @@ namespace CNC.Core
             });
 
             WcsCommand = new Command(SetWcs);
-
+            SpindleOverRideValue = 10;
+            RPMOverride = 0;
         }
 
         private void SetDefaultSpindleSpeed()
         {
-            var command = GrblConstants.CMD_SPINDLE_OVR_STOP.ToString();
-            var test = (char)GrblConstants.CMD_SPINDLE_OVR_STOP;
-            var t2 = test.ToString();
-            Comms.com.WriteCommand(command.Trim());
+            var command = GrblConstants.CMD_SPINDLE_OVR_RESET;
+            Comms.com.WriteByte(command);
         }
 
 
-        private void SetSpindleSpeed()
+        private void SetSpindleOverRideSpeed(object _)
         {
-            var spindle = SpindleOverRideValue;
+            if (!(_ is Button button)) return;
             if (IsJobRunning && GrblState.State == GrblStates.Hold) return;
-            var command = $"S{RPM + SpindleOverRideValue}";
-            Comms.com.WriteCommand(command.Trim());
+            byte command;
+            switch (SpindleOverRideValue)
+            {
+                case 1:
+                    command = (string)button.Tag == "Plus" 
+                        ? GrblConstants.CMD_SPINDLE_OVR_FINE_PLUS 
+                        : GrblConstants.CMD_SPINDLE_OVR_FINE_MINUS;
+                  
+                    break;
+                case 10:
+                    command = (string)button.Tag == "Plus"
+                        ? GrblConstants.CMD_SPINDLE_OVR_COARSE_PLUS
+                        : GrblConstants.CMD_SPINDLE_OVR_COARSE_MINUS;
+                  
+                    break;
+                default:
+                    return;
+            }
 
+            Comms.com.WriteByte(command);
         }
 
         private void SetWcs(object x)
@@ -208,8 +221,6 @@ namespace CNC.Core
             if (!(x is Button button)) return;
             var command = button.Name;
             Comms.com.WriteCommand(command.Trim());
-
-
         }
         private void ClearAlarm()
         {
@@ -437,14 +448,13 @@ namespace CNC.Core
                     }
                 }
 
-                if (ok) foreach (var command in commands)
-                    {
-                        if (ApplyCommand(command))
-                        {
-                            if (ResponseLogVerbose && !string.IsNullOrEmpty(command))
-                                ResponseLog.Add(command);
-                        }
-                    }
+                if (!ok) return;
+                foreach (var command in commands)
+                {
+                    if (!ApplyCommand(command)) continue;
+                    if (ResponseLogVerbose && !string.IsNullOrEmpty(command))
+                        ResponseLog.Add(command);
+                }
             }
         }
 

@@ -16,8 +16,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <GroupBox x:Uid="grp_spindle" x:Name="grpSpindle" Header="Spindle" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto">
-        <Grid HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="240">
+    <GroupBox x:Uid="grp_spindle" x:Name="grpSpindle" Header="Spindle" HorizontalAlignment="Stretch" VerticalAlignment="Top"  Width="Auto">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="38"/>
                 <RowDefinition Height="38"/>
@@ -34,6 +34,8 @@
                 <Label x:Uid="lbl_rpm" x:Name="lblRPM" Content="RPM" HorizontalContentAlignment="Right" VerticalAlignment="Center" Height="28" Width="40"/>
                 <local:NumericTextBox x:Name="cvRPM" Value="{Binding RPM, Mode=TwoWay}" MinWidth="100" IsEnabled="{Binding IsJobRunning, Converter={StaticResource LogicalNotConverter}}"
                                           Format="####0" HorizontalAlignment="Left" TextWrapping="NoWrap" VerticalAlignment="Center"/>
+                <Label x:Uid="lbl_rpm" x:Name="lblRPMOverridePrecent" Content="RPM %" HorizontalContentAlignment="Right" VerticalAlignment="Center" Height="28" />
+                <Label  x:Name="lblRPMOverride" Content="{Binding RPMOverride}" HorizontalContentAlignment="Left" VerticalAlignment="Center" Height="28" Width="40"/>
             </StackPanel>
             <Grid Grid.Row="4" Width="Auto" Height="60" Margin="10,0,0,0" >
                 <Grid.ColumnDefinitions>
@@ -41,28 +43,29 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" Command="{ Binding SpindleOverRide}">
+                <Button Grid.Column="0"  Tag="Plus" Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" Command="{ Binding SpindleOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                     <materialDesign:PackIcon  Height="30" Width="30" Kind="Plus" />
                 </Button>
-                <Button Grid.Column="1" Name ="DecreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" Command="{ Binding SpindleOverRide}">
+                <Button Grid.Column="1" Tag="Minus" Name ="DecreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,10,0" Command="{ Binding SpindleOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                     <materialDesign:PackIcon Height="30" Width="30" Kind="MinusThick" />
                 </Button>
-                <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"  Margin="0,0,10,0" Command="{ Binding SpindleOverRideReset}" >
+                <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"  Margin="0,0,10,0" Command="{ Binding SpindleOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" >
                     <materialDesign:PackIcon Height="25" Width="25" Kind="Cached" />
                 </Button>
             </Grid>
            
-            <Slider Grid.Row="5"
+            <Slider Name ="OverRidePrecent"  Grid.Row="5"
                         Style="{StaticResource MaterialDesignDiscreteSlider}"
-                        Maximum="500"
-                        Minimum="50"
+                        Maximum="10"
+                        Minimum="1"
                         Orientation="Horizontal"
-                        SelectionEnd="50"
-                        SelectionStart="50"
-                        TickFrequency="50"
+                        SelectionEnd="10"
+                        SelectionStart="1"
+                        TickFrequency="10"
                         TickPlacement="BottomRight"
                         Value="{Binding SpindleOverRideValue, Mode=TwoWay}" 
                         Margin="10,15,15,0"/>
+           
             <!--<local:OverrideControl x:Name="overrideControl" Value="{Binding Path=RPMOverride, Mode=OneWay}" Grid.Row="4"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" EncoderMode="SpindleRPM" Height="Auto" Width="Auto"/>-->
         </Grid>
     </GroupBox>

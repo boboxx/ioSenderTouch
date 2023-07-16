@@ -62,7 +62,7 @@ namespace CNC.Controls
            var finePlusCommand = GrblConstants.CMD_SPINDLE_OVR_FINE_PLUS;
             var coarseMinusCommand = GrblConstants.CMD_SPINDLE_OVR_COARSE_MINUS;
             var coarsePlusCommand = GrblConstants.CMD_SPINDLE_OVR_COARSE_PLUS;
-
+            OverRidePrecent.Value = 10;
             cvRPM.PreviewKeyUp += txtPos_KeyPress;
             //overrideControl.CommandGenerated += overrideControl_CommandGenerated;
         }
