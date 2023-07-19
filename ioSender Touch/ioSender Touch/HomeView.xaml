@@ -9,8 +9,7 @@
              mc:Ignorable="d" 
              Focusable="True"
              Loaded="JobView_Load"
-             IsVisibleChanged="JobView_IsVisibleChanged"
-             FocusVisualStyle="{x:Null}">
+             IsVisibleChanged="JobView_IsVisibleChanged">
 
     <UserControl.Resources>
         <system:String x:Uid="str_msgWait" x:Key="MsgWaiting">Waiting for controller ({0})...</system:String>
