@@ -40,23 +40,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using CNC.Core;
+using System.Windows.Threading;
 using CNC.Controls;
 using CNC.Converters;
-using System.Windows.Threading;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Threading;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using CNC.Controls.Probing;
-using GCode_Sender.Commands;
+using CNC.Core;
+using GCode_Sender;
 using ConfigControl = CNC.Controls.Probing.ConfigControl;
 #if ADD_CAMERA
 
 #endif
 
-namespace GCode_Sender
+namespace ioSenderTouch
 {
 
     public partial class MainWindow : Window

@@ -30,3 +30,4 @@ obj/
 /ioSender XL/packages/Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0-preview.6.23329.7/buildTransitive
 /ioSender XL/packages/*
 /ioSender XL/ioSender XL.sln.DotSettings.user
+/ioSender Touch/packages

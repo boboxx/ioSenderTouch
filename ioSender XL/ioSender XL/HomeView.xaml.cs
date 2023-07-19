@@ -38,19 +38,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
+using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Windows.Threading;
-using CNC.Core;
 using CNC.Controls;
 using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
+using CNC.Core;
 
-namespace GCode_Sender
+namespace ioSenderTouch
 {
     /// <summary>
     /// Interaction logic for JobView.xaml
