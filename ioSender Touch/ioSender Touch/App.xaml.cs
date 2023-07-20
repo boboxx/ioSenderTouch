@@ -38,7 +38,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,7 +45,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
 
-namespace GCode_Sender
+namespace ioSenderTouch
 {
     /// <summary>
     /// Interaction logic for App.xaml

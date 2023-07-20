@@ -38,31 +38,6 @@
         <cnccore:GrblViewModel />
     </Window.DataContext>
     <DockPanel LastChildFill="True" Name="DockPanel">
-        <!--<Border Height="40"  BorderThickness="1" DockPanel.Dock="Top">
-            <Menu IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}">
-                <MenuItem x:Uid="mnu_file" x:Name="menuFile" Header="_File">
-                    <MenuItem x:Uid="mnu_load" Header="_Load" Click="fileOpenMenuItem_Click"/>
-                    <MenuItem x:Uid="mnu_save" x:Name="menuSaveFile" Header="_Save" IsEnabled="false" Click="fileSaveMenuItem_Click"/>
-                    <MenuItem x:Uid="mnu_close" x:Name="menuCloseFile" Header="_Close" IsEnabled="false" Click="fileCloseMenuItem_Click"/>
-                    <MenuItem x:Uid="mnu_transform" x:Name="menuTransform" Header="_Transform" IsEnabled="false" ItemsSource="{Binding Path=UIViewModel.TransformMenuItems, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                    <MenuItem x:Uid="mnu_openConsole" x:Name="menuOpenConsole" Header="_Open Console" Click="openConsoleMenuItem_Click"/>
-                    <MenuItem x:Uid="mnu_exit" Header="_Exit" Click="exitMenuItem_Click"/>
-                    <Dock>Top</Dock>
-                </MenuItem>
-                <MenuItem x:Uid="mnu_camera" x:Name="menuCamera" Header="_Camera">
-                    <MenuItem x:Uid="mnu_open" Header="_Open" Click="CameraOpen_Click"/>
-                </MenuItem>
-                <MenuItem x:Uid="mnu_help" x:Name="menuHelp" Header="_Help">
-                    <MenuItem x:Uid="mnu_wiki" Header="_Wiki" Click="aboutWikiItem_Click"/>
-                    <MenuItem x:Uid="mnu_usageTips" Header="Usage _tips" Click="tipsWikiItem_Click"/>
-                    <MenuItem x:Uid="mnu_briefTour" Header="A _brief tour" Click="briefTour_Click"/>
-                    <MenuItem x:Uid="mnu_videoTutorials" Header="_Video tutorials" Click="videoTutorials_Click"/>
-                    <MenuItem x:Uid="mnu_errorsAndAlarms" Header="_Error and alarm codes" Click="errorAndAlarms_Click"/>
-                    <MenuItem x:Uid="mnu_about" Header="_About" Click="aboutMenuItem_Click"/>
-                </MenuItem>
-            </Menu>
-        </Border>-->
-
         <Border Height="45" BorderThickness="1" DockPanel.Dock="Top">
             <Grid  Name="Panel" Margin="0,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -155,107 +130,7 @@
                 </ToolBar>
             </ToolBarTray>
         </Border>
-
         <Border  Name="BorderLeft" BorderThickness="1" DockPanel.Dock="Left">
-
-            <!--<TabControl  
-            materialDesign:ColorZoneAssist.Mode="PrimaryDark"
-            Style="{StaticResource MaterialDesignFilledTabControl}"
-                       DockPanel.Dock="Left" x:Name="tabMode"  HorizontalAlignment="Stretch" Margin="2" Focusable="True" SelectionChanged="TabMode_SelectionChanged">
-                -->
-            <!--<TabControl.Resources>
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Height" Value="32" />
-                    <Setter Property="MinWidth" Value="40" />
-                </Style>
-            </TabControl.Resources>-->
-            <!--
-                <TabItem x:Uid="tab_grbl" x:Name="tabGrbl" Header="Grbl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <local:HomeView x:Name="Grbl"/>
-                </TabItem>
-                -->
-            <!---
-            <TabItem x:Uid="tab_3DView" x:Name="tabViewer" Header="3D View">
-                <cncviewer:Viewer x:Name="viewer"/>
-            </TabItem>
-            -->
-            <!--
-                <TabItem x:Uid="tab_probing" x:Name="tabProbing" Header="Probing">
-                    <cncprobingcontrols:ProbingView x:Name="probingView"/>
-                </TabItem>
-                <TabItem x:Uid="tab_sdCard" x:Name="tabSDCard" Header="SD Card">
-                    <cnccontrols:SDCardView x:Name="SDCardView" FileSelected="SDCardView_FileSelected"/>
-                </TabItem>
-                -->
-            <!--<TabItem x:Uid="tab_turning" x:Name="tabTurning" Header="Turning">
-                <cnclathecontrols:TurningWizard x:Name="turningWizard"/>
-            </TabItem>
-            <TabItem x:Uid="tab_parting" x:Name="tabParting" Header="Parting">
-                <cnclathecontrols:PartingWizard x:Name="partingWizard"/>
-            </TabItem>-->
-            <!--<TabItem x:Uid="tab_threading" x:Name="tabThreading" Header="Threading">
-                <cnclathecontrols:ThreadingWizard x:Name="threadingWizard"/>
-            </TabItem>-->
-            <!--
-                <TabItem x:Uid="tab_offsets" x:Name="tabOffsets" Header="Offsets">
-                    <cnccontrols:OffsetView x:Name="offsetControl"/>
-                </TabItem>
-                <TabItem x:Uid="tab_tools" x:Name="tabTools" Header="Tools">
-                    <cnccontrols:ToolView x:Name="toolControl"/>
-                </TabItem>
-                -->
-            <!--<TabItem x:Uid="tab_trinamic" x:Name="tabTrinamic" Header="Trinamic tuner">
-                <cnccontrols:TrinamicView x:Name="toolTrinamic"/>
-            </TabItem>-->
-            <!--
-                <TabItem x:Uid="tab_grblConfig" x:Name="tabConfig" Header="Settings: Grbl">
-                    <cnccontrols:GrblConfigView x:Name="configControl"/>
-                </TabItem>
-                <TabItem x:Uid="tab_appConfig" x:Name="tabAppConfig" Header="Settings: App">
-                    <cnccontrols:AppConfigView x:Name="appConfigControl"/>
-                </TabItem>
-                -->
-            <!--<TabItem x:Uid="tab_pidTuner" x:Name="tabPIDTuner" Header="PID Tuner">
-                <cnccontrols:PIDLogView x:Name="toolPIDTuner"/>
-            </TabItem>-->
-            <!--
-                <TabItem x:Name="tabTurning" Header="Turning">
-                    <Grid Background="#FFE5E5E5">
-                        <cnc:TurningWizard x:Name="toolTurning" HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="875"/>
-                    </Grid>
-                </TabItem>
-                <TabItem x:Name="tabFacing" Header="Facing">
-                    <Grid Background="#FFE5E5E5">
-                        <WindowsFormsHost HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="875">
-                            <cnc:FacingWizard x:Name="toolFacing" AutoScaleMode="Inherit"/>
-                        </WindowsFormsHost>
-                    </Grid>
-                </TabItem>
--->
-            <!--
-            </TabControl>-->
         </Border>
-
-
-        <!--</DockPanel>
-    <DockPanel IsEnabled="{Binding Path=IsMPGActive, Converter={StaticResource BooleanConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">-->
-
-
-
-        <!--Canvas DockPanel.Dock="Right" Width="22" VerticalAlignment="Stretch" HorizontalAlignment="Right" ClipToBounds="False" Panel.ZIndex="1" Margin="0,34,0,0">
-            <ItemsControl x:Name="xx" Width="22" VerticalAlignment="Stretch">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Width="22"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            <cnccontrols:MacroExecuteControl x:Name="macroControl" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:GotoFlyoutControl x:Name="gotoControl" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:OutlineFlyout x:Name="outlineFlyout" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:MachinePositionFlyout x:Name="mposFlyout" Visibility="Hidden" Canvas.Right="22"/>
-            <cnccontrols:THCMonitorControl x:Name="thcControl" Visibility="Hidden" Canvas.Right="22"/>
-        </Canvas>-->
-
     </DockPanel>
 </Window>

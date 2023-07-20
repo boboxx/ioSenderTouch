@@ -64,15 +64,7 @@ namespace CNC.Controls
         {
             InitializeComponent();
 
-            foreach (DROBaseControl axis in UIUtils.FindLogicalChildren<DROBaseControl>(this))
-            {
-                axis.txtReadout.GotFocus += txtReadout_GotFocus;
-                axis.txtReadout.LostFocus += txtReadout_LostFocus;
-                axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
-                axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
-                axis.btnZero.Click += btnZero_Click;
-                axis.btnHome.Click += BtnHome_Click;
-            }
+           
         }
 
      
@@ -104,13 +96,18 @@ namespace CNC.Controls
                     keyboard.AddHandler(Key.C, ModifierKeys.Control | ModifierKeys.Shift, ZeroC);
                 keyboard.AddHandler(Key.D0, ModifierKeys.Control | ModifierKeys.Shift, ZeroAxes);
             }
-
             foreach (DROBaseControl axis in UIUtils.FindLogicalChildren<DROBaseControl>(this))
             {
                 axis.Tag = GrblInfo.AxisLetterToIndex(axis.Label);
                 axis.btnZero.Content = $"0{axis.Label}";
                 axis.btnHome.Tag = axis.Label;
                 axis.btnHome.Content = $"H{axis.Label}";
+                axis.txtReadout.GotFocus += txtReadout_GotFocus;
+                axis.txtReadout.LostFocus += txtReadout_LostFocus;
+                axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
+                axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
+                axis.btnZero.Click += btnZero_Click;
+                axis.btnHome.Click += BtnHome_Click;
             }
         }
 

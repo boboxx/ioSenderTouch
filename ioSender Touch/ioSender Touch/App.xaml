@@ -1,4 +1,4 @@
-﻿<Application x:Class="GCode_Sender.App"
+﻿<Application x:Class="ioSenderTouch.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GCode_Sender"

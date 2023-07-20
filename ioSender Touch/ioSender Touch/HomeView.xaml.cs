@@ -67,7 +67,7 @@ namespace ioSenderTouch
         private ProbingView _probeView;
         private readonly RenderControl _renderView;
         private readonly OffsetView _offsetView;
-        private bool _hasProbing;
+
 
         public HomeView(GrblViewModel model)
         {
@@ -163,6 +163,8 @@ namespace ioSenderTouch
                             MainWindow.CloseFile();
                         else if (viewModel.IsSDCardJob)
                         {
+                            //TODO set up sd card view 
+
                             //MainWindow.EnableView(false, ViewType.GCodeViewer);
                         }
                         else if (filename.StartsWith("Wizard:"))
@@ -187,7 +189,7 @@ namespace ioSenderTouch
             }
         }
 
-        
+
         public ViewType ViewType { get { return ViewType.GRBL; } }
 
         public void Activate(bool activate, ViewType chgMode)
@@ -326,14 +328,18 @@ namespace ioSenderTouch
 
 
             if (GrblInfo.HasSDCard)
+            {
+                var sdCardView = new SDCardView();
+            }
 
 
-                if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
-                {
-                    _probeView = new ProbingView(_model);
-                    _probeView.Activate(true, ViewType.Probing);
+            if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
+            {
+                _model.HasProbing = true;
+                _probeView = new ProbingView(_model);
+                _probeView.Activate(true, ViewType.Probing);
 
-                }
+            }
             return true;
         }
 
@@ -343,7 +349,7 @@ namespace ioSenderTouch
 
         void JobView_Load(object sender, EventArgs e)
         {
-            GCodeSender.CallHandler(StreamingState.Idle, true);
+            //  GCodeSender.CallHandler(StreamingState.Idle, true);
         }
 
         private void JobView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -418,7 +424,7 @@ namespace ioSenderTouch
             if (CodeListControl.Visibility == Visibility.Visible)
             {
                 CodeListControl.Visibility = Visibility.Hidden;
-                ConsoleControl.Visibility = Visibility.Visible;
+               ConsoleControl.Visibility = Visibility.Visible;
             }
             else
             {
