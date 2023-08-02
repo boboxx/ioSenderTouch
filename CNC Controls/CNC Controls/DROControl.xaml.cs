@@ -97,20 +97,20 @@ namespace CNC.Controls
                     keyboard.AddHandler(Key.C, ModifierKeys.Control | ModifierKeys.Shift, ZeroC);
                 keyboard.AddHandler(Key.D0, ModifierKeys.Control | ModifierKeys.Shift, ZeroAxes);
             }
-    
-          
-            //foreach (var axis in  UiExtension.FindVisualChildren<DROBaseControl>(this))
+
+
+            foreach (var axis in UiExtension.FindVisualChildren<DROBaseControl>(this))
             {
-                //axis.Tag = AxisLetterToIndex(axis.Label);
-                //axis.btnZero.Content = $"0{axis.Label}";
-                //axis.btnHome.Tag = axis.Label;
-                //axis.btnHome.Content = $"H{axis.Label}";
-                //axis.txtReadout.GotFocus += txtReadout_GotFocus;
-                //axis.txtReadout.LostFocus += txtReadout_LostFocus;
-                //axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
-                //axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
-                //axis.btnZero.Click += btnZero_Click;
-                //axis.btnHome.Click += BtnHome_Click;
+                axis.Tag = AxisLetterToIndex(axis.Label);
+                axis.btnZero.Content = $"0{axis.Label}";
+                axis.btnHome.Tag = axis.Label;
+                axis.btnHome.Content = $"H{axis.Label}";
+                axis.txtReadout.GotFocus += txtReadout_GotFocus;
+                axis.txtReadout.LostFocus += txtReadout_LostFocus;
+                axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
+                axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
+                axis.btnZero.Click += btnZero_Click;
+                axis.btnHome.Click += BtnHome_Click;
             }
         }
         
