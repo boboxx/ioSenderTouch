@@ -51,6 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -290,9 +291,9 @@ namespace CNC.Controls.Viewer
             MinDistance = 0.05d;
             Machine = new Machine(this);
             viewport.DataContext = Machine;
-
             IsVisibleChanged += Renderer_IsVisibleChanged;
             Machine.PropertyChanged += Machine_PropertyChanged;
+      
         }
 
         #region Public properties
@@ -334,7 +335,7 @@ namespace CNC.Controls.Viewer
                 else if (_animateSubscribed)
                 {
                     _animateSubscribed = false;
-                    model.PropertyChanged += Model_PropertyChanged;
+                    model.PropertyChanged -= Model_PropertyChanged;
                 }
             }
         }
@@ -677,7 +678,8 @@ namespace CNC.Controls.Viewer
 
             Machine.SetToolPosition(position.X, position.Y, position.Z);
 
-            if (IsJobLoaded) switch (Machine.ToolMode)
+            if (IsJobLoaded)
+                switch (Machine.ToolMode)
             {
                 case ToolVisualizerType.Cone:
                     ShowConeTool();
@@ -1072,7 +1074,12 @@ namespace CNC.Controls.Viewer
             var bbox = (DataContext as GrblViewModel).ProgramLimits;
 
             ClearViewport();
-
+            if (IsVisible)
+            {
+                model.PropertyChanged -= Model_PropertyChanged;
+                model.PropertyChanged += Model_PropertyChanged;
+            }
+           
             this.tokens = tokens;
             renderExecuted = RenderExecuted && !Machine.HighlightColor.Equals(Machine.CutMotionColor) && _animateSubscribed;
 
