@@ -67,7 +67,8 @@ namespace ioSenderTouch
         private ProbingView _probeView;
         private readonly RenderControl _renderView;
         private readonly OffsetView _offsetView;
-        private readonly SDCardView _sdView;
+        private  SDCardView _sdView;
+        private ToolView _toolView;
 
 
         public HomeView(GrblViewModel model)
@@ -77,9 +78,8 @@ namespace ioSenderTouch
             _renderView = new RenderControl(_model);
             _grblSettingView = new GrblConfigView();
             _grblAppSettings = new AppConfigView(model);
-            _probeView = new ProbingView(model);
+            //_probeView = new ProbingView(model);
             _offsetView = new OffsetView(model);
-            _sdView = new SDCardView(model);
             FillBorder.Child = _renderView;
             AppConfig.Settings.SetupAndOpen(model, Application.Current.Dispatcher);
             DataContext = _model;
@@ -329,11 +329,15 @@ namespace ioSenderTouch
 
 
 
-            if (GrblInfo.HasSDCard)
+            if (_model.HasSDCard)
             {
-                var sdCardView = new SDCardView();
+                _sdView= new SDCardView(_model);
             }
 
+            if (_model.HasATC)
+            {
+                _toolView = new ToolView(_model);
+            }
 
             if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
             {
@@ -414,6 +418,11 @@ namespace ioSenderTouch
             FillBorder.Child = _offsetView;
         }
 
+        private void Button_Click_Tools(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _toolView;
+        }
+       
         public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
         {
             _grblAppSettings.Setup(uiViewModel, settings);

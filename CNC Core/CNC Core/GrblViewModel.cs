@@ -92,6 +92,7 @@ namespace CNC.Core
         private bool _hasProbing;
         private int _spindleOverValue;
         private int _feedOverRideValue;
+        private bool _hasSDCard;
 
         public delegate void GrblResetHandler();
 
@@ -138,7 +139,16 @@ namespace CNC.Core
                 OnPropertyChanged();
             }
         }
-
+        public bool HasSDCard
+        {
+            get => _hasSDCard;
+            set
+            {
+                if (value == _hasSDCard) return;
+                _hasSDCard = value;
+                OnPropertyChanged();
+            }
+        }
         public int FeedOverRideValue
         {
             get => _feedOverRideValue;
@@ -1416,7 +1426,10 @@ namespace CNC.Core
             }
 
             bool stateChanged = true;
+            if (data.StartsWith("NEWOPT"))
+            {
 
+            }
             if (data.First() == '<')
             {
                 stateChanged = ParseStatus(data);
@@ -1437,7 +1450,94 @@ namespace CNC.Core
                         case "PRB":
                             ParseProbeStatus(data);
                             break;
+                        case "NEWOPT":
+                            string[] valuepair = data.Substring(1).TrimEnd(']').Split(':');
+                            var options  = valuepair[1];
+                            string[] s2 = valuepair[1].Split(',');
+                            foreach (string value in s2)
+                            {
+                                
+                                 switch (value)
+                                    {
+                                    //case "ENUMS":
+                                    //    HasEnums = true;
+                                    //    break;
 
+                                    //case "EXPR":
+                                    //    ExpressionsSupported = true;
+                                    //    break;
+
+                                    //case "TC":
+                                    //    ManualToolChange = true;
+                                    //    break;
+
+                                    case "ATC":
+                                        HasATC = true;
+                                        break;
+
+                                    //case "RTC":
+                                    //    HasRTC = true;
+                                    //    break;
+
+                                    //case "ETH":
+                                    //    break;
+
+                                    //case "HOME":
+                                    //    HomingEnabled = true;
+                                    //    break;
+
+                                    case "SD":
+                                            HasSDCard = true;
+                                            break;
+
+                                        //case "SED":
+                                        //    HasSettingDescriptions = true;
+                                        //    break;
+
+                                        //case "YM":
+                                        //    if (UploadProtocol == string.Empty)
+                                        //        UploadProtocol = "YModem";
+                                        //    break;
+
+                                        case "FTP":
+                                           // UploadProtocol = "FTP";
+                                            break;
+
+                                        case "PID":
+                                          //  HasPIDLog = true;
+                                            break;
+
+                                        case "NOPROBE":
+                                          //  HasProbe = false;
+                                            break;
+
+                                        case "LATHE":
+                                            LatheModeEnabled = true;
+                                            break;
+
+                                        case "BD":
+                                          //  OptionalSignals |= Signals.BlockDelete;
+                                            break;
+
+                                        case "ES":
+                                           // OptionalSignals |= Signals.EStop;
+                                            break;
+
+                                        case "MW":
+                                           // OptionalSignals |= Signals.MotorWarning;
+                                            break;
+
+                                        case "OS":
+                                           // OptionalSignals |= Signals.OptionalStop;
+                                            break;
+
+                                        case "RT+":
+                                        case "RT-":
+                                          //  UseLegacyRTCommands = false;
+                                            break;
+                                    }
+                            }
+                            break;
                         case "GC":
                             ParseGCStatus(data);
                             break;
@@ -1556,6 +1656,7 @@ namespace CNC.Core
             OnResponseReceived?.Invoke(data);
         }
 
+        public bool HasATC { get; set; }
     }
 }
 

@@ -48,8 +48,9 @@ using System.Threading;
 
 namespace CNC.Controls
 {
-    public partial class ToolView : UserControl, ICNCView
+    public partial class ToolView : UserControl
     {
+        private readonly GrblViewModel _model;
         Tool selectedTool = null;
         private GrblViewModel parameters = new GrblViewModel();
         private volatile bool awaitCoord = false;
@@ -61,13 +62,20 @@ namespace CNC.Controls
 
             parameters.PropertyChanged += Parameters_PropertyChanged;
         }
+        public ToolView( GrblViewModel model)
+        {
+            _model = model;
+            InitializeComponent();
+
+            parameters.PropertyChanged += Parameters_PropertyChanged;
+        }
 
         public Position offset { get; private set; } = new Position();
 
         #region Methods and properties required by CNCView interface
 
         public ViewType ViewType { get { return ViewType.Tools; } }
-        public bool CanEnable { get { return !(DataContext as GrblViewModel).IsGCLock; } }
+        public bool CanEnable { get { return !_model.IsGCLock; } }
 
         public void Activate(bool activate, ViewType chgMode)
         {
