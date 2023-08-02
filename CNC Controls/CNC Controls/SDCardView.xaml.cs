@@ -55,7 +55,7 @@ namespace CNC.Controls
     {
         public delegate void FileSelectedHandler(string filename, bool rewind);
         public event FileSelectedHandler FileSelected;
-
+        private readonly GrblViewModel _viewModel;
         private DataRow currentFile = null;
 
         public SDCardView()
@@ -63,11 +63,17 @@ namespace CNC.Controls
             InitializeComponent();
             ctxMenu.DataContext = this;
         }
+        public SDCardView(GrblViewModel grblViewModel)
+        {
+            InitializeComponent();
+            _viewModel = grblViewModel;
+            ctxMenu.DataContext = grblViewModel;
+        }
 
         #region Methods and properties required by IRenderer interface
 
         public ViewType ViewType { get { return ViewType.SDCard; } }
-        public bool CanEnable { get { return !(DataContext as GrblViewModel).IsGCLock; } }
+        public bool CanEnable { get { return !_viewModel.IsGCLock; } }
 
         public void Activate(bool activate, ViewType chgMode)
         {
@@ -80,7 +86,7 @@ namespace CNC.Controls
                 CanRewind = GrblInfo.IsGrblHAL;
             }
             else
-                (DataContext as GrblViewModel).Message = string.Empty;
+                _viewModel.Message = string.Empty;
         }
 
         public void CloseFile()
@@ -131,6 +137,8 @@ namespace CNC.Controls
         }
 
         public static readonly DependencyProperty CanDeleteProperty = DependencyProperty.Register(nameof(CanDelete), typeof(bool), typeof(SDCardView), new PropertyMetadata(false));
+      
+
         public bool CanDelete
         {
             get { return (bool)GetValue(CanDeleteProperty); }

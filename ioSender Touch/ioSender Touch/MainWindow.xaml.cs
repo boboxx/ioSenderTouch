@@ -135,6 +135,8 @@ namespace ioSenderTouch
                 }
             }
 
+            
+
             UIViewModel.ConfigControls.Add(new BasicConfigControl());
             UIViewModel.ConfigControls.Add(new ConfigControl());
             if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)

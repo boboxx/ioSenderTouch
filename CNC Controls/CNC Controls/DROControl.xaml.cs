@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,7 +82,7 @@ namespace CNC.Controls
         {
             if (!keyboardMappingsOk && DataContext is GrblViewModel)
             {
-                KeypressHandler keyboard = (DataContext as GrblViewModel).Keyboard;
+                KeypressHandler keyboard = (DataContext as GrblViewModel)?.Keyboard;
 
                 keyboardMappingsOk = true;
 
@@ -96,20 +97,28 @@ namespace CNC.Controls
                     keyboard.AddHandler(Key.C, ModifierKeys.Control | ModifierKeys.Shift, ZeroC);
                 keyboard.AddHandler(Key.D0, ModifierKeys.Control | ModifierKeys.Shift, ZeroAxes);
             }
-            foreach (DROBaseControl axis in UIUtils.FindLogicalChildren<DROBaseControl>(this))
+    
+          
+            //foreach (var axis in  UiExtension.FindVisualChildren<DROBaseControl>(this))
             {
-                axis.Tag = GrblInfo.AxisLetterToIndex(axis.Label);
-                axis.btnZero.Content = $"0{axis.Label}";
-                axis.btnHome.Tag = axis.Label;
-                axis.btnHome.Content = $"H{axis.Label}";
-                axis.txtReadout.GotFocus += txtReadout_GotFocus;
-                axis.txtReadout.LostFocus += txtReadout_LostFocus;
-                axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
-                axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
-                axis.btnZero.Click += btnZero_Click;
-                axis.btnHome.Click += BtnHome_Click;
+                //axis.Tag = AxisLetterToIndex(axis.Label);
+                //axis.btnZero.Content = $"0{axis.Label}";
+                //axis.btnHome.Tag = axis.Label;
+                //axis.btnHome.Content = $"H{axis.Label}";
+                //axis.txtReadout.GotFocus += txtReadout_GotFocus;
+                //axis.txtReadout.LostFocus += txtReadout_LostFocus;
+                //axis.txtReadout.PreviewKeyDown += txtReadout_PreviewKeyDown;
+                //axis.txtReadout.PreviewKeyUp += txtReadout_PreviewKeyUp;
+                //axis.btnZero.Click += btnZero_Click;
+                //axis.btnHome.Click += BtnHome_Click;
             }
         }
+        
+        public  int AxisLetterToIndex(string letter)
+        {
+            return AxisLetters.IndexOf(letter, StringComparison.Ordinal);
+        }
+        public  string AxisLetters { get; private set; } = "XYZABCUVW";
 
         private void txtReadout_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -247,4 +256,20 @@ namespace CNC.Controls
             
         }
     }
+}
+
+public class UiExtension
+{
+    public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+    {
+        if (depObj == null) yield return (T)Enumerable.Empty<T>();
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+        {
+            DependencyObject ithChild = VisualTreeHelper.GetChild(depObj, i);
+            if (ithChild == null) continue;
+            if (ithChild is T t) yield return t;
+            foreach (T childOfChild in FindVisualChildren<T>(ithChild)) yield return childOfChild;
+        }
+    }
+
 }

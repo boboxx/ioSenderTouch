@@ -67,6 +67,7 @@ namespace ioSenderTouch
         private ProbingView _probeView;
         private readonly RenderControl _renderView;
         private readonly OffsetView _offsetView;
+        private readonly SDCardView _sdView;
 
 
         public HomeView(GrblViewModel model)
@@ -78,6 +79,7 @@ namespace ioSenderTouch
             _grblAppSettings = new AppConfigView(model);
             _probeView = new ProbingView(model);
             _offsetView = new OffsetView(model);
+            _sdView = new SDCardView(model);
             FillBorder.Child = _renderView;
             AppConfig.Settings.SetupAndOpen(model, Application.Current.Dispatcher);
             DataContext = _model;
@@ -347,11 +349,6 @@ namespace ioSenderTouch
 
         #region UIevents
 
-        void JobView_Load(object sender, EventArgs e)
-        {
-            //  GCodeSender.CallHandler(StreamingState.Idle, true);
-        }
-
         private void JobView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -386,7 +383,10 @@ namespace ioSenderTouch
         }
 
         #endregion
-
+        private void Button_ClickSDView(object sender, RoutedEventArgs e)
+        {
+            FillBorder.Child = _sdView;
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             FillBorder.Child = _grblSettingView;
