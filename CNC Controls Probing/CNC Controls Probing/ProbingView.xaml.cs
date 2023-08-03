@@ -1,7 +1,7 @@
 ﻿/*
  * ProbingView.xaml.cs - part of CNC Probing library
  *
- * v0.42 / 2023-03-21 / Io Engineering (Terje Io)
+ * v0.43 / 2023-07-25 / Io Engineering (Terje Io)
  *
  */
 
@@ -52,7 +52,7 @@ namespace CNC.Controls.Probing
     /// <summary>
     /// Interaction logic for ProbingView.xaml
     /// </summary>
-    public partial class ProbingView : UserControl, ICNCView
+    public partial class ProbingView : UserControl
     {
         private static bool keyboardMappingsOk = false;
 
@@ -142,8 +142,10 @@ namespace CNC.Controls.Probing
 
         private bool StartProbe(Key key)
         {
-            focusedControl = Keyboard.FocusedElement;
-            getView(tab.SelectedItem as TabItem)?.Start(model.PreviewEnable);
+            
+                focusedControl = Keyboard.FocusedElement;
+                getView(tab.SelectedItem as TabItem)?.Start(model.PreviewEnable);
+        
 
             return true;
         }
@@ -208,7 +210,7 @@ namespace CNC.Controls.Probing
                     probeDisconnected = grbl.Signals.Value.HasFlag(Signals.ProbeDisconnected);
                     DisplayPosition(grbl);
                     var signals = ((GrblViewModel)sender).Signals.Value;
-                    if (signals.HasFlag(Signals.CycleStart) && !signals.HasFlag(Signals.Hold) && !cycleStartSignal)
+                    if (!grbl.IsJobRunning && signals.HasFlag(Signals.CycleStart) && !signals.HasFlag(Signals.Hold) && !cycleStartSignal)
                         StartProbe(Key.R);
                     cycleStartSignal = signals.HasFlag(Signals.CycleStart);
                     break;
@@ -219,7 +221,6 @@ namespace CNC.Controls.Probing
         {
             showProbeProperties();
         }
-
         private void showProbeProperties()
         {
             double height;
@@ -236,10 +237,9 @@ namespace CNC.Controls.Probing
 
             probeProperties.Visibility = (dp.ActualHeight - t1.ActualHeight - Jog.ActualHeight + probeProperties.ActualHeight) > height ? Visibility.Visible : Visibility.Collapsed;
         }
-
         #region Methods and properties required by CNCView interface
 
-        public ViewType ViewType { get { return ViewType.Probing; } }
+
         public bool CanEnable { get { return DataContext is GrblViewModel ? !(DataContext as GrblViewModel).IsGCLock : !model.Grbl.IsGCLock; } }
 
         public void Activate(bool activate, ViewType chgMode)

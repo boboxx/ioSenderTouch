@@ -37,7 +37,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -60,28 +59,27 @@ namespace CNC.Controls.Viewer
             _grblViewModel = grblViewModel;
             DataContext = _grblViewModel;
             InitializeComponent();
-          
             GCode.File.FileLoaded += File_FileLoaded;
         }
 
         private void File_FileLoaded(object sender, bool fileLoaded)
         {
-            
+
             if (fileLoaded)
             {
                 Open(GCode.File.Tokens);
             }
-            else
-            {
-                Close();
-            }
-          
+
         }
 
         private void SettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+
         {
             textOverlay.Visibility = AppConfig.Settings.GCodeViewer.ShowTextOverlay ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
         }
+
+
+
 
         public Machine MachineView
         {
@@ -96,7 +94,7 @@ namespace CNC.Controls.Viewer
         public void Open(List<GCodeToken> tokens)
         {
             gcodeView.Render(tokens);
-//            gcodeView.ShowPosition();
+            //            gcodeView.ShowPosition();
         }
 
         #region Keypresshandlers

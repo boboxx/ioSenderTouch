@@ -169,23 +169,22 @@ namespace ioSenderTouch
 
                             //MainWindow.EnableView(false, ViewType.GCodeViewer);
                         }
-                        else if (filename.StartsWith("Wizard:"))
+                        else if (AppConfig.Settings.GCodeViewer.IsEnabled)
                         {
-                            //if (MainWindow.IsViewVisible(ViewType.GCodeViewer))
-                            //{
-                            //    MainWindow.EnableView(true, ViewType.GCodeViewer);
-                            //    _renderView.Open(GCode.File.Tokens);
-                            //}
+                            if (filename.StartsWith("Wizard:"))
+                            {
+                               
+                                _renderView.Open(GCode.File.Tokens);
+                            }
+                            else if (!string.IsNullOrEmpty(filename))
+                            {
+                                
+                                GCodeSender.EnablePolling(false);
+                                _renderView.Open(GCode.File.Tokens);
+                                GCodeSender.EnablePolling(true);
+                            }
                         }
-                        else if (!string.IsNullOrEmpty(filename) && AppConfig.Settings.GCodeViewer.IsEnabled)
-                        {
-                            MainWindow.GCodeViewer?.Open(GCode.File.Tokens);
-                            //MainWindow.EnableView(true, ViewType.GCodeViewer);
-
-                            GCodeSender.EnablePolling(false);
-                            _renderView.Open(GCode.File.Tokens);
-                            GCodeSender.EnablePolling(true);
-                        }
+                        
                         break;
                 }
             }

@@ -498,20 +498,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -534,6 +526,12 @@
     <Resource Include="Resources\edit.png" />
     <Resource Include="Resources\open.png" />
     <Resource Include="Resources\reload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\closeWhite.png" />
+    <Resource Include="Resources\editWhite.png" />
+    <Resource Include="Resources\openWhite.png" />
+    <Resource Include="Resources\reloadWhite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\ioSender Touch\packages\MaterialDesignThemes.4.10.0-ci317\build\MaterialDesignThemes.targets" Condition="Exists('..\..\ioSender Touch\packages\MaterialDesignThemes.4.10.0-ci317\build\MaterialDesignThemes.targets')" />

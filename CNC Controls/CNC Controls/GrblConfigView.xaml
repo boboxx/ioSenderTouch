@@ -58,7 +58,7 @@
         </Style>
     </UserControl.Resources>
     <DockPanel>
-        <TreeView x:Name="treeView" HorizontalAlignment="Left" Margin="10,10" VerticalAlignment="Stretch" Width="390" SelectedItemChanged="treeView_SelectedItemChanged">
+        <TreeView x:Name="treeView" HorizontalAlignment="Left" Margin="10,10" VerticalAlignment="Stretch" Width="450" SelectedItemChanged="treeView_SelectedItemChanged">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type cnccore:GrblSettingGroup}" ItemsSource="{Binding Settings}" >
                     <StackPanel Orientation="Horizontal">
