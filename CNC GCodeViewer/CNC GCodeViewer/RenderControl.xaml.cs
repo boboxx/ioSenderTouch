@@ -98,7 +98,7 @@ namespace CNC.Controls.Viewer
         public void Open(List<GCodeToken> tokens)
         {
             gcodeView.Render(tokens);
-            //            gcodeView.ShowPosition();
+            //gcodeView.ShowPosition();
         }
 
         #region Keypresshandlers
