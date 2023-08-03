@@ -78,7 +78,6 @@ namespace ioSenderTouch
             _renderView = new RenderControl(_model);
             _grblSettingView = new GrblConfigView();
             _grblAppSettings = new AppConfigView(model);
-            //_probeView = new ProbingView(model);
             _offsetView = new OffsetView(model);
             FillBorder.Child = _renderView;
             AppConfig.Settings.SetupAndOpen(model, Application.Current.Dispatcher);

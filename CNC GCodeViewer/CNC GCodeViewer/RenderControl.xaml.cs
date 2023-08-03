@@ -69,6 +69,10 @@ namespace CNC.Controls.Viewer
             {
                 Open(GCode.File.Tokens);
             }
+            else
+            {
+                Close();
+            }
 
         }
 
