@@ -7,7 +7,7 @@
              xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:local="clr-namespace:CNC.Controls.Probing"
              mc:Ignorable="d" 
-             d:DesignHeight="515" d:DesignWidth="900"
+             d:DesignHeight="700" d:DesignWidth="Auto"
              Loaded="UserControl_Loaded"
              SizeChanged="ProbingView_SizeChanged">
     <UserControl.Resources>
@@ -42,12 +42,12 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <DockPanel Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <DockPanel x:Name="dp" DockPanel.Dock="Left" Margin="5,5,5,0" Width="240" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+    <DockPanel Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0">
+        <DockPanel x:Name="dp" DockPanel.Dock="Left" Margin="5,5,5,0" Width="270" HorizontalAlignment="Left" VerticalAlignment="Stretch">
             <!--StackPanel x:Name="droPanel" Visibility ="Collapsed" Margin="0,0,5,0" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left">
                 <Controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </StackPanel>-->
-            <StackPanel x:Name="t1" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Stretch" DockPanel.Dock="Right" IsEnabled="{Binding Path=Grbl.IsJobRunning, Converter={StaticResource IsVisibleConverter}}">
+            <StackPanel x:Name="t1" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch" DockPanel.Dock="Right" IsEnabled="{Binding Path=Grbl.IsJobRunning, Converter={StaticResource IsVisibleConverter}}" Margin="0,0,0,67">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Stretch">
                     <Label x:Uid="lbl_profile" x:Name="lblProfile" Content="Profile:" HorizontalContentAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Height="25" Width="48"/>
                     <ComboBox x:Name="cbxProfile" IsEditable="True"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="155" Height="22"
@@ -66,22 +66,22 @@
                         </Button.ContextMenu>
                     </Button>
                 </StackPanel>
-                <GroupBox x:Uid="grp_probeTipOrTool" Header="Probe tip/tool">
+                <GroupBox x:Uid="grp_probeTipOrTool" Header="Probe tip/tool" HorizontalAlignment="Stretch">
                     <Controls:NumericField x:Uid="fld_diameter" Label="Diameter:" Value="{Binding Path=ProbeDiameter, Mode=TwoWay}" IsEnabled="{Binding Path=ProbeDiameterEnable}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
                 </GroupBox>
-                <GroupBox x:Uid="grp_touchOrFixture" Header="Touch plate/fixture height">
+                <GroupBox x:Uid="grp_touchOrFixture" Header="Touch plate/fixture height" HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Vertical">
                         <Controls:NumericField x:Uid="fld_touchPlate" Visibility="{Binding Path=ProbeFixture, Converter={StaticResource IsNotVisibleConverter}}"  Label="Touch plate:" Value="{Binding Path=TouchPlateHeight, Mode=TwoWay}" IsEnabled="{Binding Path=TouchPlateHeightEnable}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
                         <Controls:NumericField x:Uid="fld_fixture" Visibility="{Binding Path=ProbeFixture, Converter={StaticResource IsVisibleConverter}}" Label="Fixture:" Value="{Binding Path=FixtureHeight, Mode=TwoWay}" IsEnabled="{Binding Path=FixtureHeightEnable}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox x:Uid="grp_distanceAndSpeed" Header="Probing distances and speed">
+                <GroupBox x:Uid="grp_distanceAndSpeed" Header="Probing distances and speed" HorizontalAlignment="Stretch" >
                     <StackPanel Orientation="Vertical">
-                        <Controls:NumericField x:Uid="lbl_rapidsFeed" Label="Rapids feed rate:" ToolTip="Feed rate for rapid moves, set to 0 to use controller setting" Format="###0" Unit="mm/min" Value="{Binding Path=RapidsFeedRate, Mode=TwoWay}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
-                        <Controls:NumericField x:Uid="lbl_searchFeed" Label="Search feed rate:" ToolTip="Feed rate for initial probing move" Unit="mm/min" Format="###0" Value="{Binding Path=ProbeFeedRate, Mode=TwoWay}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
-                        <Controls:NumericField x:Uid="lbl_latchFeed" Label="Latch feed rate:" ToolTip="Feed rate for second slow probing move" Unit="mm/min" Format="###0" Value="{Binding Path=LatchFeedRate, Mode=TwoWay}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
-                        <Controls:NumericField x:Uid="lbl_probingDistance" Label="Probing distance:" Tooltip2="Max. distance for probing moves" Value="{Binding Path=ProbeDistance, Mode=TwoWay}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Style="{StaticResource ErrorStyle}"/>
-                        <Controls:NumericField x:Uid="lbl_latchDistance" Label="Latch distance:" Tooltip2="Distance to retract for second slow probing move, set to 0 to skip" Value="{Binding Path=LatchDistance, Mode=TwoWay}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Style="{StaticResource ErrorStyle}"/>
+                        <Controls:NumericField x:Uid="lbl_rapidsFeed" Label="Rapids feed rate:" ToolTip="Feed rate for rapid moves, set to 0 to use controller setting" Format="###0" Unit="mm/min" Value="{Binding Path=RapidsFeedRate, Mode=TwoWay}" ColonAt="120" HorizontalAlignment="Stretch" Margin="0,2,0,0" VerticalAlignment="Top"/>
+                        <Controls:NumericField x:Uid="lbl_searchFeed" Label="Search feed rate:" ToolTip="Feed rate for initial probing move" Unit="mm/min" Format="###0" Value="{Binding Path=ProbeFeedRate, Mode=TwoWay}" ColonAt="120" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
+                        <Controls:NumericField x:Uid="lbl_latchFeed" Label="Latch feed rate:" ToolTip="Feed rate for second slow probing move" Unit="mm/min" Format="###0" Value="{Binding Path=LatchFeedRate, Mode=TwoWay}" ColonAt="120" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top"/>
+                        <Controls:NumericField x:Uid="lbl_probingDistance" Label="Probing distance:" Tooltip2="Max. distance for probing moves" Value="{Binding Path=ProbeDistance, Mode=TwoWay}" ColonAt="120" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Style="{StaticResource ErrorStyle}"/>
+                        <Controls:NumericField x:Uid="lbl_latchDistance" Label="Latch distance:" Tooltip2="Distance to retract for second slow probing move, set to 0 to skip" Value="{Binding Path=LatchDistance, Mode=TwoWay}" ColonAt="120" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Style="{StaticResource ErrorStyle}"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox x:Uid="grp_clearances" x:Name="Clearances" Header="Probing clearances">
@@ -101,28 +101,28 @@
                 <TextBlock x:Name="Position" Text="{Binding Path=Position, Mode=OneWay}" TextWrapping="NoWrap" Height="25" Width="235" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
             </StackPanel>
         </DockPanel>
-        <StackPanel DockPanel.Dock="Right" Margin="0,10,0,0" Width="635" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <TabControl x:Name="tab" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="Auto" SelectionChanged="tab_SelectionChanged">
+        <StackPanel DockPanel.Dock="Right" Margin="0,10,0,0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <TabControl x:Name="tab" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="Auto" SelectionChanged="tab_SelectionChanged" Margin="0,0,-140,0">
                 <TabItem x:Uid="tab_toolOffset" Header="Tool length offset">
-                    <local:ToolLengthControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <local:ToolLengthControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="525"/>
                 </TabItem>
                 <TabItem x:Uid="tab_edgeInternal" Header="Edge finder, external">
-                    <local:EdgeFinderControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <local:EdgeFinderControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="525"/>
                 </TabItem>
                 <TabItem x:Uid="tab_edgeExternal" Header="Edge finder, internal">
-                    <local:EdgeFinderIntControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <local:EdgeFinderIntControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="525" Margin="0,0,0,0"/>
                 </TabItem>
                 <TabItem x:Uid="tab_Rotation" Header="Rotation">
-                    <local:RotationControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <local:RotationControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="525" Margin="0,0,0,0"/>
                 </TabItem>
                 <TabItem x:Uid="tab_Center" Header="Center finder">
-                    <local:CenterFinderControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <local:CenterFinderControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="525" Margin="0,0,0,0"/>
                 </TabItem>
                 <TabItem x:Uid="tab_heightmap" Header="Height map">
-                    <local:HeightMapControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <local:HeightMapControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="525" Margin="0,0,0,0"/>
                 </TabItem>
             </TabControl>
-            <TextBlock TextWrapping="Wrap" Height="70" Margin="0,2,0,0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <TextBlock TextWrapping="Wrap" Height="85" Margin="0,2,0,0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <Run Text="{Binding Path=Instructions, Mode=OneWay}"/>
             <LineBreak/>
             <Run x:Uid="txt_warning" Text="Warning! Use with care - incorrect parameters may damage your probe!" Foreground="Red" FontWeight="Bold"/>

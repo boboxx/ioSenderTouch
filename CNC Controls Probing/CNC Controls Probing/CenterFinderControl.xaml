@@ -6,8 +6,7 @@
              xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:local="clr-namespace:CNC.Controls.Probing"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" Height="370"
-             d:DesignHeight="370" d:DesignWidth="625">
+             mc:Ignorable="d" Height="433.023" Width="746.729">
     <UserControl.Resources>
         <system:String x:Uid="str_CenterFinderInstructions" x:Key="Instructions">Click image above to select probing action.\nPlace the probe above the approximate center of the workpiece before start.</system:String>
         <system:String x:Uid="str_centerFinderType" x:Key="SelectType">Select type of probe by clicking on one of the images above.</system:String>
@@ -38,12 +37,16 @@
         </Style>
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Margin="5" HorizontalAlignment="Left" Width="350">
             <DockPanel>
                 <local:CsSelectControl/>
                 <GroupBox x:Uid="grp_passes" Header="Passes" ToolTip="More than one pass is usually needed to get accurate dimensions." HorizontalAlignment="Stretch">
-                    <Controls:NumericField x:Uid="fld_passes" Label="Passes:" ColonAt="80" Value="{Binding Path=Passes, Mode=TwoWay}" Unit="" Format="0" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource ErrorStyle}"/>
-                 </GroupBox>
+                    <Controls:NumericField x:Uid="fld_passes" Label="Passes:" ColonAt="50" Value="{Binding Path=Passes, Mode=TwoWay}" Unit="" Format="0" Margin="0,5,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Top" Style="{StaticResource ErrorStyle}"/>
+                </GroupBox>
             </DockPanel>
             <GroupBox x:Uid="grp_dimensions" Header="Workpiece dimensions">
                 <Grid>
@@ -86,18 +89,21 @@
                 <RadioButton Content="Resources/centerO.png" Style="{StaticResource RadioImage}" GroupName="edge" IsChecked="{Binding Path=ProbeCenter, Mode=TwoWay, Converter={StaticResource EnumToEdgeConverter}, ConverterParameter=Outside}" Margin="5,0,0,0" />
             </StackPanel>
         </StackPanel>
-        <StackPanel Margin="5,0,0,5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="Auto" Width="Auto">
+        <StackPanel Grid.Column="0" Margin="5,0,0,5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="Auto" Width="Auto">
             <Button x:Uid="btn_start" Content="Start" IsEnabled="{Binding Path=Grbl.IsJobRunning, Converter={StaticResource IsNotRunningConverter}}" Margin="2,0" Width="75" Click="start_Click"/>
             <Button x:Uid="btn_stop" Content="Stop" IsEnabled="{Binding Path=Grbl.IsJobRunning}" Margin="2,0" Width="75" Click="stop_Click"/>
             <Button x:Uid="btn_useCamera" Content="Use camera positions" IsEnabled="{Binding Path=CanApplyTransform}" Margin="2,0" Padding="4,0" Click="camera_Click"/>
         </StackPanel>
-        <CheckBox x:Uid="lbl_preview" Content="Preview" Margin="365,10,0,0" IsChecked="{Binding Path=PreviewEnable}"/>
-        <GroupBox x:Uid="grp_preview" Header="Preview" Margin="365,30,0,0" Visibility="{Binding Path=PreviewEnable, Converter={StaticResource ToVisibleConverter}}" VerticalAlignment="Top">
-            <TextBox IsReadOnly="True" Text="{Binding Path=PreviewText, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="235" Height="300"
-                FontSize="10" FontFamily="Verdana"
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            </TextBox>
-        </GroupBox>
+       <StackPanel Grid.Column="1">
+           <CheckBox x:Uid="lbl_preview" Content="Preview" Margin="0,10,0,0" IsChecked="{Binding Path=PreviewEnable}" Height="30"/>
+           <GroupBox x:Uid="grp_preview" Header="Preview" Margin="0,100,0,0" Visibility="{Binding Path=PreviewEnable, Converter={StaticResource ToVisibleConverter}}" VerticalAlignment="Top" Height="246">
+               <TextBox IsReadOnly="True" Text="{Binding Path=PreviewText, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,5,0,-2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="338" Height="189"
+                        FontSize="10" FontFamily="Verdana"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto">
+               </TextBox>
+           </GroupBox>
+        </StackPanel>
+        
     </Grid>
 </UserControl>
