@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" Height="149" Width="131">
+             mc:Ignorable="d"  Width="131">
     <UserControl.Resources>
         <system:String x:Uid="str_toolchanges" x:Key="JobToolChanges">Job has {0} tool change(s) using M6, only a few Grbl ports supports that.</system:String>
         <system:String x:Uid="str_toolchangeTLO" x:Key="JobToolReference">Job has {0} tool change(s), tool length reference should be established before start.</system:String>
@@ -14,18 +14,13 @@
         <system:String x:Uid="str_pause" x:Key="JobPause">Pause</system:String>
         <system:String x:Uid="str_checking" x:Key="Checking">Checking...</system:String>
         <system:String x:Uid="str_transferComplete" x:Key="TransferComplete">Transfer complete</system:String>
-        <Style x:Key="JobButtonStyle" TargetType="Button">
-            <Setter Property="MinWidth" Value="95" />
-            <Setter Property="MaxWidth" Value="120" />
-            <Setter Property="Padding" Value="5,0" />
-            <Setter Property="Height" Value="36" />
-            <Setter Property="Focusable" Value="False" />
-        </Style>
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical">
-        <Button x:Uid="btn_cycleStart" x:Name="btnStart" Content="Cycle Start" ToolTip="Alt+R"  Click="btnStart_Click" />
-        <Button x:Uid="btn_feedHold" x:Name="btnHold" Content="Feed Hold" ToolTip="Space"   Click="btnHold_Click"/>
-        <Button x:Uid="btn_stop" x:Name="btnStop" Content="Stop" ToolTip="Alt+S" Click="btnStop_Click"/>
-        <Button x:Uid="btn_rewind" x:Name="btnRewind" Content="Rewind"  Click="btnRewind_Click"/>
-    </StackPanel>
+    <GroupBox Width="Auto" Header=" Job">
+        <StackPanel Orientation="Vertical">
+            <Button Margin="0,2" Height="45" x:Uid="btn_cycleStart" x:Name="btnStart" Content="Cycle Start" ToolTip="Alt+R"  Click="btnStart_Click" />
+            <Button Margin="0,2" Height="45" x:Uid="btn_feedHold" x:Name="btnHold" Content="Feed Hold" ToolTip="Space"   Click="btnHold_Click"/>
+            <Button Margin="0,2" Height="45" x:Uid="btn_stop" x:Name="btnStop" Content="Stop" ToolTip="Alt+S" Click="btnStop_Click"/>
+            <Button Margin="0,2" Height="45" x:Uid="btn_rewind" x:Name="btnRewind" Content="Rewind"  Click="btnRewind_Click"/>
+        </StackPanel>
+    </GroupBox>
 </UserControl>
