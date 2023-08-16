@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              Focusable="True">
 
     <UserControl.Resources>
@@ -36,29 +36,32 @@
                 <Button Content="App Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_3" Width="140" Margin="1,0,1,0" ></Button>
             </StackPanel>
         </Border>
-        <Border Height="325"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
-                <controls:MDIControl x:Name="MdiControl" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto" Margin="5,3,0,5"/>
-                <controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5" Width="Auto" VerticalContentAlignment="Stretch"/>
-                <controls:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,5" Height="Auto" Width="255" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                <controls:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="Auto" MinWidth="270" Margin="3,3,0,5" Height="Auto" />
-                <controls:JogControl x:Name="jogControl" Margin="3,3,0,5" MinHeight="300" HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Top" />
-                <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,5" Width="252" VerticalAlignment="Stretch"/>
-            </StackPanel>
-        </Border>
         <Grid DockPanel.Dock="Left" Width="425">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" VerticalAlignment ="Top"  HorizontalAlignment="Stretch" Height="35" >
                 <Button  Name="btnShowConsole" Content="Console" Click="ButtonBase_OnClick"   Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource IsVisibleConverter}}"></Button>
             </StackPanel>
             <controls:ConsoleControl Grid.Row="1" Name="ConsoleControl" HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Margin="2,5,0,5" />
             <controls:GCodeListControl Grid.Row="1" Name ="CodeListControl"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,5,0,10" Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource IsVisibleConverter}}"></controls:GCodeListControl>
+            <controls:MDIControl Grid.Row="2" x:Name="MdiControl" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" Height="Auto" Margin="5,3,0,5"/>
         </Grid>
+        <Border Name="MainControlBorder" Height="325"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+            <StackPanel Name="MainStackPanel"  Orientation="Horizontal" Margin="0,0,0,0" >
+              
+                <controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5" Width="Auto" VerticalContentAlignment="Stretch"/>
+                <controls:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,5" Height="Auto" Width="255" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                <controls:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="Auto" MinWidth="270" Margin="3,3,0,5" Height="Auto" />
+                <controls:JogControl x:Name="jogControl" Margin="3,3,0,5" MinHeight="300" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Top" />
+                <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,5" Width="252" VerticalAlignment="Stretch"/>
+            </StackPanel>
+        </Border>
+       
         <Border Name="RightMenuBorder" BorderBrush="Black" BorderThickness="1" Width="250" DockPanel.Dock="Right">
-            <StackPanel>
+            <StackPanel Name ="RightStackPanel">
                 <controls:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
 
                 <controls:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Top" Height="125" Width="Auto"/>

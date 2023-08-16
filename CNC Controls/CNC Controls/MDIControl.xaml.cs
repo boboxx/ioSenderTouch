@@ -49,13 +49,11 @@ namespace CNC.Controls
     public partial class MDIControl : UserControl
     {
         private ICommand SendCommand { get; }
+        private GrblViewModel _model;
         public MDIControl()
         {
             InitializeComponent();
-
             Commands = new ObservableCollection<string>();
-            DataContext = Grbl.GrblViewModel
-                ;
         }
 
         public new bool IsFocused { get { return TxtMdi.IsKeyboardFocusWithin; } }
@@ -76,15 +74,18 @@ namespace CNC.Controls
 
         private void txtMDI_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Return && (DataContext as GrblViewModel).MDICommand.CanExecute(null))
+            if (e.Key == Key.Return && _model.MDICommand.CanExecute(null))
             {
+                if (_model == null)
+                {
+                    _model = Grbl.GrblViewModel;
+                }
                 string cmd = (sender as ComboBox).Text;
-                var model = DataContext as GrblViewModel;
                 if (!string.IsNullOrEmpty(cmd) && (Commands.Count == 0 || Commands[0] != cmd))
                     Commands.Insert(0, cmd);
-                if (model.GrblError != 0)
-                    model.ExecuteCommand("");
-                model.MDICommand.Execute(cmd);
+                if (_model.GrblError != 0)
+                    _model.ExecuteCommand("");
+                _model.MDICommand.Execute(cmd);
                 (sender as ComboBox).SelectedIndex = -1;
             }
         }
@@ -101,20 +102,19 @@ namespace CNC.Controls
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
-            //if ((DataContext as GrblViewModel).GrblError != 0)
-            //    (DataContext as GrblViewModel).ExecuteCommand("");
-
             if (!string.IsNullOrEmpty(Command) && !Commands.Contains(Command))
             {
                 Commands.Insert(0, Command);
             }
-            Grbl.GrblViewModel.ExecuteCommand(Command.ToUpper().Trim());
+            _model.ExecuteCommand(Command.ToUpper().Trim());
             TxtMdi.SelectedIndex = -1;
         }
 
         private void MDIControl_Loaded(object sender, RoutedEventArgs e)
         {
             var mdi = TxtMdi.Template.FindName("PART_EditableTextBox", TxtMdi) as TextBox;
+            _model = Grbl.GrblViewModel;
+            DataContext = _model;
             if(mdi != null)
                 mdi.Tag = "MDI";
         }
@@ -126,7 +126,6 @@ namespace CNC.Controls
             var txt = TxtMdi.Text;
             switch (item)
             {
-                        
                 case "Enter":
                     ProcessEnterAndCommand(txt);
                     break;
@@ -141,8 +140,6 @@ namespace CNC.Controls
                 default:
                     TxtMdi.Text = txt + item;
                     break;
-
-
             }
         }
 
@@ -150,7 +147,7 @@ namespace CNC.Controls
         {
             var command = TxtMdi.Text;
             if(string.IsNullOrEmpty(TxtMdi.Text))return;
-            Grbl.GrblViewModel.ExecuteCommand(command.ToUpper().Trim());
+            _model.ExecuteCommand(command.ToUpper().Trim());
             TxtMdi.Text = string.Empty;
             TxtMdi.SelectedIndex = -1;
         }

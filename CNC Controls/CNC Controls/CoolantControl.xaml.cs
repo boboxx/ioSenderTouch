@@ -52,12 +52,19 @@ namespace CNC.Controls
 
         private void chkBox_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if((string)(sender as CheckBox).Tag == "Flood")
-                (DataContext as GrblViewModel).ExecuteCommand(GrblCommand.Flood);
-            else if ((string)(sender as CheckBox).Tag == "Mist")
-                (DataContext as GrblViewModel).ExecuteCommand(GrblCommand.Mist);
-            else
-                (DataContext as GrblViewModel).ExecuteCommand(GrblCommand.Fan);
+            var com = GrblCommand.Mist;
+            switch ((string)(sender as CheckBox)?.Tag)
+            {
+                case "Flood":
+                    (DataContext as GrblViewModel)?.ExecuteCommand(GrblCommand.Flood);
+                    break;
+                case "Mist":
+                    (DataContext as GrblViewModel)?.ExecuteCommand(GrblCommand.Mist);
+                    break;
+                default:
+                    (DataContext as GrblViewModel)?.ExecuteCommand(GrblCommand.Fan);
+                    break;
+            }
         }
     }
 }

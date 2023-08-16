@@ -68,6 +68,10 @@ namespace CNC.Controls
             InitializeComponent();
             _viewModel = grblViewModel;
             ctxMenu.DataContext = grblViewModel;
+            if (_viewModel != null)
+            {
+               SetupView();
+            }
         }
 
         #region Methods and properties required by IRenderer interface
@@ -75,6 +79,14 @@ namespace CNC.Controls
         public ViewType ViewType { get { return ViewType.SDCard; } }
         public bool CanEnable { get { return !_viewModel.IsGCLock; } }
 
+        public void SetupView()
+        {
+            GrblSDCard.Load(DataContext as GrblViewModel, ViewAll);
+            CanUpload = GrblInfo.UploadProtocol != string.Empty;
+            CanDelete = GrblInfo.Build >= 20210421;
+            CanViewAll = GrblInfo.Build >= 20230312;
+            CanRewind = GrblInfo.IsGrblHAL;
+        }
         public void Activate(bool activate, ViewType chgMode)
         {
             if (activate)
@@ -278,8 +290,7 @@ namespace CNC.Controls
 
         private void Ymodem_DataTransferred(long size, long transferred)
         {
-            GrblViewModel model = DataContext as GrblViewModel;
-            model.Message = string.Format((string)FindResource("Transferring"), transferred, size);
+            _viewModel.Message = string.Format((string)FindResource("Transferring"), transferred, size);
         }
 
         private void Run_Click(object sender, RoutedEventArgs e)
@@ -288,7 +299,7 @@ namespace CNC.Controls
         }
         private void ViewAll_Click(object sender, RoutedEventArgs e)
         {
-            GrblSDCard.Load(DataContext as GrblViewModel, ViewAll);
+            GrblSDCard.Load(_viewModel, ViewAll);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -296,7 +307,7 @@ namespace CNC.Controls
             if (MessageBox.Show(string.Format((string)FindResource("DeleteFile"), (string)currentFile["Name"]), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
                 Comms.com.WriteCommand(GrblConstants.CMD_SDCARD_UNLINK + (string)currentFile["Name"]);
-                GrblSDCard.Load(DataContext as GrblViewModel, ViewAll);
+                GrblSDCard.Load(_viewModel, ViewAll);
             }
         }
 

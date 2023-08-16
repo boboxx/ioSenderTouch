@@ -10,7 +10,7 @@
     </UserControl.Resources>
     <GroupBox  x:Uid="grp_coolant" x:Name="grpCoolant" Header="Coolant" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" MinHeight="125" Height="Auto">
         <StackPanel HorizontalAlignment="Left" Margin="0,3,0,-7" Grid.Row="1" VerticalAlignment="Top" Width="Auto" Height="76">
-            <CheckBox  x:Uid="lbl_flood" x:Name="chkFlood" Tag="Flood" Content="Flood"  IsChecked="{Binding Path=Flood, Mode=OneWay}" HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
+            <CheckBox  x:Uid="lbl_flood" x:Name="chkFlood" Tag="Flood" Content="Flood"  IsChecked="{Binding Path=Flood, Mode=OneWay}" HorizontalAlignment="Left" Margin="20,3,0,0"  VerticalAlignment="Top"  Click="chkBox_Click"/>
             <CheckBox x:Uid="lbl_mist" x:Name="chkMist" Tag="Mist" Content="Mist" IsChecked="{Binding Path=Mist, Mode=OneWay}"  HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
             <CheckBox x:Uid="lbl_fan" x:Name="chkFan" Tag="Fan" Content="Fan" IsChecked="{Binding Path=Fan0, Mode=OneWay}"  Visibility="{Binding Path=HasFans, Mode=OneWay, Converter={StaticResource IsVisibleConverter}}" HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
         </StackPanel>

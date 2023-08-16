@@ -55,13 +55,11 @@ namespace ioSenderTouch
 
     public partial class MainWindow : Window
     {
-        private const string version = "2.0.43";
+        private const string Version = "2.0.44";
+        private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
         public static CNC.Controls.Viewer.Viewer GCodeViewer = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
-
-       
-
         private bool saveWinSize = false;
         private readonly GrblViewModel _viewModel;
         private readonly HomeView _homeView;
@@ -69,20 +67,20 @@ namespace ioSenderTouch
         public MainWindow()
         {
             CNC.Core.Resources.Path = AppDomain.CurrentDomain.BaseDirectory;
-
             InitializeComponent();
-
             ui = this;
-            //            GCodeViewer = viewer;
-            Title = string.Format(Title, version);
-
+            Title = string.Format(Title, Version);
+#if DEBUG
+            this.MinHeight = 1080;
+            this.MinHeight = 1080;
+            this.MaxWidth =1920;
+#endif
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
 
             BaseWindowTitle = Title;
-            _viewModel = new GrblViewModel();
-            DataContext = _viewModel;
+            _viewModel = DataContext as GrblViewModel;
             _homeView = new HomeView(_viewModel);
             DockPanel.SetDock(_homeView, Dock.Left);
             DockPanel.Children.Add(_homeView);
@@ -95,7 +93,7 @@ namespace ioSenderTouch
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
             AppConfig.Settings.Base.PropertyChanged += Base_PropertyChanged;
-
+            VerisonLabel.Content = $"{App_Name} {Version}";
         }
 
         public string BaseWindowTitle { get; set; }
@@ -105,6 +103,7 @@ namespace ioSenderTouch
             set
             {
                 ui.Title = BaseWindowTitle + (string.IsNullOrEmpty(value) ? "" : " - " + value);
+               
                 //ui.menuCloseFile.IsEnabled = ui.menuSaveFile.IsEnabled = !(string.IsNullOrEmpty(value) || value.StartsWith("SDCard:"));
                 //ui.menuTransform.IsEnabled = ui.menuCloseFile.IsEnabled && UIViewModel.TransformMenuItems.Count > 0;
             }

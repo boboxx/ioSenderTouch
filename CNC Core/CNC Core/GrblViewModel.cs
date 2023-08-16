@@ -93,6 +93,9 @@ namespace CNC.Core
         private int _spindleOverValue;
         private int _feedOverRideValue;
         private bool _hasSDCard;
+        private string _isConnected;
+        private bool _connected;
+        private bool _hasAtc;
 
         public delegate void GrblResetHandler();
 
@@ -118,6 +121,17 @@ namespace CNC.Core
             }
         }
 
+        public bool HasATC
+        {
+            get => _hasAtc;
+            set
+            {
+                if (value == _hasAtc) return;
+                _hasAtc = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool ShowAlarmButton
         {
             get => _showAlarmButton;
@@ -139,6 +153,30 @@ namespace CNC.Core
                 OnPropertyChanged();
             }
         }
+        public bool Connected
+        {
+            get => _connected;
+            set
+            {
+                //if (value == _connected) return;
+                {
+                    IsConnected = _connected ? "Online" : "Offline";
+                }
+                _connected = value;
+                //OnPropertyChanged();
+            }
+        }
+        public string IsConnected
+        {
+            get => _isConnected;
+            set
+            {
+                if (value == _isConnected) return;
+                _isConnected = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool HasSDCard
         {
             get => _hasSDCard;
@@ -1431,6 +1469,7 @@ namespace CNC.Core
 
         public void DataReceived(string data)
         {
+            Connected = true;
             if (data.Length == 0)
                 return;
 
@@ -1672,8 +1711,6 @@ namespace CNC.Core
 
             OnResponseReceived?.Invoke(data);
         }
-
-        public bool HasATC { get; set; }
     }
 }
 

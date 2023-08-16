@@ -75,11 +75,11 @@ namespace CNC.Controls.Probing
             if (!probing.ValidateInput(true))
                 return;
 
-            if (probing.ProbeFixture && !probing.Grbl.AxisHomed.Value.HasFlag(AxisFlags.X | AxisFlags.Y | AxisFlags.Z))
-            {
-                MessageBox.Show((string)FindResource("InitFailed"), "Probing");
-                return;
-            }
+            //if (probing.ProbeFixture && !probing.Grbl.AxisHomed.Value.HasFlag(AxisFlags.X | AxisFlags.Y | AxisFlags.Z))
+            //{
+            //    MessageBox.Show((string)FindResource("InitFailed"), "Probing");
+            //    return;
+            //}
 
             if (!probing.VerifyProbe())
                 return;
@@ -87,7 +87,7 @@ namespace CNC.Controls.Probing
             if (!probing.Program.Init(AppConfig.Settings.Probing.CheckProbeStatus || !probing.ProbeFixture))
                 return;
 
-            probing.Program.Add(string.Format("G91F{0}", probing.ProbeFeedRate.ToInvariantString()));
+            probing.Program.Add($"G91F{probing.ProbeFeedRate.ToInvariantString()}");
 
             if (probing.ProbeFixture)
             {

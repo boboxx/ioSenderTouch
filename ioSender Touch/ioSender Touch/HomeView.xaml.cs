@@ -67,26 +67,25 @@ namespace ioSenderTouch
         private ProbingView _probeView;
         private readonly RenderControl _renderView;
         private readonly OffsetView _offsetView;
-        private  SDCardView _sdView;
+        private SDCardView _sdView;
         private ToolView _toolView;
 
 
         public HomeView(GrblViewModel model)
         {
-            InitializeComponent();
             _model = model;
+            DataContext = _model;
+            InitializeComponent();
+            Grbl.GrblViewModel = _model;
             _renderView = new RenderControl(_model);
             _grblSettingView = new GrblConfigView();
-            _grblAppSettings = new AppConfigView(model);
-            _offsetView = new OffsetView(model);
+            _grblAppSettings = new AppConfigView(_model);
+            _offsetView = new OffsetView(_model);
             FillBorder.Child = _renderView;
-            AppConfig.Settings.SetupAndOpen(model, Application.Current.Dispatcher);
-            DataContext = _model;
-            Grbl.GrblViewModel = _model;
+            AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
             DRO.DROEnabledChanged += DRO_DROEnabledChanged;
             DataContextChanged += View_DataContextChanged;
             InitSystem();
-
         }
 
         private void View_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -172,18 +171,18 @@ namespace ioSenderTouch
                         {
                             if (filename.StartsWith("Wizard:"))
                             {
-                               
+
                                 _renderView.Open(GCode.File.Tokens);
                             }
                             else if (!string.IsNullOrEmpty(filename))
                             {
-                                
+
                                 GCodeSender.EnablePolling(false);
                                 _renderView.Open(GCode.File.Tokens);
                                 GCodeSender.EnablePolling(true);
                             }
                         }
-                        
+
                         break;
                 }
             }
@@ -329,7 +328,7 @@ namespace ioSenderTouch
 
             if (_model.HasSDCard)
             {
-                _sdView= new SDCardView(_model);
+                _sdView = new SDCardView(_model);
             }
 
             if (_model.HasATC)
@@ -420,7 +419,7 @@ namespace ioSenderTouch
         {
             FillBorder.Child = _toolView;
         }
-       
+
         public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
         {
             _grblAppSettings.Setup(uiViewModel, settings);
@@ -431,7 +430,7 @@ namespace ioSenderTouch
             if (CodeListControl.Visibility == Visibility.Visible)
             {
                 CodeListControl.Visibility = Visibility.Hidden;
-               ConsoleControl.Visibility = Visibility.Visible;
+                ConsoleControl.Visibility = Visibility.Visible;
             }
             else
             {
