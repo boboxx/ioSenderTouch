@@ -29,9 +29,9 @@
         <DataGrid x:Name="dgrOffsets" Grid.Row="0" ItemsSource="{Binding}" Width="800" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
                             CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False" CanUserSortColumns="False" SelectionChanged="dgrOffsets_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Uid="hdr_offset" Header="Offset" Binding="{Binding Code}" Width="85"/>
-                <DataGridTextColumn Header="X" Binding="{Binding X}" Width="70"/>
-                <DataGridTextColumn Header="Y" Binding="{Binding Y}" Width="70">
+                <DataGridTextColumn x:Uid="hdr_offset" Header="Offset" Binding="{Binding Code}" Width="105"/>
+                <DataGridTextColumn Header="X" Binding="{Binding X}" Width="95"/>
+                <DataGridTextColumn Header="Y" Binding="{Binding Y}" Width="95">
                     <DataGridTextColumn.Visibility>
                         <MultiBinding Converter="{StaticResource IsAxisVisibleConverter}">
                             <Binding Source="{StaticResource ProxyElement}" Path="DataContext.AxisEnabledFlags" />
@@ -43,7 +43,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Z" Binding="{Binding Z}" Width="70">
+                <DataGridTextColumn Header="Z" Binding="{Binding Z}" Width="95">
                     <DataGridTextColumn.Visibility>
                         <MultiBinding Converter="{StaticResource IsAxisVisibleConverter}">
                             <Binding Source="{StaticResource ProxyElement}" Path="DataContext.AxisEnabledFlags" />
@@ -55,7 +55,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding A}" Width="70">
+                <DataGridTextColumn Binding="{Binding A}" Width="95">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding DataContext.AxisLetter.A, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
@@ -72,7 +72,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding B}" Width="70">
+                <DataGridTextColumn Binding="{Binding B}" Width="95">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding DataContext.AxisLetter.B, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
@@ -89,7 +89,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding C}" Width="70">
+                <DataGridTextColumn Binding="{Binding C}" Width="95">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding DataContext.AxisLetter.C, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
@@ -106,7 +106,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="U" Binding="{Binding U}" Width="70">
+                <DataGridTextColumn Header="U" Binding="{Binding U}" Width="95">
                     <DataGridTextColumn.Visibility>
                         <MultiBinding Converter="{StaticResource IsAxisVisibleConverter}">
                             <Binding Source="{StaticResource ProxyElement}" Path="DataContext.AxisEnabledFlags" />
@@ -118,7 +118,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="V" Binding="{Binding V}" Width="70">
+                <DataGridTextColumn Header="V" Binding="{Binding V}" Width="95">
                     <DataGridTextColumn.Visibility>
                         <MultiBinding Converter="{StaticResource IsAxisVisibleConverter}">
                             <Binding Source="{StaticResource ProxyElement}" Path="DataContext.AxisEnabledFlags" />
@@ -130,7 +130,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Visibility>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="W" Binding="{Binding W}" Width="70">
+                <DataGridTextColumn Header="W" Binding="{Binding W}" Width="95">
                     <DataGridTextColumn.Visibility>
                         <MultiBinding Converter="{StaticResource IsAxisVisibleConverter}">
                             <Binding Source="{StaticResource ProxyElement}" Path="DataContext.AxisEnabledFlags" />
