@@ -7,6 +7,6 @@
              mc:Ignorable="d"
              FocusVisualStyle="{x:Null}">
     <GroupBox x:Uid="grp_uijog" Header="Jogging" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="Auto" Height="Auto">
-        <local:JogBaseControl x:Name="jogBase" Margin="0,0,10,0" Width="375"></local:JogBaseControl>
+        <local:JogBaseControl x:Name="jogBase" Margin="0,0,10,0" Width="390"></local:JogBaseControl>
     </GroupBox>
 </UserControl>

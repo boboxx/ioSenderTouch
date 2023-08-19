@@ -347,9 +347,6 @@ namespace CNC.Core
             Comms.com.WriteByte(command);
         }
 
-
-
-
         private void SetWcs(object x)
         {
             if (!(x is Button button)) return;

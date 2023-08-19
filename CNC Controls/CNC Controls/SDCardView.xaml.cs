@@ -81,7 +81,7 @@ namespace CNC.Controls
 
         public void SetupView()
         {
-            GrblSDCard.Load(DataContext as GrblViewModel, ViewAll);
+            GrblSDCard.Load(_viewModel, ViewAll);
             CanUpload = GrblInfo.UploadProtocol != string.Empty;
             CanDelete = GrblInfo.Build >= 20210421;
             CanViewAll = GrblInfo.Build >= 20230312;
@@ -91,7 +91,7 @@ namespace CNC.Controls
         {
             if (activate)
             {
-                GrblSDCard.Load(DataContext as GrblViewModel, ViewAll);
+                GrblSDCard.Load(_viewModel, ViewAll);
                 CanUpload = GrblInfo.UploadProtocol != string.Empty;
                 CanDelete = GrblInfo.Build >= 20210421;
                 CanViewAll = GrblInfo.Build >= 20230312;
@@ -184,7 +184,7 @@ namespace CNC.Controls
         {
             if (currentFile != null && MessageBox.Show(string.Format((string)FindResource("DownloandRun"), (string)currentFile["Name"]), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
-                var model = DataContext as GrblViewModel;
+               
 
                 using (new UIUtils.WaitCursor())
                 {
@@ -193,8 +193,8 @@ namespace CNC.Controls
 
                     Comms.com.PurgeQueue();
 
-                    model.SuspendProcessing = true;
-                    model.Message = string.Format((string)FindResource("Downloading"), (string)currentFile["Name"]);
+                    _viewModel.SuspendProcessing = true;
+                    _viewModel.Message = string.Format((string)FindResource("Downloading"), (string)currentFile["Name"]);
 
                     GCode.File.AddBlock((string)currentFile["Name"], CNC.Core.Action.New);
 
@@ -203,20 +203,20 @@ namespace CNC.Controls
                         res = WaitFor.AckResponse<string>(
                             cancellationToken,
                             response => AddBlock(response),
-                            a => model.OnResponseReceived += a,
-                            a => model.OnResponseReceived -= a,
+                            a => _viewModel.OnResponseReceived += a,
+                            a => _viewModel.OnResponseReceived -= a,
                             400, () => Comms.com.WriteCommand(GrblConstants.CMD_SDCARD_DUMP + (string)currentFile["Name"]));
                     }).Start();
 
                     while (res == null)
                         EventUtils.DoEvents();
 
-                    model.SuspendProcessing = false;
+                    _viewModel.SuspendProcessing = false;
 
                     GCode.File.AddBlock(string.Empty, CNC.Core.Action.End);
                 }
 
-                model.Message = string.Empty;
+                _viewModel.Message = string.Empty;
 
                 if (Rewind)
                     Comms.com.WriteCommand(GrblConstants.CMD_SDCARD_REWIND);
@@ -243,17 +243,17 @@ namespace CNC.Controls
 
             if (filename != string.Empty)
             {
-                GrblViewModel model = DataContext as GrblViewModel;
+               
 
-                model.Message = (string)FindResource("Uploading");
+                _viewModel.Message = (string)FindResource("Uploading");
 
                 if (GrblInfo.UploadProtocol == "FTP")
                 {
                     if (GrblInfo.IpAddress == string.Empty)
-                        model.Message = (string)FindResource("NoConnection");
+                        _viewModel.Message = (string)FindResource("NoConnection");
                     else using(new UIUtils.WaitCursor())
                     {
-                        model.Message = (string)FindResource("Uploading");
+                        _viewModel.Message = (string)FindResource("Uploading");
                         try
                         {
                             using (WebClient client = new WebClient())
@@ -265,26 +265,26 @@ namespace CNC.Controls
                         }
                         catch (WebException ex)
                         {
-                            model.Message = ex.Message.ToString() + " " + ((FtpWebResponse)ex.Response).StatusDescription;
+                            _viewModel.Message = ex.Message.ToString() + " " + ((FtpWebResponse)ex.Response).StatusDescription;
                         }
                         catch (System.Exception ex)
                         {
-                            model.Message = ex.Message.ToString();
+                            _viewModel.Message = ex.Message.ToString();
                         }
                     }
                 }
                 else
                 {
-                    model.Message = (string)FindResource("Uploading");
+                    _viewModel.Message = (string)FindResource("Uploading");
                     YModem ymodem = new YModem();
                     ymodem.DataTransferred += Ymodem_DataTransferred;
                     ok = ymodem.Upload(filename);
                 }
 
                 if(!(GrblInfo.UploadProtocol == "FTP" && !ok))
-                    model.Message = (string)FindResource(ok ? "TransferDone" : "TransferAborted");
+                    _viewModel.Message = (string)FindResource(ok ? "TransferDone" : "TransferAborted");
 
-                GrblSDCard.Load(model, ViewAll);
+                GrblSDCard.Load(_viewModel, ViewAll);
             }
         }
 

@@ -49,6 +49,7 @@ using CNC.Controls;
 using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
 using CNC.Core;
+using ioSenderTouch.Views;
 
 namespace ioSenderTouch
 {
@@ -69,6 +70,7 @@ namespace ioSenderTouch
         private readonly OffsetView _offsetView;
         private SDCardView _sdView;
         private ToolView _toolView;
+        private readonly UtilityView _utilityView;
 
 
         public HomeView(GrblViewModel model)
@@ -81,6 +83,7 @@ namespace ioSenderTouch
             _grblSettingView = new GrblConfigView();
             _grblAppSettings = new AppConfigView(_model);
             _offsetView = new OffsetView(_model);
+            _utilityView = new UtilityView();
             FillBorder.Child = _renderView;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
             DRO.DROEnabledChanged += DRO_DROEnabledChanged;
@@ -415,6 +418,10 @@ namespace ioSenderTouch
             FillBorder.Child = _offsetView;
         }
 
+        private void Button_Click_Utility(object sender, RoutedEventArgs e)
+        {
+
+        }
         private void Button_Click_Tools(object sender, RoutedEventArgs e)
         {
             FillBorder.Child = _toolView;

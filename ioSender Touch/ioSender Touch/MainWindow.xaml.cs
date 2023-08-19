@@ -70,11 +70,7 @@ namespace ioSenderTouch
             InitializeComponent();
             ui = this;
             Title = string.Format(Title, Version);
-#if DEBUG
-            this.MinHeight = 1080;
-            this.MinHeight = 1080;
-            this.MaxWidth =1920;
-#endif
+
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
@@ -103,17 +99,10 @@ namespace ioSenderTouch
             set
             {
                 ui.Title = BaseWindowTitle + (string.IsNullOrEmpty(value) ? "" : " - " + value);
-               
-                //ui.menuCloseFile.IsEnabled = ui.menuSaveFile.IsEnabled = !(string.IsNullOrEmpty(value) || value.StartsWith("SDCard:"));
-                //ui.menuTransform.IsEnabled = ui.menuCloseFile.IsEnabled && UIViewModel.TransformMenuItems.Count > 0;
             }
         }
 
-        public bool JobRunning
-        {
-            get => _viewModel.IsJobRunning;
-
-        }
+        public bool JobRunning => _viewModel.IsJobRunning;
 
         #region UIEvents
 

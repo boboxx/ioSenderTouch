@@ -138,13 +138,14 @@ namespace CNC.Controls
 
         private void JobControl_Loaded(object sender, RoutedEventArgs e)
         {
+            model = Grbl.GrblViewModel;
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
                 AppConfig.Settings.Base.PropertyChanged += Base_PropertyChanged;
 
                 if (!keyboardMappingsOk && DataContext is GrblViewModel)
                 {
-                    KeypressHandler keyboard = (DataContext as GrblViewModel).Keyboard;
+                    KeypressHandler keyboard = model.Keyboard;
 
                     keyboardMappingsOk = true;
 
@@ -977,7 +978,25 @@ namespace CNC.Controls
         {
             if (grblState.State == GrblStates.Jog)
                 model.IsJobRunning = false;
-
+            if (newstate.State == GrblStates.Tool)
+            {
+                if (grblState.State != GrblStates.Jog)
+                {
+                    if (JobTimer.IsRunning && job.PendingLine > 0 && !model.IsSDCardJob)
+                    {
+                        job.ToolChangeLine = job.PendingLine - 1;
+                        GCode.File.Data.Rows[job.ToolChangeLine]["Sent"] = "pending";
+                        //      ResponseReceived("pending");
+                    }
+                    streamingHandler.Call(StreamingState.ToolChange, true);
+                    if (!grblState.MPG)
+                        Comms.com.WriteByte(GrblConstants.CMD_TOOL_ACK);
+                    grblState.State = newstate.State;
+                    grblState.Substate = newstate.Substate;
+                    grblState.MPG = newstate.MPG;
+                    return;
+                }
+            }
             if (!model.IsFileLoaded || !model.IsPhysicalFileLoaded) return;
             switch (newstate.State)
             {
