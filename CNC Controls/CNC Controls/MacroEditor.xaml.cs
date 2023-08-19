@@ -41,73 +41,80 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using CNC.Core;
 using System;
+using System.Windows.Controls;
 
 namespace CNC.Controls
 {
     /// <summary>
     /// Interaction logic for MacroEditor.xaml
     /// </summary>
-    public partial class MacroEditor : Window
+    public partial class MacroEditor : UserControl
     {
         private CNC.GCode.Macro addMacro = null;
+        private  MacroData _macroData;
 
-        public MacroEditor(ObservableCollection<CNC.GCode.Macro> macros)
+        public MacroEditor()
         {
-            DataContext = new MacroData();
-            (DataContext as MacroData).Macros = macros;
-
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if ((DataContext as MacroData).Macros.Count > 0)
-                (DataContext as MacroData).Macro = (DataContext as MacroData).Macros[0];
+            if (_macroData == null)
+            {
+                _macroData = new MacroData
+                {
+                    Macros = AppConfig.Settings.Base.Macros
+                };
+                DataContext = _macroData;
+            }
+      
+            if (_macroData.Macros.Count > 0)
+                _macroData.Macro = _macroData.Macros[0];
         }
 
         void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            cbxMacro.Text = string.Empty;
+            textBox.Text = string.Empty;
         }
 
         void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            var macroData = DataContext as MacroData;
 
-            if (macroData.Macro != null && macroData.Code == string.Empty)
-                macroData.Macros.Remove(macroData.Macro);
+            if (_macroData.Macro != null && _macroData.Code == string.Empty)
+                _macroData.Macros.Remove(_macroData.Macro);
 
-            if (macroData.Macro == null && macroData.LastMacro != null)
+            if (_macroData.Macro == null && _macroData.LastMacro != null)
             {
-                macroData.LastMacro.Name = cbxMacro.Text;
-                macroData.LastMacro.ConfirmOnExecute = macroData.ConfirmOnExecute;
+                _macroData.LastMacro.Name = cbxMacro.Text;
+                _macroData.LastMacro.ConfirmOnExecute = _macroData.ConfirmOnExecute;
             }
 
+            AppConfig.Settings.Base.Macros = _macroData.Macros;
+            AppConfig.Settings.Save();
+            cbxMacro.Text = string.Empty;
+            textBox.Text = string.Empty;
             addMacro = null;
 
-            Close();
+           
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             int id = 0;
 
-            foreach (var macro in (DataContext as MacroData).Macros)
+            foreach (var macro in _macroData.Macros)
                 id = Math.Max(id, macro.Id);
 
             addMacro = new CNC.GCode.Macro();
             addMacro.Id = id + 1;
             addMacro.Name = cbxMacro.Text;
 
-            (DataContext as MacroData).Macros.Add(addMacro);
-            (DataContext as MacroData).Macro = addMacro;
+            _macroData.Macros.Add(addMacro);
+            _macroData.Macro = addMacro;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (addMacro != null)
-                (DataContext as MacroData).Macros.Remove(addMacro);
-        }
     }
 
     public class MacroData : ViewModelBase

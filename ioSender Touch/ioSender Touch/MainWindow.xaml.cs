@@ -58,7 +58,7 @@ namespace ioSenderTouch
         private const string Version = "2.0.44";
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
-        public static CNC.Controls.Viewer.Viewer GCodeViewer = null;
+        public static CNC.Controls.Viewer.Viewer GCodeViewer = null; 
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
         private bool saveWinSize = false;
         private readonly GrblViewModel _viewModel;
@@ -70,7 +70,6 @@ namespace ioSenderTouch
             InitializeComponent();
             ui = this;
             Title = string.Format(Title, Version);
-
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
@@ -80,12 +79,7 @@ namespace ioSenderTouch
             _homeView = new HomeView(_viewModel);
             DockPanel.SetDock(_homeView, Dock.Left);
             DockPanel.Children.Add(_homeView);
-
-            //CNC.Core.Grbl.GrblViewModel = (GrblViewModel)DataContext;
             GrblInfo.LatheModeEnabled = AppConfig.Settings.Lathe.IsEnabled;
-
-            //       SDCardControl.FileSelected += new CNC_Controls.SDCardControl.FileSelectedHandler(SDCardControl_FileSelected);
-
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
             AppConfig.Settings.Base.PropertyChanged += Base_PropertyChanged;
@@ -103,8 +97,6 @@ namespace ioSenderTouch
         }
 
         public bool JobRunning => _viewModel.IsJobRunning;
-
-        #region UIEvents
 
         private void Window_Load(object sender, EventArgs e)
         {
@@ -144,8 +136,6 @@ namespace ioSenderTouch
 
             System.Threading.Thread.Sleep(50);
             Comms.com.PurgeQueue();
-            //UIViewModel.CurrentView.Activate(true, ViewType.Startup);
-
             if (!string.IsNullOrEmpty(AppConfig.Settings.FileName))
             {
                 // Delay loading until app is ready
@@ -159,16 +149,10 @@ namespace ioSenderTouch
             GCode.File.AddConverter(c.GetType(), c.FileType, c.FileExtensions);
             c = new HpglToGCode();
             GCode.File.AddConverter(c.GetType(), c.FileType, c.FileExtensions);
-
             GCode.File.AddTransformer(typeof(GCodeRotateViewModel), (string)FindResource("MenuRotate"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(ArcsToLines), (string)FindResource("MenuArcsToLines"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(GCodeCompress), (string)FindResource("MenuCompress"), UIViewModel.TransformMenuItems);
-            //TODO remove dragKnife
-            //GCode.File.AddTransformer(typeof(CNC.Controls.DragKnife.DragKnifeViewModel), (string)FindResource("MenuDragKnife"), UIViewModel.TransformMenuItems);
-
             _homeView.ConfiguationLoaded(UIViewModel, AppConfig.Settings);
-
-
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -196,7 +180,7 @@ namespace ioSenderTouch
                     UIViewModel.Camera.Close();
                 }
 #endif
-                Comms.com.DataReceived -= (DataContext as GrblViewModel).DataReceived;
+                Comms.com.DataReceived -= _viewModel.DataReceived;
                 using (new UIUtils.WaitCursor())
                 {
                     Comms.com.Close(); // disconnecting from websocket may take some time...
@@ -237,7 +221,7 @@ namespace ioSenderTouch
 
         void errorAndAlarms_Click(object sender, EventArgs e)
         {
-            new ErrorsAndAlarms(BaseWindowTitle) { Owner = Application.Current.MainWindow }.Show();
+            // new ErrorsAndAlarms(BaseWindowTitle) { Owner = Application.Current.MainWindow }.Show();
         }
 
         void aboutMenuItem_Click(object sender, EventArgs e)
@@ -265,37 +249,14 @@ namespace ioSenderTouch
                 GCode.File.Load(filename);
         }
 
-
-        private void SDCardView_FileSelected(string filename, bool rewind)
-        {
-            if ((ui.DataContext as GrblViewModel).FileName != filename.Substring(filename.IndexOf(':') + 1))
-                GCode.File.Close();
-            (ui.DataContext as GrblViewModel).FileName = filename;
-            (ui.DataContext as GrblViewModel).SDRewind = rewind;
-            //Dispatcher.BeginInvoke((System.Action)(() => ui.tabMode.SelectedItem = getTab(ViewType.GRBL)));
-        }
-
-        #endregion
-
         public static void CloseFile()
         {
-            //ICNCView view, grbl = GetView(ta));
-
-            //grbl.CloseFile();
-
-            //foreach (TabItem tabitem in UIUtils.FindLogicalChildren<TabItem>(ui.tabMode))
-            //{
-            //    if ((view = getView(tabitem)) != null && view != grbl)
-            //        view.CloseFile();
-            //}
             GCode.File.Close();
         }
-
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             this.Close();
-
         }
     }
 }

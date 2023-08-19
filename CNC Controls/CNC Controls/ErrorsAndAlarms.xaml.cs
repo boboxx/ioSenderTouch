@@ -38,15 +38,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CNC.Controls
 {
-    public partial class ErrorsAndAlarms : Window
+    public partial class ErrorsAndAlarms : UserControl
     {
         public ErrorsAndAlarms(string title)
         {
             InitializeComponent();
-            Title = title + " - " + Title;
+           
         }
     }
 }

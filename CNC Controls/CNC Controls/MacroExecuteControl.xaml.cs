@@ -125,9 +125,9 @@ namespace CNC.Controls
 
         private void button_Edit(object sender, RoutedEventArgs e)
         {
-            MacroEditor editor = new MacroEditor(Macros) {Owner = Application.Current.MainWindow};
-            editor.ShowDialog();
-            AppConfig.Settings.Save();
+            //MacroEditor editor = new MacroEditor(Macros) {Owner = Application.Current.MainWindow};
+            //editor.ShowDialog();
+            //AppConfig.Settings.Save();
         }
     }
 }

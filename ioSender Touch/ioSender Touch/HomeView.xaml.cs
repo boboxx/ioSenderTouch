@@ -83,7 +83,7 @@ namespace ioSenderTouch
             _grblSettingView = new GrblConfigView();
             _grblAppSettings = new AppConfigView(_model);
             _offsetView = new OffsetView(_model);
-            _utilityView = new UtilityView();
+            _utilityView = new UtilityView(_model);
             FillBorder.Child = _renderView;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
             DRO.DROEnabledChanged += DRO_DROEnabledChanged;
@@ -420,7 +420,7 @@ namespace ioSenderTouch
 
         private void Button_Click_Utility(object sender, RoutedEventArgs e)
         {
-
+            FillBorder.Child = _utilityView;
         }
         private void Button_Click_Tools(object sender, RoutedEventArgs e)
         {
