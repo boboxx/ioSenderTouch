@@ -41,7 +41,10 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using CNC.Core;
 using System;
+using System.Linq;
 using System.Windows.Controls;
+using CNC.Controls.Views;
+
 
 namespace CNC.Controls
 {
@@ -51,11 +54,69 @@ namespace CNC.Controls
     public partial class MacroEditor : UserControl
     {
         private CNC.GCode.Macro addMacro = null;
-        private  MacroData _macroData;
+        private MacroData _macroData;
+        private VirtualKeyBoard _keyBoard;
 
         public MacroEditor()
         {
             InitializeComponent();
+            this.Loaded += MacroEditor_Loaded;
+        }
+
+        private void MacroEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_keyBoard == null)
+            {
+                _keyBoard = new VirtualKeyBoard
+                {
+                    Owner = Application.Current.MainWindow,
+                    Topmost = true
+                };
+                //textBox.GotFocus += TextBox_GotFocus;
+                //cbxMacro.GotFocus += CbxMacro_GotFocus;
+                textBox.MouseDoubleClick += TextBox_GotFocus;
+                cbxMacro.MouseDoubleClick += CbxMacro_GotFocus;
+            }
+        }
+
+        private void CbxMacro_GotFocus(object sender, RoutedEventArgs e)
+        {
+            void Close(object senders, EventArgs es)
+            {
+                _keyBoard.VBClosing -= Close;
+                _keyBoard.TextChanged -= TextChanged;
+            }
+
+            void TextChanged(object senders, string t)
+            {
+                cbxMacro.Text = t;
+            }
+            if(_keyBoard.Visibility==Visibility.Visible)return;
+            _keyBoard.Show();
+            _keyBoard.TextChanged -= TextChanged;
+            _keyBoard.TextChanged += TextChanged;
+            _keyBoard.VBClosing -= Close;
+            _keyBoard.VBClosing += Close;
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            void Close(object senders, EventArgs es)
+            {
+                _keyBoard.VBClosing -= Close;
+                _keyBoard.TextChanged -= TextChanged;
+            }
+
+            void TextChanged(object senders, string t)
+            {
+                textBox.Text = t;
+            }
+            if (_keyBoard.Visibility == Visibility.Visible) return;
+            _keyBoard.Show();
+            _keyBoard.TextChanged -= TextChanged;
+            _keyBoard.TextChanged += TextChanged;
+            _keyBoard.VBClosing -= Close;
+            _keyBoard.VBClosing += Close;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -68,11 +129,26 @@ namespace CNC.Controls
                 };
                 DataContext = _macroData;
             }
-      
+
             if (_macroData.Macros.Count > 0)
                 _macroData.Macro = _macroData.Macros[0];
         }
 
+        void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (cbxMacro.Text == string.Empty) return;
+                var macroName = cbxMacro.Text;
+                var macro = _macroData.Macros.First(m => m.Name.Equals(macroName));
+                _macroData.Macros.Remove(macro);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
+        }
         void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             cbxMacro.Text = string.Empty;
@@ -90,14 +166,11 @@ namespace CNC.Controls
                 _macroData.LastMacro.Name = cbxMacro.Text;
                 _macroData.LastMacro.ConfirmOnExecute = _macroData.ConfirmOnExecute;
             }
-
             AppConfig.Settings.Base.Macros = _macroData.Macros;
             AppConfig.Settings.Save();
             cbxMacro.Text = string.Empty;
             textBox.Text = string.Empty;
             addMacro = null;
-
-           
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -107,14 +180,14 @@ namespace CNC.Controls
             foreach (var macro in _macroData.Macros)
                 id = Math.Max(id, macro.Id);
 
-            addMacro = new CNC.GCode.Macro();
-            addMacro.Id = id + 1;
-            addMacro.Name = cbxMacro.Text;
-
+            addMacro = new CNC.GCode.Macro
+            {
+                Id = id + 1,
+                Name = cbxMacro.Text
+            };
             _macroData.Macros.Add(addMacro);
             _macroData.Macro = addMacro;
         }
-
     }
 
     public class MacroData : ViewModelBase
@@ -132,7 +205,8 @@ namespace CNC.Controls
         public CNC.GCode.Macro Macro
         {
             get { return _macro; }
-            set {
+            set
+            {
                 _macro = value;
                 //              Code = _macro == null ? string.Empty : _macro.Code;
                 if (_macro != null)
@@ -160,7 +234,7 @@ namespace CNC.Controls
 
         public bool CanEdit
         {
-            get { return _macro != null ; }
+            get { return _macro != null; }
             set { OnPropertyChanged(); }
         }
 
@@ -173,7 +247,8 @@ namespace CNC.Controls
         public string Code
         {
             get { return _text; }
-            set {
+            set
+            {
                 _text = value == null ? string.Empty : value;
                 if (_macro != null)
                     _macro.Code = _text.TrimEnd('\r', '\n');
