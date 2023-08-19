@@ -147,6 +147,9 @@
       <DependentUpon>JobControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="GCode.cs" />
+    <Compile Include="JogCoontrolT.xaml.cs">
+      <DependentUpon>JogCoontrolT.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JogBaseControl.xaml.cs">
       <DependentUpon>JogBaseControl.xaml</DependentUpon>
     </Compile>
@@ -277,6 +280,10 @@
     <Page Include="GrblErrorList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JogCoontrolT.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JogBaseControl.xaml">
       <SubType>Designer</SubType>

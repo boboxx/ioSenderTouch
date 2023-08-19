@@ -56,7 +56,7 @@
                 <controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5" Width="Auto" VerticalContentAlignment="Stretch"/>
                 <controls:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,5" Height="Auto" Width="255" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
                 <controls:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="Auto" MinWidth="270" Margin="3,3,0,5" Height="Auto" />
-                <controls:JogControl x:Name="jogControl" Margin="3,3,0,5" MinHeight="300" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Top" />
+                <controls:JogControlT x:Name="jogControl" Margin="3,3,0,5" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch" />
                 <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Left" Margin="3,3,0,5" Width="252" VerticalAlignment="Stretch"/>
             </StackPanel>
         </Border>
