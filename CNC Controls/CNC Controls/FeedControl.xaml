@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" d:DesignWidth="270" >
+             mc:Ignorable="d" d:DesignWidth="255" >
     <Grid Margin="0,0,0,0">
-        <GroupBox x:Uid="grp_feedrate" x:Name="grpFeedRate" Header="Feed rate" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="Auto" Width="270">
+        <GroupBox x:Uid="grp_feedrate" x:Name="grpFeedRate" Header="Feed rate" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="Auto" Width="255">
             <Grid HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch"  Width="Auto" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="55"/>
@@ -34,7 +34,7 @@
                             Grid.Row="0" >
                         <materialDesign:PackIcon Height="30" Width="30" Kind="MinusThick" />
                     </Button>
-                    <Button Grid.Column="2" Name="Reset" Width="55" Height="Auto" HorizontalAlignment="Stretch"   Command="{ Binding FeedOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                    <Button Grid.Column="2" Name="Reset" Width="60" Height="Auto" HorizontalAlignment="Stretch"   Command="{ Binding FeedOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                             Grid.Row="0" >
                         <materialDesign:PackIcon Height="25" Width="25" Kind="Cached" />
                     </Button>
@@ -65,9 +65,9 @@
                     </Button>
                     <Button Grid.Column="1" Tag="Low" Name ="IncreaseRapidLow" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="10,0,0,0" Command="{ Binding RapidOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                 Grid.Row="0" >
-                        <materialDesign:PackIcon Height="20" Width="20" Kind="Plus" />
+                        <materialDesign:PackIcon Height="25" Width="25" Kind="Plus" />
                     </Button>
-                    <Button Grid.Column="2" Name="ResetRapid" Width="55" Height="Auto" HorizontalAlignment="Stretch"   Command="{ Binding RapidOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                    <Button Grid.Column="2" Name="ResetRapid" Width="60" Height="Auto" HorizontalAlignment="Stretch"   Command="{ Binding RapidOverRideReset}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                 Grid.Row="0" >
                         <materialDesign:PackIcon Height="25" Width="25" Kind="Cached" />
                     </Button>

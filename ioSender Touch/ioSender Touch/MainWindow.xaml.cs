@@ -55,7 +55,7 @@ namespace ioSenderTouch
 
     public partial class MainWindow : Window
     {
-        private const string Version = "2.0.44";
+        private const string Version = "1.0.0";
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
         public static CNC.Controls.Viewer.Viewer GCodeViewer = null; 
