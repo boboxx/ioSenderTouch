@@ -72,8 +72,6 @@ namespace CNC.Controls
                     Owner = Application.Current.MainWindow,
                     Topmost = true
                 };
-                //textBox.GotFocus += TextBox_GotFocus;
-                //cbxMacro.GotFocus += CbxMacro_GotFocus;
                 textBox.MouseDoubleClick += TextBox_GotFocus;
                 cbxMacro.MouseDoubleClick += CbxMacro_GotFocus;
             }
