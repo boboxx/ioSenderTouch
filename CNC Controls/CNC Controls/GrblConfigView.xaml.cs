@@ -48,30 +48,22 @@ using System.Threading;
 
 namespace CNC.Controls
 {
-    public partial class GrblConfigView : UserControl, ICNCView
+    public partial class GrblConfigView : UserControl
     {
         private Widget curSetting = null;
-        private GrblViewModel model = null;
+        private GrblViewModel _model;
 
         private string retval;
 
-        public GrblConfigView()
+        public GrblConfigView(GrblViewModel model)
         {
             InitializeComponent();
-
-            DataContextChanged += GrblConfigView_DataContextChanged;
-        }
-
-        private void GrblConfigView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.OldValue is GrblViewModel)
-                model = (GrblViewModel)e.OldValue;
+            _model = model;
         }
 
         private void ConfigView_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = new WidgetViewModel();
-
             dgrSettings.Visibility = GrblInfo.HasEnums ? Visibility.Collapsed : Visibility.Visible;
             treeView.Visibility = !GrblInfo.HasEnums ? Visibility.Collapsed : Visibility.Visible;
             details.Visibility = GrblInfo.HasEnums && curSetting == null ? Visibility.Hidden : Visibility.Visible;
@@ -87,69 +79,20 @@ namespace CNC.Controls
             }
         }
 
-        #region Methods required by CNCView interface
-
-        public ViewType ViewType { get { return ViewType.GRBLConfig; } }
-        public bool CanEnable { get { return true; } }
-
-        public void Activate(bool activate, ViewType chgMode)
-        {
-            if (model != null)
-            {
-                btnSave.IsEnabled = !model.IsCheckMode;
-                model.Message = string.Empty;
-
-                if (activate)
-                {
-                    using (new UIUtils.WaitCursor())
-                    {
-                        GrblSettings.Load();
-                    }
-
-                    if(treeView.SelectedItem != null && treeView.SelectedItem is GrblSettingDetails)
-                        ShowSetting(treeView.SelectedItem as GrblSettingDetails, false);
-                    else if (dgrSettings.SelectedItem != null)
-                        ShowSetting(dgrSettings.SelectedItem as GrblSettingDetails, false);
-                }
-                else
-                {
-                    if (curSetting != null)
-                        curSetting.Assign();
-
-                    if (GrblSettings.HasChanges())
-                    {
-                        if (MessageBox.Show((string)FindResource("SaveSettings"), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
-                            GrblSettings.Save();
-                    }
-                }
-            }
-        }
-
-        public void CloseFile()
-        {
-        }
-
-        public void Setup(UIViewModel model, AppConfig profile)
-        {
-        }
-
-        #endregion
-
-        #region UIEvents
-
         void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (curSetting != null)
                 curSetting.Assign();
 
-            model.Message = string.Empty;
+            _model.Message = string.Empty;
 
             GrblSettings.Save();
         }
 
         void btnReload_Click(object sender, RoutedEventArgs e)
         {
-            using(new UIUtils.WaitCursor()) {
+            using (new UIUtils.WaitCursor())
+            {
                 GrblSettings.Load();
             }
         }
@@ -157,7 +100,7 @@ namespace CNC.Controls
         void btnBackup_Click(object sender, RoutedEventArgs e)
         {
             GrblSettings.Backup(string.Format("{0}settings.txt", Core.Resources.Path));
-            model.Message = string.Format((string)FindResource("SettingsWritten"), "settings.txt");
+            _model.Message = string.Format((string)FindResource("SettingsWritten"), "settings.txt");
         }
 
         private void ShowSetting(GrblSettingDetails setting, bool assign)
@@ -176,64 +119,22 @@ namespace CNC.Controls
             curSetting.IsEnabled = true;
         }
 
-        private bool SetSetting (KeyValuePair<int, string> setting)
-        {
-            bool? res = null;
-            CancellationToken cancellationToken = new CancellationToken();
-            var scmd = string.Format("${0}={1}", setting.Key, setting.Value);
-
-            retval = string.Empty;
-
-            new Thread(() =>
-            {
-                res = WaitFor.AckResponse<string>(
-                    cancellationToken,
-                    response => Process(response),
-                    a => model.OnResponseReceived += a,
-                    a => model.OnResponseReceived -= a,
-                    400, () => Comms.com.WriteCommand(scmd));
-            }).Start();
-
-            while (res == null)
-                EventUtils.DoEvents();
-
-            if (retval != string.Empty)
-            {
-                if(retval.StartsWith("error:"))
-                {
-                    var msg = GrblErrors.GetMessage(retval.Substring(6));
-                    if(msg != retval)
-                        retval += " - \"" + msg + "\"";
-                }
-
-                var details = GrblSettings.Get((GrblSetting)setting.Key);
-
-                if (MessageBox.Show(string.Format((string)FindResource("SettingsError"), scmd, retval), "ioSender" + (details == null ? "" : " - " + details.Name), MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
-                    return false;
-            }
-            else if (res == false && MessageBox.Show(string.Format((string)FindResource("SettingsTimeout"), scmd), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
-                return false;
-
-            return true;
-        }
-
         public bool LoadFile(string filename)
         {
             int pos, id;
-            List<string> lines = new List<string>();
-            List<int> dep = new List<int>();
-            Dictionary<int, string> settings = new Dictionary<int, string>();
-            FileInfo file = new FileInfo(filename);
-            StreamReader sr = file.OpenText();
-
-            string block = sr.ReadLine();
+            var lines = new List<string>();
+            var dep = new List<int>();
+            var settings = new Dictionary<int, string>();
+            var file = new FileInfo(filename);
+            var sr = file.OpenText();
+            var block = sr.ReadLine();
 
             while (block != null)
             {
                 block = block.Trim();
                 try
                 {
-                    if (lines.Count == 0 && model.IsGrblHAL && block == "%")
+                    if (lines.Count == 0 && _model.IsGrblHAL && block == "%")
                         lines.Add(block);
                     else if (block.StartsWith("$") && (pos = block.IndexOf('=')) > 1)
                     {
@@ -264,6 +165,7 @@ namespace CNC.Controls
                 MessageBox.Show((string)FindResource("SettingsInvalid"));
             else
             {
+                
                 bool? res = null;
                 CancellationToken cancellationToken = new CancellationToken();
 
@@ -273,28 +175,35 @@ namespace CNC.Controls
                 foreach (var cmd in lines)
                 {
                     res = null;
-                    retval = string.Empty;
-
-                    new Thread(() =>
+                    if (cmd.Equals("%"))
                     {
-                        res = WaitFor.AckResponse<string>(
-                            cancellationToken,
-                            response => Process(response),
-                            a => model.OnResponseReceived += a,
-                            a => model.OnResponseReceived -= a,
-                            400, () => Comms.com.WriteCommand(cmd));
-                    }).Start();
+                        Comms.com.WriteCommand(cmd);
 
-                    while (res == null)
-                        EventUtils.DoEvents();
-
-                    if (retval != string.Empty)
-                    {
-                        if (MessageBox.Show(string.Format((string)FindResource("SettingsError"), cmd, retval), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
-                            break;
                     }
-                    else if (res == false && MessageBox.Show(string.Format((string)FindResource("SettingsTimeout"), cmd), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
-                        break;
+                    // retval = string.Empty;
+
+                    //new Thread(() =>
+                    //{
+                    //    res = WaitFor.AckResponse<string>(
+                    //        cancellationToken,
+                    //        response => Process(response),
+                    //        a => _model.OnResponseReceived += a,
+                    //        a => _model.OnResponseReceived -= a,
+                    //        400, () => Comms.com.WriteCommand(cmd));
+                    //}).Start();
+
+                    //while (res == null)
+                    //    EventUtils.DoEvents();
+
+                    //if (retval != string.Empty)
+                    //{
+                    //    if (MessageBox.Show(string.Format((string)FindResource("SettingsError"),
+                    //            cmd, retval), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
+                    //        break;
+                    //}
+                    //else if (res == false && MessageBox.Show(string.Format((string)FindResource("SettingsTimeout"), cmd),
+                    //             "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
+                    //    break;
                 }
 
                 foreach (var d in dep)
@@ -311,32 +220,90 @@ namespace CNC.Controls
 
                 foreach (var setting in settings)
                 {
-                    if (!dep.Contains(setting.Key)) {
-                        if(!SetSetting(setting))
+                    if (!dep.Contains(setting.Key))
+                    {
+                        if (!SetSetting(setting))
                             break;
                     }
                 }
 
                 if (lines[0] == "%")
+                {
                     Comms.com.WriteCommand("%");
+                }
 
                 using (new UIUtils.WaitCursor())
                 {
                     GrblSettings.Load();
                 }
             }
-
-            model.Message = string.Empty;
-
+            _model.Message = string.Empty;
             return settings.Count > 0;
+        }
+
+
+        private bool SetSetting(KeyValuePair<int, string> setting)
+        {
+            bool? res = null;
+            CancellationToken cancellationToken = new CancellationToken();
+            var scmd = $"${setting.Key}={setting.Value}";
+
+            retval = string.Empty;
+
+            new Thread(() =>
+            {
+                res = cancellationToken.AckResponse<string>(response => Process(response),
+                    a => _model.OnResponseReceived += a,
+                    a => _model.OnResponseReceived -= a,
+                    400, () => Comms.com.WriteCommand(scmd));
+            }).Start();
+
+            while (res == null)
+            {
+                EventUtils.DoEvents();
+            }
+            
+            if (retval != string.Empty)
+            {
+                if (retval.StartsWith("error:"))
+                {
+                    var msg = GrblErrors.GetMessage(retval.Substring(6));
+                    if (msg != retval)
+                        retval += " - \"" + msg + "\"";
+                }
+                var settingDetails = GrblSettings.Get((GrblSetting)setting.Key);
+
+                var results = MessageBox.Show(string.Format((string)FindResource("SettingsError"), scmd, retval),
+                    "ioSender" + (settingDetails == null ? "" : " - " + settingDetails.Name),
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No;
+                if (results)
+                {
+                    return false;
+                }
+
+            }
+            else if (res == false &&
+                     MessageBox.Show(string.Format((string)FindResource("SettingsTimeout"), scmd),
+                         "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void Process(string data)
         {
             if (data != "ok")
-                retval = data;
+            {
+                //filtering out homing error and machine state from the setting responses.
+                //TODO FIX FOR LATTER.  Better fix would be to stop state polling while sending setting 
+                if (data.StartsWith("error:9") || data.StartsWith("<Alarm|MPos:") || data.StartsWith("<Idle|MPos:"))return;
+                {
+                    retval = data;
+                }
+            }
         }
-
         private void btnRestore_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog file = new OpenFileDialog();
@@ -360,8 +327,7 @@ namespace CNC.Controls
             if (e.AddedItems.Count == 1)
                 ShowSetting(e.AddedItems[0] as GrblSettingDetails, true);
         }
-        #endregion
-
+        
         private void treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e != null && e.NewValue is GrblSettingDetails && (e.NewValue as GrblSettingDetails).Value != null)

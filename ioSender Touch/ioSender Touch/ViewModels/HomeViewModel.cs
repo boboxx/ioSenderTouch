@@ -50,7 +50,7 @@ namespace ioSenderTouch.ViewModels
             _grblViewModel = grblViewModel;
             Grbl.GrblViewModel = _grblViewModel;
             _renderView = new RenderControl(_grblViewModel);
-            _grblSettingView = new GrblConfigView();
+            _grblSettingView = new GrblConfigView(_grblViewModel);
             _grblAppSettings = new AppConfigView(_grblViewModel);
             _offsetView = new OffsetView(_grblViewModel);
             _utilityView = new UtilityView(_grblViewModel);

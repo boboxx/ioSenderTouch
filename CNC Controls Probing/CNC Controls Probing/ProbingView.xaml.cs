@@ -88,13 +88,8 @@ namespace CNC.Controls.Probing
                 keyboard.AddHandler(Key.R, ModifierKeys.Alt, StartProbe, this);
                 keyboard.AddHandler(Key.S, ModifierKeys.Alt, StopProbe, this);
                 keyboard.AddHandler(Key.C, ModifierKeys.Alt, ProbeConnectedToggle, this);
-
                 _grblViewModel.OnCameraProbe += addCameraPosition;
-
-                
             }
-
-          
         }
 
         private void addCameraPosition(Position position)

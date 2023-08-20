@@ -40,7 +40,7 @@ namespace ioSenderTouch
             InitializeComponent();
             Grbl.GrblViewModel = _model;
             _renderView = new RenderControl(_model);
-            _grblSettingView = new GrblConfigView();
+            _grblSettingView = new GrblConfigView(_model);
             _grblAppSettings = new AppConfigView(_model);
             _offsetView = new OffsetView(_model);
             _utilityView = new UtilityView(_model);

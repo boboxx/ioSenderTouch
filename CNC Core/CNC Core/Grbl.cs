@@ -380,13 +380,9 @@ namespace CNC.Core
         {
             Comms.com.WriteByte((byte)GrblConstants.CMD_RESET);
             System.Threading.Thread.Sleep(20);
-            //grblState.State = GrblStates.Unknown;
-            //grblState.Substate = 0;
         }
 
         public static GrblViewModel GrblViewModel { get; set; } = null;
-
-        //       public static GrblInfo Info { get; private set; };
 
         public static bool WaitForResponse(string command)
         {
@@ -2681,6 +2677,53 @@ namespace CNC.Core
         public static bool Load()
         {
             return Grbl.GrblViewModel != null && Load(Grbl.GrblViewModel);
+        }
+
+        //TODO try the GRBL setting loading with this 
+        public static List<string> LoadSetting(Dictionary<int, string> grblSettings, GrblViewModel model)
+        {
+            try
+            {
+                var retVal = new List<string>();
+                bool? res = null;
+                var cancellationToken = new CancellationToken();
+                PollGrbl.Suspend();
+
+                void ProcessSettings(string response)
+                {
+                    if (response != "ok")
+                    {
+                        retVal.Add(response);
+                    }
+                }
+
+                foreach (var setting in grblSettings)
+                {
+                    var cmdr = $"${setting.Key}={setting.Value}";
+                    new Thread(() =>
+                    {
+                        res = cancellationToken.AckResponse<string>(ProcessSettings,
+                            a => model.OnResponseReceived += a,
+                            a => model.OnResponseReceived -= a,
+                            400, () => Comms.com.WriteCommand(cmdr));
+                    }).Start();
+
+                    while (res == null)
+                    {
+                        EventUtils.DoEvents();
+                    }
+                }
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+            finally
+            {
+                PollGrbl.Resume();
+            }
         }
 
         public static bool HasChanges()
