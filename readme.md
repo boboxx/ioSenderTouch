@@ -1,8 +1,8 @@
-## ioSender - a gcode sender for grblHAL and Grbl controllers
+## ioSender Touch - a gcode sender based on Terjeio ioSender for grblHAL [grblHAL](https://github.com/grblHAL)
 
 ---
 
-Please check out the [Wiki](https://github.com/terjeio/Grbl-GCode-Sender/wiki) for further details.
+<!--Please check out the [Wiki](https://github.com/terjeio/Grbl-GCode-Sender/wiki) for further details.
 
 8-bit Arduino controllers needs _Toggle DTR_ selected in order to reset the controller on connect. Behaviour may be erratic if not set.
 
