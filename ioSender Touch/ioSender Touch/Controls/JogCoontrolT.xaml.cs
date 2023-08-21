@@ -37,15 +37,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-using System.ComponentModel;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CNC.Controls;
 using CNC.Core;
 using CNC.GCode;
 
-namespace CNC.Controls
+namespace ioSenderTouch.Controls
 {
     /// <summary>
     /// Interaction logic for JogControl.xaml
