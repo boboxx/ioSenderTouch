@@ -1,4 +1,4 @@
-## ioSender Touch - a gcode sender based on Terjeio ioSender for grblHAL [grblHAL](https://github.com/grblHAL)
+## ioSender Touch - a gcode sender based on Terjeio ioSender for grblHAL [ioSender]([https://github.com/grblHA](https://github.com/terjeio/ioSender)
 
 ---
 
