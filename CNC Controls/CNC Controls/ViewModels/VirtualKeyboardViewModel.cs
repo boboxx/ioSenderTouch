@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using GCode_Sender.Commands;
+using CNC.Core.Comands;
 
 namespace CNC.Controls.ViewModels
 {

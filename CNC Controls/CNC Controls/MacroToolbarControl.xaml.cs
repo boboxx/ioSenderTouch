@@ -63,15 +63,20 @@ namespace CNC.Controls
         public static readonly DependencyProperty MacrosProperty = DependencyProperty.Register(nameof(MacroToolbarControl.Macros), typeof(ObservableCollection<CNC.GCode.Macro>), typeof(MacroToolbarControl));
         public ObservableCollection<CNC.GCode.Macro> Macros
         {
-            get { return (ObservableCollection<CNC.GCode.Macro>)GetValue(MacrosProperty); }
-            set { SetValue(MacrosProperty, value); }
+            get => (ObservableCollection<CNC.GCode.Macro>)GetValue(MacrosProperty);
+            set => SetValue(MacrosProperty, value);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var macro = Macros.FirstOrDefault(o => o.Id == (int)(sender as Button).Tag);
-            if (macro != null && (!macro.ConfirmOnExecute || MessageBox.Show(string.Format((string)FindResource("RunMacro"), macro.Name), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes))
-                (DataContext as GrblViewModel).ExecuteMacro(macro.Code);
+            var macro = Macros.FirstOrDefault(o =>
+            {
+                var tag = (sender as Button)?.Tag;
+                return tag != null && o.Id == (int)tag;
+            });
+            if (macro != null && (!macro.ConfirmOnExecute || MessageBox.Show(string.Format((string)FindResource("RunMacro"), macro.Name), "ioSender",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes))
+                (DataContext as GrblViewModel)?.ExecuteMacro(macro.Code);
         }
     }
 }

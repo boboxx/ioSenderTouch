@@ -10,7 +10,7 @@ using CNC.Controls;
 using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
 using CNC.Core;
-using GCode_Sender.Commands;
+using CNC.Core.Comands;
 using ioSenderTouch.Views;
 
 namespace ioSenderTouch.ViewModels
@@ -136,6 +136,9 @@ namespace ioSenderTouch.ViewModels
                         }
                         else if (!string.IsNullOrEmpty(filename))
                         {
+                            _grblViewModel.Poller.SetState(0);
+                            _renderView.Open(GCode.File.Tokens);
+                            _grblViewModel.Poller.SetState(AppConfig.Settings.Base.PollInterval);
                             _renderView.Open(GCode.File.Tokens);
                         }
                     }
@@ -221,7 +224,7 @@ namespace ioSenderTouch.ViewModels
         {
             initOK = true;
             int timeout = 5;
-
+            _grblViewModel.Poller.SetState(0);
             using (new UIUtils.WaitCursor())
             {
                 while (!GrblInfo.Get())
@@ -243,6 +246,8 @@ namespace ioSenderTouch.ViewModels
                 }
                 else
                     GrblParserState.Get(true);
+                _grblViewModel.Poller.SetState(AppConfig.Settings.Base.PollInterval);
+
             }
 
             GrblCommand.ToolChange = GrblInfo.ManualToolChange ? "M61Q{0}" : "T{0}";

@@ -44,8 +44,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading;
 using System.Windows.Controls;
+using CNC.Core.Comands;
 using CNC.GCode;
-using GCode_Sender.Commands;
 using Color = System.Windows.Media.Color;
 
 namespace CNC.Core
@@ -158,12 +158,8 @@ namespace CNC.Core
             get => _connected;
             set
             {
-                //if (value == _connected) return;
-                {
-                    IsConnected = _connected ? "Online" : "Offline";
-                }
+                IsConnected = _connected ? "Online" : "Offline";
                 _connected = value;
-                //OnPropertyChanged();
             }
         }
         public string IsConnected
@@ -233,27 +229,26 @@ namespace CNC.Core
             {
                 ClearAlarm();
             });
-
             SpindleOverRide = new Command(SetSpindleOverRideSpeed);
-
             SpindleOverRideReset = new Command(_ =>
             {
                 SetDefaultSpindleSpeed();
             });
-
             FeedOverRideReset = new Command(_ =>
             {
                 SetFeedOverRideReset();
             });
             FeedOverRide = new Command(SetFeedOverRide);
-
             RapidOverRideReset = new Command(_ =>
             {
                 SetRapidOverRideReset();
             });
-
             RapidOverRide = new Command(SetRapidOverRide);
             WcsCommand = new Command(SetWcs);
+            SetDefaults();
+        }
+        private void SetDefaults()
+        {
             SpindleOverRideValue = 10;
             FeedOverRideValue = 10;
             RPMOverride = 0;
@@ -335,7 +330,7 @@ namespace CNC.Core
 
             Comms.com.WriteByte(GrblConstants.CMD_RAPID_OVR_RESET);
         }
-        
+
         private void SetFeedOverRideReset()
         {
             Comms.com.WriteByte(GrblConstants.CMD_FEED_OVR_RESET);
@@ -646,13 +641,30 @@ namespace CNC.Core
         public GrblState GrblState { get { return _grblState; } set { _grblState = value; OnPropertyChanged(); } }
         public string GrblCurentState { get { return _grblCurrentState; } set { _grblCurrentState = value; OnPropertyChanged(); } }
         public bool AutoReportingEnabled { get { return _autoReporting; } private set { { _autoReporting = value; OnPropertyChanged(); } } }
-        public int AutoReportInterval { get { return _autoReportInterval;  } private set { { _autoReportInterval = value;  OnPropertyChanged();  } } }
+        public int AutoReportInterval { get { return _autoReportInterval; } private set { { _autoReportInterval = value; OnPropertyChanged(); } } }
         public bool IsGCLock { get { return _grblState.State == GrblStates.Alarm; } }
         public bool IsCheckMode { get { return _grblState.State == GrblStates.Check; } }
         public bool IsSleepMode { get { return _grblState.State == GrblStates.Sleep; } }
         public bool IsG92Active { get { return GrblParserState.IsActive("G92") != null; } }
         public bool IsToolOffsetActive { get { return IsGrblHAL ? GrblParserState.IsActive("G49") == null : !(double.IsNaN(ToolOffset.Z) || ToolOffset.Z == 0d); } }
-        public bool IsJobRunning { get { return _isJobRunning; } set { if (_isJobRunning != value) { _isJobRunning = value; OnPropertyChanged(); } } }
+        public bool IsJobRunning
+        {
+            get => _isJobRunning;
+            set
+            {
+                if (_isJobRunning == value) return;
+                _isJobRunning = value;
+                SetToolCommand(value);
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Macro> UtilityMacros { get; set; } = new ObservableCollection<Macro>();
+        private void SetToolCommand(bool isJobRunning)
+        {
+            GrblCommand.ToolChange = isJobRunning ? "T{0}M6" : "M61Q{0}";
+        }
+
         public bool IsProbing { get { return _isProbing; } set { _isProbing = value; OnPropertyChanged(); } }
         public bool ProgramEnd { get { return _pgmEnd; } set { _pgmEnd = value; if (_pgmEnd) OnPropertyChanged(); } }
         public int GrblError { get { return _grblState.Error; } set { _grblState.Error = value; OnPropertyChanged(); } }
@@ -1315,9 +1327,9 @@ namespace CNC.Core
                                 s |= (1 << i);
                         }
                         Signals.Value = (Signals)s;
-                        if(Signals.Value.HasFlag(Core.Signals.EStop) && !OptionalSignals.Value.HasFlag(Core.Signals.EStop))
+                        if (Signals.Value.HasFlag(Core.Signals.EStop) && !OptionalSignals.Value.HasFlag(Core.Signals.EStop))
                             OptionalSignals.Value |= Core.Signals.EStop;
-//                        CanReset = canReset();
+                        //                        CanReset = canReset();
                     }
                     break;
 
@@ -1503,13 +1515,13 @@ namespace CNC.Core
                             break;
                         case "NEWOPT":
                             string[] valuepair = data.Substring(1).TrimEnd(']').Split(':');
-                            var options  = valuepair[1];
+                            var options = valuepair[1];
                             string[] s2 = valuepair[1].Split(',');
                             foreach (string value in s2)
                             {
-                                
-                                 switch (value)
-                                    {
+
+                                switch (value)
+                                {
                                     //case "ENUMS":
                                     //    HasEnums = true;
                                     //    break;
@@ -1538,55 +1550,55 @@ namespace CNC.Core
                                     //    break;
 
                                     case "SD":
-                                            HasSDCard = true;
-                                            break;
+                                        HasSDCard = true;
+                                        break;
 
-                                        //case "SED":
-                                        //    HasSettingDescriptions = true;
-                                        //    break;
+                                    //case "SED":
+                                    //    HasSettingDescriptions = true;
+                                    //    break;
 
-                                        //case "YM":
-                                        //    if (UploadProtocol == string.Empty)
-                                        //        UploadProtocol = "YModem";
-                                        //    break;
+                                    //case "YM":
+                                    //    if (UploadProtocol == string.Empty)
+                                    //        UploadProtocol = "YModem";
+                                    //    break;
 
-                                        case "FTP":
-                                           // UploadProtocol = "FTP";
-                                            break;
+                                    case "FTP":
+                                        // UploadProtocol = "FTP";
+                                        break;
 
-                                        case "PID":
-                                          //  HasPIDLog = true;
-                                            break;
+                                    case "PID":
+                                        //  HasPIDLog = true;
+                                        break;
 
-                                        case "NOPROBE":
-                                          //  HasProbe = false;
-                                            break;
+                                    case "NOPROBE":
+                                        //  HasProbe = false;
+                                        break;
 
-                                        case "LATHE":
-                                            LatheModeEnabled = true;
-                                            break;
+                                    case "LATHE":
+                                        LatheModeEnabled = true;
+                                        break;
 
-                                        case "BD":
-                                          //  OptionalSignals |= Signals.BlockDelete;
-                                            break;
+                                    case "BD":
+                                        //  OptionalSignals |= Signals.BlockDelete;
+                                        break;
 
-                                        case "ES":
-                                           // OptionalSignals |= Signals.EStop;
-                                            break;
+                                    case "ES":
+                                        // OptionalSignals |= Signals.EStop;
+                                        break;
 
-                                        case "MW":
-                                           // OptionalSignals |= Signals.MotorWarning;
-                                            break;
+                                    case "MW":
+                                        // OptionalSignals |= Signals.MotorWarning;
+                                        break;
 
-                                        case "OS":
-                                           // OptionalSignals |= Signals.OptionalStop;
-                                            break;
+                                    case "OS":
+                                        // OptionalSignals |= Signals.OptionalStop;
+                                        break;
 
-                                        case "RT+":
-                                        case "RT-":
-                                          //  UseLegacyRTCommands = false;
-                                            break;
-                                    }
+                                    case "RT+":
+                                    case "RT-":
+                                        //  UseLegacyRTCommands = false;
+                                        break;
+                                }
                             }
                             break;
                         case "GC":
@@ -1662,7 +1674,7 @@ namespace CNC.Core
                 _reset = false;
                 OnPropertyChanged(nameof(IsCheckMode));
                 OnPropertyChanged(nameof(IsSleepMode));
-                if(IsReady && AutoReportingEnabled)
+                if (IsReady && AutoReportingEnabled)
                     Comms.com.WriteByte(GrblConstants.CMD_AUTO_REPORTING_TOGGLE);
             }
             else if (_grblState.State != GrblStates.Jog)

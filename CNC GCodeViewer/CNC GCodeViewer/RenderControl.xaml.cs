@@ -83,8 +83,6 @@ namespace CNC.Controls.Viewer
         }
 
 
-
-
         public Machine MachineView
         {
             get { return gcodeView.Machine; }

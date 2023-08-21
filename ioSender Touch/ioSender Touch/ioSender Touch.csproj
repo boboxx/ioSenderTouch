@@ -89,11 +89,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\SurfacingView.xaml.cs">
+      <DependentUpon>SurfacingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UtilityMacroControl.xaml.cs">
+      <DependentUpon>UtilityMacroControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\SurfacingViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\UtilityViewModel.cs" />
     <Compile Include="Views\UtilityView.xaml.cs">
       <DependentUpon>UtilityView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\SurfacingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UtilityMacroControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="HomeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

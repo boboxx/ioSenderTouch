@@ -43,7 +43,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CNC.Core;
 using System.Windows;
-using GCode_Sender.Commands;
 
 namespace CNC.Controls
 {

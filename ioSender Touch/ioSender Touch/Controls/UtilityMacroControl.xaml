@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="ioSenderTouch.Controls.UtilityMacroControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="Auto" d:DesignWidth="Auto">
+
+    <Grid>
+        <GroupBox Header="Utility">
+            <ItemsControl x:Name="xy" HorizontalAlignment="Stretch" ItemsSource="{Binding Path=Macros, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Height="34" Width="175" VerticalAlignment="Center" Margin="2,0" Padding="2,0" Tag="{Binding Id}" Click="ButtonBase_OnClick" Focusable="False">
+                            <Button.Content>
+                                <Binding Path="Name"></Binding>
+                            </Button.Content>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+    </Grid>
+</UserControl>

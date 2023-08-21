@@ -44,7 +44,6 @@ using System.Windows.Threading;
 using CNC.Controls;
 using CNC.Converters;
 using CNC.Core;
-using GCode_Sender;
 using ConfigControl = CNC.Controls.Probing.ConfigControl;
 #if ADD_CAMERA
 

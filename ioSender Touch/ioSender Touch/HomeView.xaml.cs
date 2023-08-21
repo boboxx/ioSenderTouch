@@ -58,7 +58,6 @@ namespace ioSenderTouch
                 var model = (GrblViewModel)e.NewValue;
                 model.PropertyChanged += OnDataContextPropertyChanged;
                 DataContextChanged -= View_DataContextChanged;
-                //          model.OnGrblReset += Model_OnGrblReset;
             }
         }
 

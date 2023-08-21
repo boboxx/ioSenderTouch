@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
+             xmlns:controls1="clr-namespace:ioSenderTouch.Controls"
              mc:Ignorable="d"
              Focusable="True">
 
@@ -63,8 +64,8 @@
         <Border Name="RightMenuBorder" BorderBrush="Black" BorderThickness="1" Width="250" DockPanel.Dock="Right">
             <StackPanel Name ="RightStackPanel">
                 <controls:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
-
-                <controls:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Top" Height="125" Width="Auto"/>
+                <controls:CoolantControl x:Name="coolantControl" Margin="3,5,3,3"   VerticalAlignment="Top" Height="125" Width="Auto"/>
+                <controls1:UtilityMacroControl Margin="3,5,3,3" ></controls1:UtilityMacroControl>
             </StackPanel>
         </Border>
         <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">

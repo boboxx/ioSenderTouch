@@ -1,19 +1,13 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using CNC.Controls;
 using CNC.Core;
-using CNC.GCode;
-using GCode_Sender.Commands;
+using CNC.Core.Comands;
+using ioSenderTouch.Controls;
 
 namespace ioSenderTouch.ViewModels
 {
@@ -23,6 +17,7 @@ namespace ioSenderTouch.ViewModels
         private UIElement _control;
         private readonly ErrorsAndAlarms _alarmAndError;
         private MacroEditor _macroEditor;
+        private SurfacingView _surfacingView;
         public ICommand ShowView { get; }
 
         public UIElement Control
@@ -33,7 +28,6 @@ namespace ioSenderTouch.ViewModels
                 if (Equals(value, _control)) return;
                 _control = value;
                 OnPropertyChanged();
-                
             }
         }
 
@@ -43,11 +37,11 @@ namespace ioSenderTouch.ViewModels
             ShowView = new Command(SetView);
             _alarmAndError = new ErrorsAndAlarms("");
             _macroEditor = new MacroEditor();
+            _surfacingView = new SurfacingView(grblViewModel);
         }
 
         private void SetView(object view)
         {
-            var marco = AppConfig.Settings.Macros;
             switch (view.ToString())
             {
                 case "Alarm":
@@ -56,8 +50,10 @@ namespace ioSenderTouch.ViewModels
                 case "Macro":
                     Control = _macroEditor;
                     break;
+                case "Surfacing":
+                    Control = _surfacingView;
+                    break;
             }
-          
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
