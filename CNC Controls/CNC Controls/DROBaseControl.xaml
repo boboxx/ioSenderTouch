@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d" 
-             Width="270" VerticalAlignment="Stretch">
+             Width="280" VerticalAlignment="Stretch">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
     </UserControl.Resources>
-    <Grid  HorizontalAlignment="Left"  VerticalAlignment="Stretch" Width="270" >
+    <Grid  HorizontalAlignment="Left"  VerticalAlignment="Stretch" Width="Auto" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -19,12 +19,14 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" x:Name="lblAxis" Content="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Stretch" FontSize="22" Margin="0,0,3,0" Width="30"/>
         <local:NumericTextBox Grid.Column="1" x:Name="txtReadout" Format="{Binding Path=FormatSigned}" Value="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsReadOnly="True"   
-                              Width="103" FontSize="22" TextWrapping="NoWrap" TextAlignment="Right" HorizontalAlignment="Center" Height="Auto
+                              Width="106" FontSize="22" TextWrapping="NoWrap" TextAlignment="Right" HorizontalAlignment="Center" Height="Auto
                               " VerticalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0,0,1,0"/>
         <Button Grid.Column="2" x:Name="btnZero" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="Auto"
-                IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Focusable="False" Click="btnZero_Click" Margin="3,1,2,1"  VerticalAlignment="Stretch"  Width="55"/>
+                IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
+                Focusable="False" Click="btnZero_Click" Margin="5,1,2,1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="80"/>
         <Button Grid.Column="3" x:Name="btnHome" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18"  Height="Auto"
-                IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}"  Focusable="False" Click="btnHome_Click" Margin="3,1,2,1" VerticalAlignment="Stretch"  Width="55"/>
+                IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
+                Focusable="False" Click="btnHome_Click" Margin="5,1,2,1" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Width="80"/>
         <Button Grid.Column="4" x:Name="btnScaled" Height="Auto" Focusable="False" Width="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,2"/>
     </Grid>
 </UserControl>

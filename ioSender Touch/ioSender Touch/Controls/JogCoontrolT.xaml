@@ -8,8 +8,8 @@
              FocusVisualStyle="{x:Null}">
     <UserControl.Resources>
         <Style x:Key="JogButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="53"/>
-            <Setter Property="Height" Value="53"/>
+            <Setter Property="Width" Value="55"/>
+            <Setter Property="Height" Value="55"/>
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Content" Value="xx"/>
         </Style>
@@ -41,17 +41,17 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  >
                     <Label Content="Distance" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Label>
-                    <Button Width="65"  Tag="3" Content="{Binding Path=JogData.Distance3, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,3,0" VerticalAlignment="Stretch" Click="distance_Click"/>
-                    <Button Width="65"  Tag="2" Content="{Binding Path=JogData.Distance2, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,3,0" VerticalAlignment="Stretch" Click="distance_Click"/>
-                    <Button Width="65"  Tag="1" Content="{Binding Path=JogData.Distance1, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,3,0" VerticalAlignment="Stretch" Click="distance_Click"/>
-                    <Button Width="65"  Tag="0" Content="{Binding Path=JogData.Distance0, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Click="distance_Click"/>
+                    <Button Width="68"  Tag="3" Content="{Binding Path=JogData.Distance3, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,3,0" VerticalAlignment="Stretch" Click="distance_Click"/>
+                    <Button Width="68"  Tag="2" Content="{Binding Path=JogData.Distance2, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,3,0" VerticalAlignment="Stretch" Click="distance_Click"/>
+                    <Button Width="68"  Tag="1" Content="{Binding Path=JogData.Distance1, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,3,0" VerticalAlignment="Stretch" Click="distance_Click"/>
+                    <Button Width="68"  Tag="0" Content="{Binding Path=JogData.Distance0, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Click="distance_Click"/>
                     <Label Content="{Binding Path=Unit}" Height="20" FontSize="12" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                 </StackPanel>
                
                 <Grid Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Width="Auto">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="85"></ColumnDefinition>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0"  HorizontalAlignment="Stretch" Width="Auto" Height="Auto"  VerticalAlignment="Stretch" Margin="2" >
                         <Grid.ColumnDefinitions>
@@ -59,6 +59,7 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
+                          
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="Auto" Width="Auto">
                             <Button VerticalAlignment="Stretch" Content="X-" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
@@ -77,9 +78,9 @@
                             <Button  Content="X+" VerticalAlignment="Center" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"  Height="Auto" >
-                            <Button Content="Z+" Style="{StaticResource JogButtonStyle}" Click="Button_Click"/>
-                            <Button Content="Z-" Style="{StaticResource JogButtonStyle}" Margin="0,65,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+                        <StackPanel Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Stretch"  Height="Auto" >
+                            <Button Content="Z+" Style="{StaticResource JogButtonStyle}" HorizontalAlignment="Center" Click="Button_Click"/>
+                            <Button Content="Z-" Style="{StaticResource JogButtonStyle}" HorizontalAlignment="Center" Margin="0,65,0,0" VerticalAlignment="Top" Click="Button_Click"/>
                         </StackPanel>
                     </Grid>
                     <Border Grid.Column="1" x:Uid="grp_jogFeedrate"  Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto"  Width="Auto">

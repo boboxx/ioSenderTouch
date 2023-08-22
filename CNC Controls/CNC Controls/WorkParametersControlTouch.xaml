@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d" 
-             d:DesignWidth="255">
+             d:DesignWidth="265">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
         <local:BoolToVisibleConverter x:Key="IsVisibleConverter" />
     </UserControl.Resources>
-    <GroupBox x:Uid="grp_workparams" x:Name="grpWorkParams" Header="Work Parameters" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="250">
+    <GroupBox x:Uid="grp_workparams" x:Name="grpWorkParams" Header="Work Parameters" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
+              HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="Auto">
         <Grid Name="Main" Height="Auto" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"></RowDefinition>

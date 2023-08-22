@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" d:DesignWidth="265" >
+             mc:Ignorable="d" d:DesignWidth="270">
     <Grid Margin="0,0,0,0">
-        <GroupBox x:Uid="grp_feedrate" x:Name="grpFeedRate" Header="Feed rate" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="Auto" Width="265">
+        <GroupBox x:Uid="grp_feedrate" x:Name="grpFeedRate" Header="Feed rate" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Width="Auto">
             <Grid HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch"  Width="Auto" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="55"/>
@@ -22,12 +22,12 @@
                     <Label x:Name="lblFeedRrate" Content="{Binding Path=FeedrateUnit, Mode=OneWay}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,16" VerticalAlignment="Center" Width="62" Height="23" />
                     <Label x:Name="lblFeedRratePercent" Content="{Binding FeedOverride}" ContentStringFormat="%{0}"   HorizontalContentAlignment="Right" VerticalAlignment="Center"  Height="23" />
                 </StackPanel>
-                <Grid Grid.Row="1" >
+                <Grid Grid.Row="1" Margin="10,0,0,0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions >
                     <Button   Tag="Plus" Name ="IncreaseSpindle" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" Command="{ Binding FeedOverRide}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                         <materialDesign:PackIcon  Height="30" Width="30" Kind="Plus" />
                     </Button>
@@ -55,8 +55,8 @@
                     <Label x:Uid="lbl_rapids" x:Name="lblRapids" Content="Rapids:" HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Height="22"/>
                     <Label x:Uid="lbl_rapids" x:Name="lblRapidPercentValue" Content="{Binding RapidsOverride}" ContentStringFormat="%{0}" HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Height="22"/>
                 </StackPanel>
-              
-                <Grid Grid.Row="4">
+
+                <Grid Grid.Row="4" Margin="10,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="21*"></ColumnDefinition>
                         <ColumnDefinition Width="14*"/>

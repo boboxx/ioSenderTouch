@@ -53,11 +53,13 @@
         </Grid>
         <Border Name="MainControlBorder" Height="325"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
             <StackPanel Name="MainStackPanel"  Orientation="Horizontal" Margin="0,0,0,0" >
-                <controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5" Width="Auto" VerticalContentAlignment="Stretch"/>
-                <controls:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,5" Height="Auto" Width="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                <controls:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch"  Margin="3,3,0,5" Height="Auto" />
-                <local:JogControlT x:Name="jogControl" Margin="3,3,0,5" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch" />
-                <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Center" Margin="3,3,3,5"  VerticalAlignment="Stretch"/>
+                <controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5"  VerticalContentAlignment="Stretch"/>
+                <controls:WorkParametersControlTouch x:Name="workParametersControl" IsToolChanging="{Binding IsToolChanging}" Margin="3,3,0,5"
+                                                     Height="Auto"  VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+               
+                <controls:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch"  Margin="3,3,0,5" Width="260" Height="Auto" />
+                <local:JogControlT x:Name="jogControl" Margin="3,3,0,5" Height="Auto" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
+                <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Stretch" Margin="3,3,3,5" Width="260"  VerticalAlignment="Stretch"/>
             </StackPanel>
         </Border>
        

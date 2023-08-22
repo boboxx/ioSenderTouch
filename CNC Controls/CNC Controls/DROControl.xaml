@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CNC.Controls"
              xmlns:gcode="clr-namespace:CNC.GCode;assembly=CNC.Core"
              mc:Ignorable="d"
-             Loaded="DRO_Loaded" Width="275">
+             Loaded="DRO_Loaded" Width="305">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,8 +19,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <GroupBox x:Uid="grp_dro" x:Name="grpDRO" Header="DRO" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="275" >
-        <Grid HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,0,0,0" Width="260" >
+    <GroupBox x:Uid="grp_dro" x:Name="grpDRO" Header="DRO" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" >
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" Width="Auto" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -37,19 +37,19 @@
                    HorizontalContentAlignment="Right" />
             <local:DROBaseControl Grid.Row="2" x:Name="axisX" Label="X" Margin="0,1,0,1"
                 Value="{Binding Path=Position.X, Mode=TwoWay}"
-                IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)X], Mode=OneWay}" Width="260" Height="Auto" VerticalAlignment="Stretch"
+                IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)X], Mode=OneWay}" Width="Auto" Height="Auto" VerticalAlignment="Stretch"
             />
             <local:DROBaseControl  Grid.Row="3" x:Name="axisY" Label="Y" Style="{StaticResource YAxisVisibleStyle}"
                                    Value="{Binding Path=Position.Y, Mode=TwoWay}"
-                                   IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)Y], Mode=OneWay}" VerticalAlignment="Stretch" 
+                                   IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)Y], Mode=OneWay}"  Width="Auto" Height="Auto" VerticalAlignment="Stretch" 
             />
             <local:DROBaseControl  Grid.Row="4" x:Name="axisZ" Label="Z" Style="{StaticResource ZAxisVisibleStyle}"
                                    Value="{Binding Path=Position.Z, Mode=TwoWay}"
-                                   IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)Z], Mode=OneWay}"  VerticalAlignment="Stretch"
+                                   IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)Z], Mode=OneWay}"  Width="Auto" Height="Auto" VerticalAlignment="Stretch"
             />
             <local:DROBaseControl  Grid.Row="5" x:Name="axisA" Label="{Binding Path=AxisLetter.A, Mode=OneWay}" Style="{StaticResource AAxisVisibleStyle}"
                                    Value="{Binding Path=Position.A, Mode=TwoWay}"
-                                   IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)A], Mode=OneWay}"  VerticalAlignment="Stretch"
+                                   IsScaled="{Binding Path=AxisScaled[(gcode:AxisFlags)A], Mode=OneWay}"  Width="Auto" Height="Auto" VerticalAlignment="Stretch"
             />
             <Button Grid.Row="6" x:Uid="btn_zeroAll" x:Name="btnZeroAll" Content="Zero all" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
                     Focusable="False"  HorizontalAlignment="Stretch" Margin="2,5" Height="Auto" Click="btnZeroAll_Click" VerticalAlignment="Stretch"/>

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CNC.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             x:Name="root" d:DesignWidth="275">
+             x:Name="root" d:DesignWidth="270">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
