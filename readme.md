@@ -20,5 +20,7 @@ Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard
 <br>
 -Virtual keyboard support for porbing ui
 <br>
+-Finish utility section for material sufracing 
+<br>
 -Add support for portrait orientation 
 <br><br>
