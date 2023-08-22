@@ -16,7 +16,9 @@ Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard
 ---
 
 ### Priority issues and work
--Reset needs to be added 
+-Reset button and logic needs to be added 
+<br>
+-Virtual keyboard support for porbing ui
 <br>
 -Add support for portrait orientation 
 <br><br>
