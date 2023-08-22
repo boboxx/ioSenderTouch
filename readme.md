@@ -8,7 +8,7 @@ Changes is UI
 ![Home Screen](media/HomeScreen.png)
 
 Probing carried over from ioSender 
-![Probe Screen](media/HomeScreen.png)
+![Probe Screen](Probe.png)
 
 Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard 
 ![Utility](Utility_macro.png)
