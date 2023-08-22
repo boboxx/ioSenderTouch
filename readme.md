@@ -3,7 +3,17 @@
 Goal was to create a touch monitor friendly application that will not require a mouse or keyboard to use.
 <br><br>
 ---
+Changes is UI 
+
 ![Home Screen](media/HomeScreen.png)
+
+Probing carried over from ioSender 
+![Probe Screen](media/HomeScreen.png)
+
+Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard 
+![Utility](Utility_macro.png)
+
+
 <!--Please check out the [Wiki](https://github.com/terjeio/Grbl-GCode-Sender/wiki) for further details.
 
 8-bit Arduino controllers needs _Toggle DTR_ selected in order to reset the controller on connect. Behaviour may be erratic if not set.
