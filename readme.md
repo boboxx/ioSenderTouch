@@ -20,7 +20,7 @@ Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard
 <br>
 -Virtual keyboard support for probing ui
 <br>
--Finish utility section for material sufracing 
+-Finish utility section for material surfacing 
 <br>
 -Add support for portrait orientation 
 <br><br>
