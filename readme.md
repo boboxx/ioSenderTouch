@@ -8,10 +8,10 @@ Changes is UI
 ![Home Screen](media/HomeScreen.png)
 
 Probing carried over from ioSender 
-![Probe Screen](media/HomeScreen.png)
+![Probe Screen](media/Probe.png)
 
 Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard 
-![Utility](Utility_macro.png)
+![Utility](media/Utility_macro.png)
 
 
 <!--Please check out the [Wiki](https://github.com/terjeio/Grbl-GCode-Sender/wiki) for further details.
