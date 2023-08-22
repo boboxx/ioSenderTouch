@@ -18,7 +18,7 @@ Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard
 ### Priority issues and work
 -Reset button and logic needs to be added 
 <br>
--Virtual keyboard support for porbing ui
+-Virtual keyboard support for probing ui
 <br>
 -Finish utility section for material sufracing 
 <br>
