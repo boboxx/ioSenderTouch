@@ -1,5 +1,7 @@
 ## ioSender Touch - a gcode sender based on Terjeio ioSender for grblHAL [ioSender](https://github.com/terjeio/ioSender)
 
+Goal was to create a touch monitor friendly application that will not require a mouse or keyboard to use.
+<br><br>
 ---
 ![Home Screen](media/HomeScreen.png)
 <!--Please check out the [Wiki](https://github.com/terjeio/Grbl-GCode-Sender/wiki) for further details.
