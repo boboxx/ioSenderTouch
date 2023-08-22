@@ -40,6 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Management;
 using System.Windows.Media.Media3D;
 using CNC.Core;
 
@@ -406,6 +407,9 @@ namespace CNC.GCode
         public string Name { get { return _name; } set { _name = value;  OnPropertyChanged(); } }
         public bool ConfirmOnExecute { get; set; } = true;
         public string Code { get; set; }
+        public bool isJob { get; set; }
+
+        public string Path { get; set; }
     }
 
     public struct Point6D

@@ -98,6 +98,7 @@
     <Compile Include="Controls\UtilityMacroControl.xaml.cs">
       <DependentUpon>UtilityMacroControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Convertors\RadioBoolToIntConverter.cs" />
     <Compile Include="ViewModels\SurfacingViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\UtilityViewModel.cs" />

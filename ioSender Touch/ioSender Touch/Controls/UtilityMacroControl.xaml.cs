@@ -45,11 +45,27 @@ namespace ioSenderTouch.Controls
             var macro = Macros.FirstOrDefault(o =>
             {
                 var tag = (sender as Button)?.Tag;
-                return tag != null && o.Id == (int)tag;
+                return tag != null && o.Name == (string)tag;
             });
-            if (macro != null && (!macro.ConfirmOnExecute || MessageBox.Show($"RunMacro{macro.Name}", "ioSender",
-                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes))
-                (DataContext as GrblViewModel)?.ExecuteMacro(macro.Code);
+            if(macro == null)return;
+            if (macro.isJob)
+            {
+                if(!macro.ConfirmOnExecute || MessageBox.Show($"Load Job {macro.Name}", "ioSender",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    GCode.File.Load(macro.Path);
+                     
+              
+            }
+            else
+            {
+                if (!macro.ConfirmOnExecute || MessageBox.Show($"Run Macro {macro.Name}", "ioSender",
+                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    _model?.ExecuteMacro(macro.Code);
+            }
+           
+           
+            
+
         }
     }
 }

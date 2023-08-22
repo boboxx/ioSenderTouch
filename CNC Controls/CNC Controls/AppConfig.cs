@@ -58,13 +58,15 @@ namespace CNC.Controls
 
         public static string FindResource(string key)
         {
-            if(resource.Source == null)
-            try {
-                resource.Source = new Uri("pack://application:,,,/CNC.Controls.WPF;Component/LibStrings.xaml", UriKind.Absolute);
-            }
-            catch
-            {
-            }
+            if (resource.Source == null)
+                try
+                {
+
+                    resource.Source = new Uri("pack://application:,,,/CNC.Controls.WPF;Component/LibStrings.xaml", UriKind.Absolute);
+                }
+                catch
+                {
+                }
 
             return resource.Source == null || !resource.Contains(key) ? string.Empty : (string)resource[key];
         }
@@ -127,6 +129,31 @@ namespace CNC.Controls
         public bool ConfirmMove { get { return _confirmMove; } set { _confirmMove = value; IsDirty = true; OnPropertyChanged(); } }
         public CameraMoveMode MoveMode { get { return _moveMode; } set { _moveMode = value; OnPropertyChanged(); } }
     }
+    [Serializable]
+    public class SurfaceConfig : ViewModelBase
+    {
+        private string _filePath = string.Empty;
+        private bool _isInches;
+        private double _toolDiameter;
+        private double _stockLength;
+        private double _stockWidth;
+        private double _depth;
+        private int _overlap =50;
+        private int _passes = 1;
+        private double _feedRate;
+        private double _spindleRpm;
+
+        public string FilePath { get { return _filePath; } set { _filePath = value;  OnPropertyChanged(); } }
+        public bool IsInches { get { return _isInches; } set { _isInches = value; OnPropertyChanged(); } }
+        public double TooDiameter { get { return _toolDiameter; } set { _toolDiameter = value; OnPropertyChanged(); } }
+        public double StockLength { get { return _stockLength; } set { _stockLength = value; OnPropertyChanged(); } }
+        public double StockWidth { get { return _stockWidth; } set { _stockWidth = value;  OnPropertyChanged(); } }
+        public double Depth { get { return _depth; } set { _depth = value;  OnPropertyChanged(); } }
+        public int Overlap { get { return _overlap; } set { _overlap = value; OnPropertyChanged(); } }
+        public int Passes { get { return _passes; } set { _passes = value; OnPropertyChanged(); } }
+        public double FeedRate { get { return _feedRate; } set { _feedRate = value; OnPropertyChanged(); } }
+        public double SpindleRPM { get { return _spindleRpm; } set { _spindleRpm = value; OnPropertyChanged(); } }
+    }
 
     [Serializable]
     public class GCodeViewerConfig : ViewModelBase
@@ -180,7 +207,7 @@ namespace CNC.Controls
 
         public JogUIConfig(int[] feedrate, double[] distance)
         {
-            for(int i = 0; i < feedrate.Length; i++)
+            for (int i = 0; i < feedrate.Length; i++)
             {
                 _feedrate[i] = feedrate[i];
                 _distance[i] = distance[i];
@@ -244,7 +271,7 @@ namespace CNC.Controls
         private string _theme = "default";
 
         [XmlIgnore]
-       // public Dictionary<string, string> Themes { get; private set; } = new Dictionary<string, string>();
+        // public Dictionary<string, string> Themes { get; private set; } = new Dictionary<string, string>();
 
         //public string Theme
         //{
@@ -285,13 +312,16 @@ namespace CNC.Controls
         public CameraConfig Camera { get; set; } = new CameraConfig();
         public GCodeViewerConfig GCodeViewer { get; set; } = new GCodeViewerConfig();
         public ProbeConfig Probing { get; set; } = new ProbeConfig();
+
+        public SurfaceConfig Surface { get; set; } = new SurfaceConfig();
     }
 
     public class AppConfig : ViewModelBase
     {
+        public event EventHandler OnConfigFileLoaded;
         private string configfile = null;
         private bool? MPGactive = null;
-     
+
         public string FileName { get; private set; }
 
         private static readonly Lazy<AppConfig> settings = new Lazy<AppConfig>(() => new AppConfig());
@@ -329,6 +359,8 @@ namespace CNC.Controls
         public LatheConfig Lathe { get { return Base == null ? null : Base.Lathe; } }
         public GCodeViewerConfig GCodeViewer { get { return Base == null ? null : Base.GCodeViewer; } }
         public ProbeConfig Probing { get { return Base == null ? null : Base.Probing; } }
+
+        public SurfaceConfig Surface { get { return Base == null ? null : Base.Surface; } }
 
         public bool Save(string filename)
         {
@@ -382,6 +414,7 @@ namespace CNC.Controls
                 }
 
                 ok = true;
+                OnConfigFileLoaded?.Invoke(this, null);
             }
             catch
             {
@@ -410,7 +443,7 @@ namespace CNC.Controls
                 if (isComPort(Base.PortParams))
                 {
                     var props = Base.PortParams.Substring(Base.PortParams.IndexOf(':')).Split(',');
-                    if(props.Length >= 4)
+                    if (props.Length >= 4)
                         prop = string.Format(":{0},{1},{2},{3}", (string.IsNullOrEmpty(baud) ? props[0] : baud), props[1], props[2], props[3]);
                 }
                 port = values[0] + prop + (values.Length > 1 ? ",," + values[1] : "");
@@ -478,7 +511,7 @@ namespace CNC.Controls
 
             if (!Load(CNC.Core.Resources.IniFile))
             {
-                if (MessageBox.Show(LibStrings.FindResource("CreateConfig"),"IoSender", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show(LibStrings.FindResource("CreateConfig"), "IoSender", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     if (!Save(CNC.Core.Resources.IniFile))
                     {
@@ -639,7 +672,7 @@ namespace CNC.Controls
             Exit
         }
 
-        public Controller (GrblViewModel model)
+        public Controller(GrblViewModel model)
         {
             this.model = model;
         }
@@ -647,7 +680,7 @@ namespace CNC.Controls
         public bool ResetPending { get; private set; } = false;
         public string Message { get; private set; }
 
-        public RestartResult Restart ()
+        public RestartResult Restart()
         {
             Message = model.Message;
             model.Message = string.Format(LibStrings.FindResource("MsgWaiting"), AppConfig.Settings.Base.PortParams);
@@ -664,12 +697,31 @@ namespace CNC.Controls
 
                             model.Poller.SetState(AppConfig.Settings.Base.PollInterval);
 
-                            if (!model.SysCommandsAlwaysAvailable) switch(model.GrblState.Substate)
-                            {
-                                case 1: // Hard limits
-                                    if (!GrblInfo.IsLoaded)
-                                    {
-                                        if (model.LimitTriggered)
+                            if (!model.SysCommandsAlwaysAvailable) switch (model.GrblState.Substate)
+                                {
+                                    case 1: // Hard limits
+                                        if (!GrblInfo.IsLoaded)
+                                        {
+                                            if (model.LimitTriggered)
+                                            {
+                                                MessageBox.Show(string.Format(LibStrings.FindResource("MsgNoCommAlarm"), model.GrblState.Substate.ToString()), "ioSender");
+                                                if (AttemptReset())
+                                                    model.ExecuteCommand(GrblConstants.CMD_UNLOCK);
+                                                else
+                                                {
+                                                    MessageBox.Show(LibStrings.FindResource("MsgResetFailed"), "ioSender");
+                                                    return RestartResult.Close;
+                                                }
+                                            }
+                                            else if (AttemptReset())
+                                                model.ExecuteCommand(GrblConstants.CMD_UNLOCK);
+                                        }
+                                        else
+                                            response = string.Empty;
+                                        break;
+
+                                    case 2: // Soft limits
+                                        if (!GrblInfo.IsLoaded)
                                         {
                                             MessageBox.Show(string.Format(LibStrings.FindResource("MsgNoCommAlarm"), model.GrblState.Substate.ToString()), "ioSender");
                                             if (AttemptReset())
@@ -680,52 +732,33 @@ namespace CNC.Controls
                                                 return RestartResult.Close;
                                             }
                                         }
-                                        else if (AttemptReset())
-                                            model.ExecuteCommand(GrblConstants.CMD_UNLOCK);
-                                    }
-                                    else
-                                        response = string.Empty;
-                                    break;
-
-                                case 2: // Soft limits
-                                    if (!GrblInfo.IsLoaded)
-                                    {
-                                        MessageBox.Show(string.Format(LibStrings.FindResource("MsgNoCommAlarm"), model.GrblState.Substate.ToString()), "ioSender");
-                                        if (AttemptReset())
-                                            model.ExecuteCommand(GrblConstants.CMD_UNLOCK);
                                         else
+                                            response = string.Empty;
+                                        break;
+
+                                    case 10: // EStop
+                                        if (GrblInfo.IsGrblHAL && model.Signals.Value.HasFlag(Signals.EStop))
                                         {
-                                            MessageBox.Show(LibStrings.FindResource("MsgResetFailed"), "ioSender");
-                                            return RestartResult.Close;
+                                            MessageBox.Show(LibStrings.FindResource("MsgEStop"), "ioSender", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                            while (!AttemptReset() && model.GrblState.State == GrblStates.Alarm)
+                                            {
+                                                if (MessageBox.Show(LibStrings.FindResource("MsgEStopExit"), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                                    return RestartResult.Close;
+                                            };
                                         }
-                                    }
-                                    else
-                                        response = string.Empty;
-                                    break;
+                                        else
+                                            AttemptReset();
+                                        if (!GrblInfo.IsLoaded)
+                                            model.ExecuteCommand(GrblConstants.CMD_UNLOCK);
+                                        break;
 
-                                case 10: // EStop
-                                    if (GrblInfo.IsGrblHAL && model.Signals.Value.HasFlag(Signals.EStop))
-                                    {
-                                        MessageBox.Show(LibStrings.FindResource("MsgEStop"), "ioSender", MessageBoxButton.OK, MessageBoxImage.Warning);
-                                        while (!AttemptReset() && model.GrblState.State == GrblStates.Alarm)
-                                        {
-                                            if (MessageBox.Show(LibStrings.FindResource("MsgEStopExit"), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                                                return RestartResult.Close;
-                                        };
-                                    }
-                                    else
-                                        AttemptReset();
-                                    if (!GrblInfo.IsLoaded)
-                                        model.ExecuteCommand(GrblConstants.CMD_UNLOCK);
-                                    break;
-
-                                case 11: // Homing required
-                                    if (GrblInfo.IsLoaded)
-                                        response = string.Empty;
-                                    else
-                                        Message = LibStrings.FindResource("MsgHome");
-                                    break;
-                            }
+                                    case 11: // Homing required
+                                        if (GrblInfo.IsLoaded)
+                                            response = string.Empty;
+                                        else
+                                            Message = LibStrings.FindResource("MsgHome");
+                                        break;
+                                }
                             break;
 
                         case GrblStates.Tool:
@@ -770,7 +803,7 @@ namespace CNC.Controls
                                         }
                                     } while (!exit);
                                 }
-                                if(model.GrblState.State == GrblStates.Door && model.GrblState.Substate == 0)
+                                if (model.GrblState.State == GrblStates.Door && model.GrblState.Substate == 0)
                                     Comms.com.WriteByte(GrblConstants.CMD_RESET);
                             }
                             else

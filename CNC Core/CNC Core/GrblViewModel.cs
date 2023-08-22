@@ -220,10 +220,6 @@ namespace CNC.Core
             ToolOffset.PropertyChanged += ToolOffset_PropertyChanged;
 
             //TODO new command linking 
-            SettingsCommand = new Command(_ =>
-            {
-                ShowSettingsView(); ;
-            });
 
             ClearAlarmCommand = new Command(_ =>
             {
@@ -352,10 +348,6 @@ namespace CNC.Core
         {
             if (GrblState.State != GrblStates.Alarm) return;
             Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK); ;
-        }
-        private void ShowSettingsView()
-        {
-
         }
 
         private void Axisletter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
