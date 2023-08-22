@@ -17,9 +17,9 @@
                 <ColumnDefinition ></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Name="BtnMacro" Content="Macro" Command="{Binding ShowView}" CommandParameter="Macro"></Button>
-            <Button Grid.Column="1" Name="Facing" Content="Facing" Command="{Binding ShowView}" CommandParameter="Surfacing"></Button>
+            <Button Grid.Column="1" Name="Facing" Content="Surfacing" Command="{Binding ShowView}" CommandParameter="Surfacing"></Button>
             <Button Grid.Column="2" Name="BtnAlarm" Content="Show Alarm And Errors" Command="{Binding ShowView}" CommandParameter="Alarm"></Button>
         </Grid>
-      <ContentControl Grid.Row="1" Name="ContentControl" Content="{Binding Control}" ></ContentControl>
+        <ContentControl Grid.Row="1" Name="ContentControl" Content="{Binding Control}" ></ContentControl>
     </Grid>
 </UserControl>
