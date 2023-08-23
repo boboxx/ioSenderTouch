@@ -6,30 +6,26 @@
              xmlns:viewModel="clr-namespace:ioSenderTouch.ViewModels"
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:convertors="clr-namespace:ioSenderTouch.Convertors"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" Width="325" Height="510" HorizontalAlignment="Left" Margin="10,0,0,5">
     <UserControl.Resources>
         <convertors:RadioBoolToIntConverter x:Key="radioBoolToIntConverter" />
     </UserControl.Resources>
-    <Grid>
-        <GroupBox Header="Facing Operation" Height="700" Width="780" VerticalAlignment="Top" HorizontalAlignment="Left">
-            <Grid Margin="0,0,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
-                    <RadioButton Name="UseMetric"  Content="Metric"   IsChecked="{Binding Path=Measurement, Mode=TwoWay, Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=Metric}"    Padding="0,0,10,0"></RadioButton>
-                    <RadioButton Name="UseStandard" Content="Inches" IsChecked="{Binding Path =Measurement, Mode=TwoWay,  Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=Inches}"  ></RadioButton>
-                </StackPanel>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width ="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+    <DockPanel LastChildFill="True" Name="DockPanel">
 
-                    <Grid Grid.Column="0" >
+       <Border DockPanel.Dock="Left" Width="390">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <GroupBox Header="Surfacing Operation"  VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0,0,0,0" >
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                        <RadioButton Name="UseMetric"  Content="Metric"   IsChecked="{Binding Path=Measurement, Mode=TwoWay, Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=Metric}"    Padding="0,0,10,0"></RadioButton>
+                        <RadioButton Name="UseStandard" Content="Inches" IsChecked="{Binding Path =Measurement, Mode=TwoWay,  Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=Inches}"  ></RadioButton>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
@@ -42,38 +38,39 @@
                             <RowDefinition Height="40"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Tool Diameter:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                        <StackPanel Grid.Row="0" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Tool Diameter:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="ToolDiameter" Text="{Binding ToolDiameter, StringFormat={}{0:F2}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Name="DiaUnitLabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
                                    Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Stock Length(X):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                        <StackPanel Grid.Row="1" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Stock Length(X):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="StockLength" Text="{Binding StockLength, StringFormat={}{0:F2},Mode=TwoWay}"  FontWeight ="Bold" 
                                       FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
-                            <Label  FontSize ="12" Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Visibility="Visible" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="30" Margin="0,6,0,5"></Label>
+                            <Label  FontSize ="12" Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Visibility="Visible" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" 
+                                    Width="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Stock Width(Y):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                        <StackPanel Grid.Row="2" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Stock Width(Y):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox Name ="StockWidth"  Text="{Binding StockWidth, StringFormat={}{0:F2},Mode=TwoWay}"    FontWeight ="Bold" FontSize="20"  
                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="3" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Depth of Cut:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                        <StackPanel Grid.Row="3" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Depth of Cut:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="CutDepth" Text="{Binding DepthOfCut, StringFormat={}{0:F2},Mode= TwoWay}"   FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding  Unit, UpdateSourceTrigger=PropertyChanged}"   VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="4" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Overlap:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                            <Label Content="Overlap:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="Overlap" Text="{Binding OverLap, StringFormat={}{0:},Mode= TwoWay}"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="%"   VerticalAlignment="Center"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Number of Passes:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                            <Label Content="Number of Passes:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <Grid Height="30">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="47*"/>
@@ -84,26 +81,29 @@
                             </Grid>
                         </StackPanel>
                         <StackPanel Grid.Row="6" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Feed Rate:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                            <Label Content="Feed Rate:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="CutRate" Text="{Binding FeedRate, StringFormat={}{0:},Mode= TwoWay}"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding  UnitPerMin, UpdateSourceTrigger=PropertyChanged}"    VerticalAlignment="Center"  HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="7" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Spindle RPM:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Height="30"></Label>
+                            <Label Content="Spindle RPM:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="SpindleRpm" Text="{Binding SpindleRpm, StringFormat={}{0:},Mode= TwoWay}"   FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="RPM"   VerticalAlignment="Center"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                     </Grid>
-
-                </Grid>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Margin="0,20,0,10">
-                    <Button Name="GenGcodeBtn" Content="Generate"  Command="{Binding Path= SurfacingCommand}"  CommandParameter="{Binding ElementName=GenGcodeBtn, Path=Content}"
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="35" Margin="0,10,0,50">
+                        <Button Name="GenGcodeBtn" Content="Generate"  Command="{Binding Path= SurfacingCommand}"  CommandParameter="{Binding ElementName=GenGcodeBtn, Path=Content}"
                             Margin="0,0,20,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105"></Button>
-                    <Button Name="SendJobBtn" Content="Send Job"  HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105" ></Button>
-                </StackPanel>
-            </Grid>
-        </GroupBox>
-    </Grid>
+                        <Button Name="SendJobBtn" Content="Send Job"  HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105" ></Button>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </Grid>
+       </Border>
+        <Border DockPanel.Dock="Right">
+
+        </Border>
+    </DockPanel>
 </UserControl>
