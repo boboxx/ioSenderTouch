@@ -12,6 +12,16 @@ Probing carried over from ioSender
 
 Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard 
 ![Utility](media/Utility_macro.png)
+
+Material Surface Feature 
+Saves settings to app config and Gcode to NC file named QuickSurface 
+![Surface](media/Surface.png)
+
+Creates Button on  Home Screen in Utility Section to run the job 
+![Surface](media/Surface2.png)
+
+![Surface](media/Surface3.png)
+
 <br><br>
 ---
 
@@ -20,7 +30,7 @@ Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard
 <br>
 -Virtual keyboard support for probing ui
 <br>
--Finish utility section for material surfacing 
+-Finish utility section for material surfacing (8/22/23 Implemented needs more testing)
 <br>
 -Add support for portrait orientation 
 <br><br>
