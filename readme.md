@@ -1,6 +1,6 @@
 # ioSender Touch - a gcode sender based on Terjeio ioSender  [ioSender](https://github.com/terjeio/ioSender) for grblHAL
 
-Goal was to create a touch monitor friendly application that will run on a cheap mini PC,  that will not require a mouse or keyboard to use.
+Goal was to create a application that will run on a cheap mini PC with a UI design that is touch monitor friendly, and will not require a mouse or keyboard to use.
 <br><br>
 ---
 
@@ -14,6 +14,7 @@ Double clicking Text Fields in Utility -> Macro tab brings up virtual keyboard
 ![Utility](media/Utility_macro.png)
 
 Material Surface Feature 
+<br>
 Saves settings to app config and Gcode to NC file named QuickSurface 
 ![Surface](media/Surface.png)
 
