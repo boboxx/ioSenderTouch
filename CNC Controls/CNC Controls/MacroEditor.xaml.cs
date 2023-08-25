@@ -60,7 +60,35 @@ namespace CNC.Controls
         public MacroEditor()
         {
             InitializeComponent();
+            if (_macroData == null)
+            {
+                _macroData = new MacroData
+                {
+                    Macros = AppConfig.Settings.Base.Macros
+                };
+                DataContext = _macroData;
+            }
+
+            if (_macroData.Macros.Count > 0)
+                _macroData.Macro = _macroData.Macros[0];
             this.Loaded += MacroEditor_Loaded;
+            IsVisibleChanged += VisibleChanged;
+            this.LostFocus += MacroEditor_LostFocus;
+        }
+        private void VisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is bool b)
+            {
+                if (!b)
+                {
+                    _keyBoard.Close();
+                }
+
+            }
+        }
+        private void MacroEditor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _keyBoard.Close();
         }
 
         private void MacroEditor_Loaded(object sender, RoutedEventArgs e)
@@ -117,20 +145,6 @@ namespace CNC.Controls
             _keyBoard.VBClosing += Close;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (_macroData == null)
-            {
-                _macroData = new MacroData
-                {
-                    Macros = AppConfig.Settings.Base.Macros
-                };
-                DataContext = _macroData;
-            }
-
-            if (_macroData.Macros.Count > 0)
-                _macroData.Macro = _macroData.Macros[0];
-        }
 
         void btnDelete_Click(object sender, RoutedEventArgs e)
         {

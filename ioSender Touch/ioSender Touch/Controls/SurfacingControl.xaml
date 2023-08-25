@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ioSenderTouch.Controls.SurfacingView"
+﻿<UserControl x:Class="ioSenderTouch.Controls.SurfacingControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -40,32 +40,32 @@
 
                         <StackPanel Grid.Row="0" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Tool Diameter:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox  Name ="ToolDiameter" Text="{Binding ToolDiameter, StringFormat={}{0:F2}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
+                                <TextBox  Name ="ToolDiameter"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding ToolDiameter, StringFormat={}{0:F2}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Name="DiaUnitLabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
                                    Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Stock Length(X):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox  Name ="StockLength" Text="{Binding StockLength, StringFormat={}{0:F2},Mode=TwoWay}"  FontWeight ="Bold" 
+                                <TextBox  Name ="StockLength"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding StockLength, StringFormat={}{0:F2},Mode=TwoWay}"  FontWeight ="Bold" 
                                       FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label  FontSize ="12" Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Visibility="Visible" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" 
                                     Width="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Stock Width(Y):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox Name ="StockWidth"  Text="{Binding StockWidth, StringFormat={}{0:F2},Mode=TwoWay}"    FontWeight ="Bold" FontSize="20"  
+                                <TextBox Name ="StockWidth"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding StockWidth, StringFormat={}{0:F2},Mode=TwoWay}"    FontWeight ="Bold" FontSize="20"  
                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
-                            <Label Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
+                                <Label Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="3" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Depth of Cut:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox  Name ="CutDepth" Text="{Binding DepthOfCut, StringFormat={}{0:F2},Mode= TwoWay}"   FontWeight ="Bold" FontSize="20" 
+                                <TextBox  Name ="CutDepth"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding DepthOfCut, StringFormat={}{0:F2},Mode= TwoWay}"   FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding  Unit, UpdateSourceTrigger=PropertyChanged}"   VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="4" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Overlap:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox  Name ="Overlap" Text="{Binding OverLap, StringFormat={}{0:},Mode= TwoWay}"  FontWeight ="Bold" FontSize="20" 
+                                <TextBox  Name ="Overlap"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding OverLap, StringFormat={}{0:},Mode= TwoWay}"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="%"   VerticalAlignment="Center"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
@@ -76,19 +76,19 @@
                                     <ColumnDefinition Width="47*"/>
                                     <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="PartTextBox" Text="{Binding Passes,Mode=TwoWay, BindsDirectlyToSource=True}" FontWeight ="Bold" FontSize="20" 
+                                    <TextBox x:Name="PartTextBox" Text="{Binding Passes,Mode=TwoWay, BindsDirectlyToSource=True}"  MouseDoubleClick="TextBox_GotFocus" FontWeight ="Bold" FontSize="20" 
                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30" />
                             </Grid>
                         </StackPanel>
                         <StackPanel Grid.Row="6" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Feed Rate:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox  Name ="CutRate" Text="{Binding FeedRate, StringFormat={}{0:},Mode= TwoWay}"  FontWeight ="Bold" FontSize="20" 
+                                <TextBox  Name ="CutRate" Text="{Binding FeedRate, StringFormat={}{0:},Mode= TwoWay}"  MouseDoubleClick="TextBox_GotFocus"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding  UnitPerMin, UpdateSourceTrigger=PropertyChanged}"    VerticalAlignment="Center"  HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="7" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Spindle RPM:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
-                            <TextBox  Name ="SpindleRpm" Text="{Binding SpindleRpm, StringFormat={}{0:},Mode= TwoWay}"   FontWeight ="Bold" FontSize="20" 
+                                <TextBox  Name ="SpindleRpm" Text="{Binding SpindleRpm, StringFormat={}{0:},Mode= TwoWay}"   MouseDoubleClick="TextBox_GotFocus" FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="RPM"   VerticalAlignment="Center"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
@@ -96,7 +96,6 @@
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="35" Margin="0,10,0,50">
                         <Button Name="GenGcodeBtn" Content="Generate"  Command="{Binding Path= SurfacingCommand}"  CommandParameter="{Binding ElementName=GenGcodeBtn, Path=Content}"
                             Margin="0,0,20,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105"></Button>
-                        <Button Name="SendJobBtn" Content="Send Job"  HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105" ></Button>
                     </StackPanel>
                 </Grid>
             </GroupBox>

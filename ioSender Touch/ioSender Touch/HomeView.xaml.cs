@@ -312,12 +312,6 @@ namespace ioSenderTouch
 
         #region UIevents
 
-        private void JobView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-                GCodeSender.Focus();
-        }
-
         void DRO_DROEnabledChanged(bool enabled)
         {
             if (!enabled)

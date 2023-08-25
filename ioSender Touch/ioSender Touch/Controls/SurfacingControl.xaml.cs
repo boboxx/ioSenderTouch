@@ -1,0 +1,83 @@
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using CNC.Controls.Views;
+using CNC.Core;
+using ioSenderTouch.ViewModels;
+
+namespace ioSenderTouch.Controls
+{
+    /// <summary>
+    /// Interaction logic for FacingView.xaml
+    /// </summary>
+    public partial class SurfacingControl : UserControl
+    {
+
+        private VirtualKeyBoard _keyBoard;
+        public SurfacingControl(GrblViewModel grblViewModel)
+        {
+            InitializeComponent();
+            IsVisibleChanged += SurfacingControl_IsVisibleChanged; 
+            this.Loaded += SurfacingControl_Loaded;
+            this.LostFocus += SurfacingControl_LostFocus1;
+        }
+
+        private void SurfacingControl_LostFocus1(object sender, RoutedEventArgs e)
+        {
+            _keyBoard.Close();
+        }
+
+        private void SurfacingControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is bool b )
+            {
+                if (!b)
+                {
+                    _keyBoard.Close();
+                }
+
+            }
+        }
+
+        private void SurfacingControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_keyBoard == null)
+            {
+                _keyBoard = new VirtualKeyBoard
+                {
+                    Owner = Application.Current.MainWindow,
+                    Topmost = true
+                };
+
+            }
+        }
+
+        private void SurfacingControl_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _keyBoard.Close();
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+
+            void Close(object senders, EventArgs es)
+            {
+                _keyBoard.VBClosing -= Close;
+                _keyBoard.TextChanged -= TextChanged;
+            }
+
+            void TextChanged(object senders, string t)
+            {
+                textBox.Text = t;
+            }
+            if (_keyBoard.Visibility == Visibility.Visible) return;
+            _keyBoard.Show();
+            _keyBoard.TextChanged -= TextChanged;
+            _keyBoard.TextChanged += TextChanged;
+            _keyBoard.VBClosing -= Close;
+            _keyBoard.VBClosing += Close;
+
+        }
+    }
+}

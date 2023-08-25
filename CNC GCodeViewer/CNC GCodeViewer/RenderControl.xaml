@@ -11,7 +11,9 @@
     <UserControl.Resources>
         <Controls:HomedStateToBooleanConverter x:Key="IsHomed" />
         <Controls:LogicalNotConverter x:Key="IsNotRunningConverter" />
+        <Controls:BoolToVisibleConverter x:Key="IsVisibleConverter" />
         <Controls:LogicalNotConverter x:Key="IsNotVisibleConverter">
+
             <Controls:LogicalNotConverter.FinalConverter>
                 <Controls:BoolToVisibleConverter />
             </Controls:LogicalNotConverter.FinalConverter>
@@ -79,8 +81,10 @@
             <Button x:Uid="saveView" Content="Resources/SaveView.png" Style="{StaticResource BtnImage}" IsEnabled="{Binding Path=IsFileLoaded}" Click="SaveView_Click" ToolTip="Save view"/>
         </StackPanel>
         <Grid DockPanel.Dock="Top">
+           
             <local:Renderer x:Name="gcodeView"/>
         <local:TextOverlayControl x:Name="textOverlay" HorizontalAlignment="Right" Margin="5,5" VerticalAlignment="Top"/>
+            <Label Content="Tool Change" Visibility="{Binding IsToolChanging,  Converter={StaticResource IsVisibleConverter}}" FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Red" Opacity=".5"></Label>
         </Grid>
     </DockPanel>
 </UserControl>
