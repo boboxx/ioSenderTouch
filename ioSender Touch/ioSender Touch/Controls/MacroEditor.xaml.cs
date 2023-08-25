@@ -37,16 +37,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-using System.Collections.ObjectModel;
-using System.Windows;
-using CNC.Core;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using CNC.Controls;
 using CNC.Controls.Views;
+using CNC.Core;
 
-
-namespace CNC.Controls
+namespace ioSenderTouch.Controls
 {
     /// <summary>
     /// Interaction logic for MacroEditor.xaml
@@ -60,6 +60,14 @@ namespace CNC.Controls
         public MacroEditor()
         {
             InitializeComponent();
+            AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
+            this.Loaded += MacroEditor_Loaded;
+            IsVisibleChanged += VisibleChanged;
+            this.LostFocus += MacroEditor_LostFocus;
+        }
+
+        private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
+        {
             if (_macroData == null)
             {
                 _macroData = new MacroData
@@ -68,13 +76,10 @@ namespace CNC.Controls
                 };
                 DataContext = _macroData;
             }
-
             if (_macroData.Macros.Count > 0)
                 _macroData.Macro = _macroData.Macros[0];
-            this.Loaded += MacroEditor_Loaded;
-            IsVisibleChanged += VisibleChanged;
-            this.LostFocus += MacroEditor_LostFocus;
         }
+
         private void VisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue is bool b)
@@ -97,12 +102,16 @@ namespace CNC.Controls
             {
                 _keyBoard = new VirtualKeyBoard
                 {
-                    Owner = Application.Current.MainWindow,
-                    Topmost = true
+                    Owner =  Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Left = 750,
+                    Top = 400,
                 };
                 textBox.MouseDoubleClick += TextBox_GotFocus;
                 cbxMacro.MouseDoubleClick += CbxMacro_GotFocus;
             }
+          
+           
         }
 
         private void CbxMacro_GotFocus(object sender, RoutedEventArgs e)

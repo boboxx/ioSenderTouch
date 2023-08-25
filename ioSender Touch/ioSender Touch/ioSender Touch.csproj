@@ -92,6 +92,9 @@
     <Compile Include="Controls\JogCoontrolT.xaml.cs">
       <DependentUpon>JogCoontrolT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MacroEditor.xaml.cs">
+      <DependentUpon>MacroEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SurfacingControl.xaml.cs">
       <DependentUpon>SurfacingControl.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,10 @@
       <DependentUpon>UtilityView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\JogCoontrolT.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MacroEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

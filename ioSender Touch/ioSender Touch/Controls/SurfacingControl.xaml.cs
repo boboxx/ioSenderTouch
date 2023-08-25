@@ -12,12 +12,11 @@ namespace ioSenderTouch.Controls
     /// </summary>
     public partial class SurfacingControl : UserControl
     {
-
         private VirtualKeyBoard _keyBoard;
-        public SurfacingControl(GrblViewModel grblViewModel)
+        public SurfacingControl()
         {
             InitializeComponent();
-            IsVisibleChanged += SurfacingControl_IsVisibleChanged; 
+            IsVisibleChanged += SurfacingControl_IsVisibleChanged;
             this.Loaded += SurfacingControl_Loaded;
             this.LostFocus += SurfacingControl_LostFocus1;
         }
@@ -46,15 +45,13 @@ namespace ioSenderTouch.Controls
                 _keyBoard = new VirtualKeyBoard
                 {
                     Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Left = 750,
+                    Top = 400,
                     Topmost = true
                 };
 
             }
-        }
-
-        private void SurfacingControl_LostFocus(object sender, RoutedEventArgs e)
-        {
-            _keyBoard.Close();
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)

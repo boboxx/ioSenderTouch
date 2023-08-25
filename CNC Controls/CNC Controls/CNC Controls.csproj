@@ -204,9 +204,6 @@
     <Compile Include="LimitsControl.xaml.cs">
       <DependentUpon>LimitsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MacroEditor.xaml.cs">
-      <DependentUpon>MacroEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MacroExecuteControl.xaml.cs">
       <DependentUpon>MacroExecuteControl.xaml</DependentUpon>
     </Compile>
@@ -388,10 +385,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LimitsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MacroEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

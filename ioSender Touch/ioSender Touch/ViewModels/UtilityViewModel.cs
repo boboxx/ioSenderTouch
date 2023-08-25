@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using CNC.Controls;
+using CNC.Controls.Views;
 using CNC.Core;
 using CNC.Core.Comands;
 using CNC.GCode;
@@ -18,16 +19,16 @@ namespace ioSenderTouch.ViewModels
 {
     public class UtilityViewModel : INotifyPropertyChanged
     {
+
+        private const string Metric = "Metric";
+        private const string Inches = "Inches";
+
         private readonly GrblViewModel _grblViewModel;
         private UIElement _control;
         private readonly ErrorsAndAlarms _alarmAndError;
         private MacroEditor _macroEditor;
         private SurfacingControl _surfacingControl;
-      
-
-
-        private const string Metric = "Metric";
-        private const string Inches = "Inches";
+        
 
         private const double Inches_To_MM = 25.4;
         private const double Safe_Height = .12;
@@ -84,19 +85,20 @@ namespace ioSenderTouch.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        
         public UtilityViewModel(GrblViewModel grblViewModel)
         {
             _grblViewModel = grblViewModel;
             ShowView = new Command(SetView);
             _alarmAndError = new ErrorsAndAlarms("");
-            
-            _surfacingControl = new SurfacingControl(grblViewModel);
+            _surfacingControl = new SurfacingControl();
+            _macroEditor = new MacroEditor();
             SurfacingCommand = new Command(ExecuteMethod);
             Passes = 1;
             OverLap = 50;
             BuildProbeMacro();
             AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
+            
         }
 
         private void BuildProbeMacro()
@@ -110,11 +112,10 @@ namespace ioSenderTouch.ViewModels
             });
         }
 
-
         private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
         {
+           
             var surface = AppConfig.Settings.Base.Surface;
-            _macroEditor = new MacroEditor();
             if (surface == null) return;
             PopulateUI(surface);
         }
