@@ -53,7 +53,7 @@ namespace CNC.Controls
         private void chkBox_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var com = GrblCommand.Mist;
-            switch ((string)(sender as CheckBox)?.Tag)
+            switch ((string)(sender as Button)?.Tag)
             {
                 case "Flood":
                     (DataContext as GrblViewModel)?.ExecuteCommand(GrblCommand.Flood);
