@@ -33,5 +33,7 @@ Creates Button on  Home Screen in Utility Section to run the job
 <br>
 -Finish utility section for material surfacing (8/22/23 Implemented needs more testing)
 <br>
+-Create axis alignment/squaring helper under utility 
+<br>
 -Add support for portrait orientation 
 <br><br>
