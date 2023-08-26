@@ -1,6 +1,8 @@
 
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Resources;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +12,7 @@ using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
 using CNC.Core;
 using ioSenderTouch.Views;
+using ConfigControl = CNC.Controls.Probing.ConfigControl;
 
 namespace ioSenderTouch
 {
@@ -36,6 +39,7 @@ namespace ioSenderTouch
             _model = model;
             DataContext = _model;
             InitializeComponent();
+            
             Grbl.GrblViewModel = _model;
             _renderView = new RenderControl(_model);
             _grblSettingView = new GrblConfigView(_model);
@@ -43,12 +47,27 @@ namespace ioSenderTouch
             _offsetView = new OffsetView(_model);
             _utilityView = new UtilityView(_model);
             FillBorder.Child = _renderView;
+            AppConfig.Settings.OnConfigFileLoaded += AppConfiguationLoaded;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
+            BuildOptionalUi();
+            _model.PollingInterval = AppConfig.Settings.Base.PollInterval;
             InitSystem();
             GCode.File.FileLoaded += File_FileLoaded;
+            
         }
 
-        
+        private void BuildOptionalUi()
+        {
+            if (_model.HasSDCard)
+            {
+                _sdView = new SDCardView(_model);
+            }
+
+            if (_model.HasATC)
+            {
+                _toolView = new ToolView(_model);
+            }
+        }
 
 
         private bool InitSystem()
@@ -83,16 +102,6 @@ namespace ioSenderTouch
 
             GrblCommand.ToolChange = GrblInfo.ManualToolChange ? "M61Q{0}" : "T{0}";
 
-
-            if (_model.HasSDCard)
-            {
-                _sdView = new SDCardView(_model);
-            }
-
-            if (_model.HasATC)
-            {
-                _toolView = new ToolView(_model);
-            }
 
             if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
             {
@@ -166,9 +175,35 @@ namespace ioSenderTouch
             FillBorder.Child = _toolView;
         }
 
+        private void AppConfiguationLoaded(object sender, EventArgs e)
+        {
+            BuildOptionalUi();
+            _model.PollingInterval = AppConfig.Settings.Base.PollInterval;
+            var controls = new ObservableCollection<UserControl>();
+
+            controls.Add(new BasicConfigControl());
+            controls.Add(new ConfigControl());
+            if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)
+            {
+                controls.Add(new JogUiConfigControl());
+            }
+
+            if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI)
+            {
+                controls.Add(new JogConfigControl());
+            }
+            controls.Add(new StripGCodeConfigControl());
+            if (AppConfig.Settings.GCodeViewer.IsEnabled)
+            {
+                controls.Add(new CNC.Controls.Viewer.ConfigControl());
+            }
+            _grblAppSettings.Setup(controls, AppConfig.Settings);
+
+        }
+
         public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
         {
-            _grblAppSettings.Setup(uiViewModel, settings);
+            //_grblAppSettings.Setup(uiViewModel, settings);
         }
 
         private void File_FileLoaded(object sender, bool fileLoaded)

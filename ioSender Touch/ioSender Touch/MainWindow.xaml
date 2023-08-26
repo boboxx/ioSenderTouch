@@ -14,9 +14,7 @@
         Loaded="Window_Load"
         Width="1920"
         Height="1080"
-        SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
-        Closed="Window_Closed" 
         Icon="App.ico" 
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -75,7 +73,9 @@
                         Background="Red" Command="{ Binding ClearAlarmCommand}"
                         Visibility="{Binding ShowAlarmButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Style="{StaticResource MaterialDesignRaisedButton}" />
-                <Button Grid.Column="3" Content="Shut Down" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="40" Width="110" Click="ButtonBase_OnClick" ></Button>
+                
+                <Button Grid.Column="3" Content="Shut Down" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center" Height="40" Width="110" Click="ButtonBase_OnClick" ></Button>
             </Grid>
         </Border>
 
@@ -121,15 +121,18 @@
             </StatusBar>
         </Border>
 
-        <Border Height="55"  BorderThickness="1" DockPanel.Dock="Top">
+        <Grid Height="55"  DockPanel.Dock="Top">
             <ToolBarTray  IsLocked="True">
                 <ToolBar IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Height="42" VerticalAlignment="Top" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}}" >
                     <cnccontrols:FileActionControl IsEnabled="{Binding Path=IsToolChanging, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <Separator Margin="4,0"></Separator>
                     <cnccontrols:MacroToolbarControl x:Name="toolbarMacros"/>
+                    <Separator Margin="4,0"></Separator>
                 </ToolBar>
             </ToolBarTray>
-        </Border>
+            <Button  HorizontalAlignment="Right" Height="40" Width="110" Margin="0,0,5,0" Content="Reset" HorizontalContentAlignment="Center"
+                     VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ResetCommand}"></Button>
+        </Grid>
         <Border  Name="BorderLeft" BorderThickness="1" DockPanel.Dock="Left">
         </Border>
     </DockPanel>

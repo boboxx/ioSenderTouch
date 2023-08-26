@@ -44,7 +44,7 @@ using CNC.Core;
 
 namespace CNC.Controls
 {
-    public partial class AppConfigView : UserControl, ICNCView
+    public partial class AppConfigView : UserControl
     {
         private UIViewModel model;
         private GrblViewModel grblmodel;
@@ -63,7 +63,7 @@ namespace CNC.Controls
             InitializeComponent();
         }
 
-        ObservableCollection<UserControl> ConfigControls { get { return model == null ? null : model.ConfigControls; } }
+        private ObservableCollection<UserControl> ConfigControls { get; set; }
 
         #region Methods and properties required by CNCView interface
 
@@ -74,7 +74,7 @@ namespace CNC.Controls
         {
             if (activate)
             {
-               
+
                 foreach (var control in model.ConfigControls) // TODO: use callback!
                 {
                     if (control is JogConfigControl)
@@ -96,16 +96,11 @@ namespace CNC.Controls
         {
         }
 
-        public void Setup(UIViewModel model, AppConfig profile)
+        public void Setup(ObservableCollection<UserControl> controls, AppConfig profile)
         {
-            this.model = model;
-            
-            {
-                this.model = model;
-                if(profile.Base == null)return;
-                DataContext = profile.Base;
-                xx.ItemsSource = model.ConfigControls;
-            }
+            if (profile.Base == null) return;
+            DataContext = profile.Base;
+            xx.ItemsSource = controls;
         }
 
         #endregion

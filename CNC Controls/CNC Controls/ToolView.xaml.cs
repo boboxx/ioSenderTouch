@@ -52,22 +52,23 @@ namespace CNC.Controls
     {
         private readonly GrblViewModel _model;
         Tool selectedTool = null;
-        private GrblViewModel parameters = new GrblViewModel();
+        //private GrblViewModel parameters = new GrblViewModel();
         private volatile bool awaitCoord = false;
         private Action<string> GotPosition;
 
         public ToolView()
         {
             InitializeComponent();
-
-            parameters.PropertyChanged += Parameters_PropertyChanged;
+              _model = DataContext as GrblViewModel;
+              if(_model == null)return;
+            _model.PropertyChanged += Parameters_PropertyChanged;
         }
         public ToolView( GrblViewModel model)
         {
             _model = model;
             InitializeComponent();
 
-            parameters.PropertyChanged += Parameters_PropertyChanged;
+            _model.PropertyChanged += Parameters_PropertyChanged;
         }
 
         public Position offset { get; private set; } = new Position();
@@ -81,16 +82,16 @@ namespace CNC.Controls
         {
             if (activate)
             {
-                Comms.com.DataReceived += parameters.DataReceived;
+                Comms.com.DataReceived += _model.DataReceived;
 
-                GrblWorkParameters.Get(parameters);
+                GrblWorkParameters.Get(_model);
 
                 dgrTools.ItemsSource = new ObservableCollection<Tool>(from tool in GrblWorkParameters.Tools where tool.Code != GrblConstants.NO_TOOL orderby tool.Code select tool);
                 dgrTools.SelectedIndex = 0;
             }
             else
             {
-                Comms.com.DataReceived -= parameters.DataReceived;
+                Comms.com.DataReceived -= _model.DataReceived;
                 dgrTools.ItemsSource = null;
             }
         }
@@ -110,13 +111,13 @@ namespace CNC.Controls
             switch (e.PropertyName)
             {
                 case nameof(GrblViewModel.MachinePosition):
-                    if (!(awaitCoord = double.IsNaN(parameters.MachinePosition.Values[0])))
+                    if (!(awaitCoord = double.IsNaN(_model.MachinePosition.Values[0])))
                     {
-                        offset.Set(parameters.MachinePosition);
-                        parameters.SuspendPositionNotifications = true;
-                        parameters.Clear();
-                        parameters.MachinePosition.Clear();
-                        parameters.SuspendPositionNotifications = false;
+                        offset.Set(_model.MachinePosition);
+                        _model.SuspendPositionNotifications = true;
+                        _model.Clear();
+                        _model.MachinePosition.Clear();
+                        _model.SuspendPositionNotifications = false;
                     }
                     break;
             }
@@ -217,8 +218,8 @@ namespace CNC.Controls
 
         private void RequestStatus()
         {
-            parameters.Clear();
-            if (double.IsNaN(parameters.WorkPosition.X) || true) // If not NaN then MPG is polling
+            _model.Clear();
+            if (double.IsNaN(_model.WorkPosition.X) || true) // If not NaN then MPG is polling
                 Comms.com.WriteByte(GrblLegacy.ConvertRTCommand(GrblConstants.CMD_STATUS_REPORT_ALL));
         }
 
@@ -229,7 +230,7 @@ namespace CNC.Controls
 
             awaitCoord = true;
 
-            parameters.OnRealtimeStatusProcessed += DataReceived;
+            _model.OnRealtimeStatusProcessed += DataReceived;
 
             new Thread(() =>
             {
@@ -244,7 +245,7 @@ namespace CNC.Controls
             while (res == null)
                 EventUtils.DoEvents();
 
-            parameters.OnRealtimeStatusProcessed -= DataReceived;
+            _model.OnRealtimeStatusProcessed -= DataReceived;
         }
 
         #endregion

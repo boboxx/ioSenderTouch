@@ -72,67 +72,25 @@ namespace ioSenderTouch
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
-
+           // _viewModel  = new GrblViewModel();
             BaseWindowTitle = Title;
             _viewModel = DataContext as GrblViewModel;
             _homeView = new HomeView(_viewModel);
             DockPanel.SetDock(_homeView, Dock.Left);
             DockPanel.Children.Add(_homeView);
-            GrblInfo.LatheModeEnabled = AppConfig.Settings.Lathe.IsEnabled;
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
-            AppConfig.Settings.Base.PropertyChanged += Base_PropertyChanged;
             VerisonLabel.Content = $"{App_Name} {Version}";
         }
 
         public string BaseWindowTitle { get; set; }
 
-        public string WindowTitle
-        {
-            set
-            {
-                ui.Title = BaseWindowTitle + (string.IsNullOrEmpty(value) ? "" : " - " + value);
-            }
-        }
 
         public bool JobRunning => _viewModel.IsJobRunning;
 
         private void Window_Load(object sender, EventArgs e)
         {
-            if (AppConfig.Settings.Base.KeepWindowSize)
-            {
-                if (AppConfig.Settings.Base.WindowWidth == -1)
-                    WindowState = WindowState.Maximized;
-                else
-                {
-                    Width = Math.Max(Math.Min(AppConfig.Settings.Base.WindowWidth, SystemParameters.PrimaryScreenWidth), MinWidth);
-                    Height = Math.Max(Math.Min(AppConfig.Settings.Base.WindowHeight, SystemParameters.PrimaryScreenHeight), MinHeight);
-                    if (Left + Width > SystemParameters.PrimaryScreenWidth)
-                        Left = 0d;
-                    if (Top + Height > SystemParameters.PrimaryScreenHeight)
-                        Top = 0d;
-                }
-            }
-
             
-
-            UIViewModel.ConfigControls.Add(new BasicConfigControl());
-            UIViewModel.ConfigControls.Add(new ConfigControl());
-            if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.Keypad)
-            {
-                UIViewModel.ConfigControls.Add(new JogUiConfigControl());
-            }
-            
-            if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI)
-            {
-                UIViewModel.ConfigControls.Add(new JogConfigControl());
-            }
-            UIViewModel.ConfigControls.Add(new StripGCodeConfigControl());
-            if (AppConfig.Settings.GCodeViewer.IsEnabled)
-            {
-                UIViewModel.ConfigControls.Add(new CNC.Controls.Viewer.ConfigControl());
-            }
-
             System.Threading.Thread.Sleep(50);
             Comms.com.PurgeQueue();
             if (!string.IsNullOrEmpty(AppConfig.Settings.FileName))
@@ -154,15 +112,6 @@ namespace ioSenderTouch
             _homeView.ConfiguationLoaded(UIViewModel, AppConfig.Settings);
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (saveWinSize && !(AppConfig.Settings.Base.WindowWidth == e.NewSize.Width && AppConfig.Settings.Base.WindowHeight == e.NewSize.Height))
-            {
-                AppConfig.Settings.Base.WindowWidth = WindowState == WindowState.Maximized ? -1 : e.NewSize.Width;
-                AppConfig.Settings.Base.WindowHeight = WindowState == WindowState.Maximized ? -1 : e.NewSize.Height;
-                AppConfig.Settings.Save();
-            }
-        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -187,70 +136,10 @@ namespace ioSenderTouch
                 }
             }
         }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            //Comms.com.Close(); // Makes fking process hang
-        }
-
-        private void exitMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        void aboutWikiItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/terjeio/ioSender/wiki");
-        }
-
-        void tipsWikiItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/terjeio/ioSender/wiki/Usage-tips");
-        }
-
-        void briefTour_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.grbl.org/single-post/one-sender-to-rule-them-all");
-        }
-
-        void videoTutorials_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://youtube.com/playlist?list=PLnSV6o2cRxM5mQQe4ec5cS2J8jBsEciY3");
-        }
-
-        void errorAndAlarms_Click(object sender, EventArgs e)
-        {
-            // new ErrorsAndAlarms(BaseWindowTitle) { Owner = Application.Current.MainWindow }.Show();
-        }
-
-        void aboutMenuItem_Click(object sender, EventArgs e)
-        {
-            About about = new About(BaseWindowTitle) { Owner = Application.Current.MainWindow };
-            about.DataContext = DataContext;
-            about.ShowDialog();
-        }
-
-        private void Base_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Config.KeepWindowSize))
-            {
-                if ((sender as Config).KeepWindowSize)
-                {
-                    AppConfig.Settings.Base.WindowWidth = Width;
-                    AppConfig.Settings.Base.WindowHeight = Height;
-                }
-            }
-        }
-
         private void Pipe_FileTransfer(string filename)
         {
             if (!JobRunning)
                 GCode.File.Load(filename);
-        }
-
-        public static void CloseFile()
-        {
-            GCode.File.Close();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

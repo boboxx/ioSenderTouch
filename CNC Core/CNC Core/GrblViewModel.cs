@@ -43,6 +43,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using CNC.Core.Comands;
 using CNC.GCode;
@@ -109,6 +110,7 @@ namespace CNC.Core
         public ICommand RapidOverRideReset { get; }
         public ICommand FeedOverRide { get; }
         public ICommand FeedOverRideReset { get; }
+        public ICommand ResetCommand { get; }
 
         public string AlarmConText
         {
@@ -241,8 +243,15 @@ namespace CNC.Core
             });
             RapidOverRide = new Command(SetRapidOverRide);
             WcsCommand = new Command(SetWcs);
+            ResetCommand = new Command(SetResetCommand);
             SetDefaults();
         }
+
+        private void SetResetCommand(object obj)
+        {
+            Grbl.Reset();
+        }
+
         private void SetDefaults()
         {
             SpindleOverRideValue = 10;
@@ -347,7 +356,7 @@ namespace CNC.Core
         private void ClearAlarm()
         {
             if (GrblState.State != GrblStates.Alarm) return;
-            Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK); ;
+            Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK);
         }
 
         private void Axisletter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1462,6 +1471,7 @@ namespace CNC.Core
         }
 
         public bool SysCommandsAlwaysAvailable { get; set; }
+        public int PollingInterval { get; set; }
 
         private bool DataIsEnumeration(string data)
         {
@@ -1663,6 +1673,7 @@ namespace CNC.Core
                 GrblReset = true;
                 OnGrblReset?.Invoke(data);
                 Message = msg;
+                ResetSystem();
                 _reset = false;
                 OnPropertyChanged(nameof(IsCheckMode));
                 OnPropertyChanged(nameof(IsSleepMode));
@@ -1711,6 +1722,52 @@ namespace CNC.Core
             }
 
             OnResponseReceived?.Invoke(data);
+        }
+
+        
+
+        private void ResetSystem()
+        {
+            int timeout = 5;
+            if (Poller.IsEnabled)
+            {
+                Poller.SetState(0);
+            }
+            {
+
+                while (!GrblInfo.Get())
+                {
+                    if (--timeout == 0)
+                    {
+                        Message = ("MsgNoResponse");
+                        
+                    }
+                    Thread.Sleep(500);
+                }
+                GrblAlarms.Get();
+                GrblErrors.Get();
+                GrblSettings.Load();
+                if (GrblInfo.IsGrblHAL)
+                {
+                    GrblParserState.Get();
+                    GrblWorkParameters.Get();
+                }
+                else
+                    GrblParserState.Get(true);
+            }
+
+            GrblCommand.ToolChange = GrblInfo.ManualToolChange ? "M61Q{0}" : "T{0}";
+            if (!Poller.IsEnabled)
+                Poller.SetState(PollingInterval);
+            Task.Factory.StartNew(DelayClearAlarm)
+            ;
+
+        }
+
+        private void DelayClearAlarm()
+        {
+            Thread.Sleep(PollingInterval*2);
+            ClearAlarm();
         }
     }
 }
