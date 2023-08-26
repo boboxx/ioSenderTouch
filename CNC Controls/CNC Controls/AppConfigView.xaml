@@ -19,8 +19,8 @@
     </UserControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Button x:Uid="btn_saveSettings" x:Name="btnSave" Content="Save settings" Margin="5" Padding="5,0" Click="btnSave_Click" Style="{StaticResource ConfigButtonStyle}"/>
-            <Button x:Uid="btn_saveKeyMap" x:Name="btnSaveKeyMap" Content="Save keymappings" Width="120" Margin="5" Padding="5,0" Click="btnSaveKeyMap_Click" Style="{StaticResource ConfigButtonStyle}"/>
+            <Button x:Uid="btn_saveSettings" x:Name="btnSave" Content="Save settings" Margin="5" Padding="5,0" Click="btnSave_Click" Height="45" Width="125"/>
+            <Button x:Uid="btn_saveKeyMap" x:Name="btnSaveKeyMap" Content="Save keymappings" Width="155" Margin="5" Height="45"  Click="btnSaveKeyMap_Click" />
         </StackPanel>
         <ItemsControl x:Name="xx" DockPanel.Dock="Top">
             <ItemsControl.ItemsPanel>

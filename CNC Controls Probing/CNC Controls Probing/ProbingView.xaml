@@ -43,9 +43,6 @@
     </UserControl.Resources>
     <DockPanel Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,8">
         <DockPanel x:Name="dp" DockPanel.Dock="Left" Margin="5,5,5,0" Width="270" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-            <!--StackPanel x:Name="droPanel" Visibility ="Collapsed" Margin="0,0,5,0" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left">
-                <Controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            </StackPanel>-->
             <StackPanel x:Name="t1" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch" DockPanel.Dock="Right" IsEnabled="{Binding Path=Grbl.IsJobRunning, Converter={StaticResource IsVisibleConverter}}" Margin="0,0,0,67">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Stretch">
                     <Label x:Uid="lbl_profile" x:Name="lblProfile" Content="Profile:" HorizontalContentAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Height="25" Width="48"/>

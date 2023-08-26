@@ -9,10 +9,10 @@
         <local:BoolToVisibleConverter x:Key="IsVisibleConverter" />
     </UserControl.Resources>
     <GroupBox  x:Uid="grp_coolant" x:Name="grpCoolant" Header="Coolant" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" MinHeight="135" Height="Auto">
-        <StackPanel HorizontalAlignment="Stretch" Margin="0,3,0,0" Grid.Row="1"  VerticalAlignment="Top" Width="Auto" Height="Auto">
-            <Button   x:Uid="lbl_flood" x:Name="chkFlood" Width="175"  Tag="Flood" Content="Flood"  VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="0,5,0,5"  VerticalAlignment="Top"  Click="chkBox_Click"/>
-            <Button x:Uid="lbl_mist" x:Name="chkMist"   Tag="Mist" Content="Mist" Width="175"   HorizontalAlignment="Stretch" Margin="0,5,0,5" VerticalAlignment="Top" Click="chkBox_Click"/>
-            <Button x:Uid="lbl_fan" x:Name="chkFan" Width="175"  Tag="Fan" Content="Fan"  Visibility="{Binding Path=HasFans, Mode=OneWay, Converter={StaticResource IsVisibleConverter}}" HorizontalAlignment="Stretch" Margin="0,5,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
+        <StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="1"  VerticalAlignment="Top" Width="Auto" Height="Auto">
+            <Button   x:Uid="lbl_flood" Height="45" x:Name="chkFlood" Width="175"  Tag="Flood" Content="Flood"  VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4"  VerticalAlignment="Top"  Click="chkBox_Click"/>
+            <Button x:Uid="lbl_mist" Height="45" x:Name="chkMist"   Tag="Mist" Content="Mist" Width="175"   HorizontalAlignment="Stretch" Margin="0,4" VerticalAlignment="Top" Click="chkBox_Click"/>
+            <Button x:Uid="lbl_fan" Height="45" x:Name="chkFan" Width="175"  Tag="Fan" Content="Fan"  Visibility="{Binding Path=HasFans, Mode=OneWay, Converter={StaticResource IsVisibleConverter}}" HorizontalAlignment="Stretch" Margin="0,5,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
         </StackPanel>
     </GroupBox>
 </UserControl>
