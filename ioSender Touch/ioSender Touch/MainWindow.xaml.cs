@@ -57,12 +57,13 @@ namespace ioSenderTouch
         private const string Version = "1.0.0";
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
-        public static CNC.Controls.Viewer.Viewer GCodeViewer = null; 
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
         private bool saveWinSize = false;
         private readonly GrblViewModel _viewModel;
         private readonly HomeView _homeView;
 
+        public string BaseWindowTitle { get; set; }
+        public bool JobRunning => _viewModel.IsJobRunning;
         public MainWindow()
         {
             CNC.Core.Resources.Path = AppDomain.CurrentDomain.BaseDirectory;
@@ -72,7 +73,7 @@ namespace ioSenderTouch
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
-           // _viewModel  = new GrblViewModel();
+            // _viewModel  = new GrblViewModel();
             BaseWindowTitle = Title;
             _viewModel = DataContext as GrblViewModel;
             _homeView = new HomeView(_viewModel);
@@ -83,14 +84,9 @@ namespace ioSenderTouch
             VerisonLabel.Content = $"{App_Name} {Version}";
         }
 
-        public string BaseWindowTitle { get; set; }
-
-
-        public bool JobRunning => _viewModel.IsJobRunning;
-
         private void Window_Load(object sender, EventArgs e)
         {
-            
+
             System.Threading.Thread.Sleep(50);
             Comms.com.PurgeQueue();
             if (!string.IsNullOrEmpty(AppConfig.Settings.FileName))
@@ -109,31 +105,14 @@ namespace ioSenderTouch
             GCode.File.AddTransformer(typeof(GCodeRotateViewModel), (string)FindResource("MenuRotate"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(ArcsToLines), (string)FindResource("MenuArcsToLines"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(GCodeCompress), (string)FindResource("MenuCompress"), UIViewModel.TransformMenuItems);
-            _homeView.ConfiguationLoaded(UIViewModel, AppConfig.Settings);
         }
-
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //if (!(e.Cancel = !menuFile.IsEnabled))
+            Comms.com.DataReceived -= _viewModel.DataReceived;
+            using (new UIUtils.WaitCursor())
             {
-                //UIViewModel.CurrentView.Activate(false, ViewType.Shutdown);
-
-                if (UIViewModel.Console != null)
-                    UIViewModel.Console.Close();
-#if ADD_CAMERA
-                if (UIViewModel.Camera != null)
-                {
-                    UIViewModel.Camera.CloseCamera();
-                    UIViewModel.Camera.Close();
-                }
-#endif
-                Comms.com.DataReceived -= _viewModel.DataReceived;
-                using (new UIUtils.WaitCursor())
-                {
-                    Comms.com.Close(); // disconnecting from websocket may take some time...
-                    AppConfig.Settings.Shutdown();
-                }
+                Comms.com.Close(); // disconnecting from websocket may take some time...
+                AppConfig.Settings.Shutdown();
             }
         }
         private void Pipe_FileTransfer(string filename)

@@ -53,7 +53,6 @@ namespace ioSenderTouch
             _model.PollingInterval = AppConfig.Settings.Base.PollInterval;
             InitSystem();
             GCode.File.FileLoaded += File_FileLoaded;
-            
         }
 
         private void BuildOptionalUi()
@@ -146,7 +145,6 @@ namespace ioSenderTouch
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             FillBorder.Child = _probeView;
-
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -156,9 +154,7 @@ namespace ioSenderTouch
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            
             FillBorder.Child = _grblAppSettings;
-
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
@@ -199,11 +195,6 @@ namespace ioSenderTouch
             }
             _grblAppSettings.Setup(controls, AppConfig.Settings);
 
-        }
-
-        public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
-        {
-            //_grblAppSettings.Setup(uiViewModel, settings);
         }
 
         private void File_FileLoaded(object sender, bool fileLoaded)
