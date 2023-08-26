@@ -102,7 +102,7 @@ namespace ioSenderTouch.Controls
             {
                 _keyBoard = new VirtualKeyBoard
                 {
-                    Owner =  Application.Current.MainWindow,
+                    Owner = Application.Current.MainWindow,
                     WindowStartupLocation = WindowStartupLocation.Manual,
                     Left = 750,
                     Top = 400,
@@ -110,8 +110,8 @@ namespace ioSenderTouch.Controls
                 textBox.MouseDoubleClick += TextBox_GotFocus;
                 cbxMacro.MouseDoubleClick += CbxMacro_GotFocus;
             }
-          
-           
+
+
         }
 
         private void CbxMacro_GotFocus(object sender, RoutedEventArgs e)
@@ -126,7 +126,7 @@ namespace ioSenderTouch.Controls
             {
                 cbxMacro.Text = t;
             }
-            if(_keyBoard.Visibility==Visibility.Visible)return;
+            if (_keyBoard.Visibility == Visibility.Visible) return;
             _keyBoard.Show();
             _keyBoard.TextChanged -= TextChanged;
             _keyBoard.TextChanged += TextChanged;
@@ -168,7 +168,7 @@ namespace ioSenderTouch.Controls
             {
                 Console.WriteLine(ex);
             }
-            
+
         }
         void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -178,16 +178,20 @@ namespace ioSenderTouch.Controls
 
         void btnOk_Click(object sender, RoutedEventArgs e)
         {
-
-            if (_macroData.Macro != null && _macroData.Code == string.Empty)
+            if (_macroData == null)
+            {
+                
+                BuildMacroCollection();
+            }
+            if (_macroData?.Macro != null && _macroData.Code == string.Empty)
                 _macroData.Macros.Remove(_macroData.Macro);
 
-            if (_macroData.Macro == null && _macroData.LastMacro != null)
+            if (_macroData?.Macro == null && _macroData?.LastMacro != null)
             {
                 _macroData.LastMacro.Name = cbxMacro.Text;
                 _macroData.LastMacro.ConfirmOnExecute = _macroData.ConfirmOnExecute;
             }
-            AppConfig.Settings.Base.Macros = _macroData.Macros;
+            AppConfig.Settings.Base.Macros = _macroData?.Macros;
             AppConfig.Settings.Save();
             cbxMacro.Text = string.Empty;
             textBox.Text = string.Empty;
@@ -197,17 +201,36 @@ namespace ioSenderTouch.Controls
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             int id = 0;
-
-            foreach (var macro in _macroData.Macros)
-                id = Math.Max(id, macro.Id);
-
-            addMacro = new CNC.GCode.Macro
+            if (_macroData == null)
             {
-                Id = id + 1,
-                Name = cbxMacro.Text
+                BuildMacroCollection();
+            }
+
+            if (_macroData != null)
+            {
+                foreach (var macro in _macroData.Macros)
+                    id = Math.Max(id, macro.Id);
+
+                addMacro = new CNC.GCode.Macro
+                {
+                    Id = id + 1,
+                    Name = cbxMacro.Text
+                };
+                _macroData.Macros.Add(addMacro);
+                _macroData.Macro = addMacro;
+            }
+        }
+
+        private void BuildMacroCollection()
+        {
+            _macroData = new MacroData
+            {
+                Macros = AppConfig.Settings.Base.Macros,
+
             };
-            _macroData.Macros.Add(addMacro);
-            _macroData.Macro = addMacro;
+            DataContext = _macroData;
+            if (_macroData.Macros.Count > 0)
+                _macroData.Macro = _macroData.Macros[0];
         }
     }
 

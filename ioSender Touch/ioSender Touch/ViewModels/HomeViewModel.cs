@@ -157,7 +157,7 @@ namespace ioSenderTouch.ViewModels
 
         public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
         {
-            _grblAppSettings.Setup(uiViewModel, settings);
+            //_grblAppSettings.Setup(uiViewModel, settings);
         }
 
         public void SetNewView(object x)
