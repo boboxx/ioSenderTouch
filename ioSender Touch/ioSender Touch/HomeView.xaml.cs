@@ -2,11 +2,9 @@
 using System;
 using System.ComponentModel;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using CNC.Controls;
 using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
@@ -46,207 +44,12 @@ namespace ioSenderTouch
             _utilityView = new UtilityView(_model);
             FillBorder.Child = _renderView;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
-            DRO.DROEnabledChanged += DRO_DROEnabledChanged;
-            DataContextChanged += View_DataContextChanged;
             InitSystem();
+            GCode.File.FileLoaded += File_FileLoaded;
         }
 
-        private void View_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is GrblViewModel)
-            {
-                var model = (GrblViewModel)e.NewValue;
-                model.PropertyChanged += OnDataContextPropertyChanged;
-                DataContextChanged -= View_DataContextChanged;
-            }
-        }
+        
 
-        private void OnDataContextPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is GrblViewModel viewModel)
-            {
-                switch (e.PropertyName)
-                {
-                    case nameof(GrblViewModel.GrblState):
-                        if (Controller != null && !Controller.ResetPending)
-                        {
-                            if (isBooted && initOK == false && viewModel.GrblState.State != GrblStates.Alarm)
-                                Dispatcher.BeginInvoke(new System.Action(() => InitSystem()), DispatcherPriority.ApplicationIdle);
-                        }
-                        break;
-
-                    case nameof(GrblViewModel.IsGCLock):
-
-                        break;
-
-                    case nameof(GrblViewModel.IsSleepMode):
-
-                        break;
-
-                    case nameof(GrblViewModel.IsJobRunning):
-
-                        if (GrblInfo.ManualToolChange)
-                            GrblCommand.ToolChange = viewModel.IsJobRunning ? "T{0}M6" : "M61Q{0}";
-                        break;
-
-                    case nameof(GrblViewModel.IsToolChanging):
-
-                        break;
-
-                    case nameof(GrblViewModel.Tool):
-                        if (GrblInfo.ManualToolChange && viewModel.Tool != GrblConstants.NO_TOOL)
-                            GrblWorkParameters.RemoveNoTool();
-                        break;
-
-                    case nameof(GrblViewModel.GrblReset):
-                        if (viewModel.IsReady)
-                        {
-                            if (!Controller.ResetPending && viewModel.GrblReset)
-                            {
-                                initOK = null;
-                                Dispatcher.BeginInvoke(new System.Action(() => Activate(true, ViewType.GRBL)), DispatcherPriority.ApplicationIdle);
-                            }
-                        }
-                        break;
-
-                    case nameof(GrblViewModel.ParserState):
-                        if (!Controller.ResetPending && viewModel.GrblReset)
-                        {
-
-                            viewModel.GrblReset = false;
-                        }
-                        break;
-
-                    case nameof(GrblViewModel.FileName):
-                        string filename = viewModel.FileName;
-                        MainWindow.ui.WindowTitle = filename;
-
-                        if (string.IsNullOrEmpty(filename))
-                            MainWindow.CloseFile();
-                        else if (viewModel.IsSDCardJob)
-                        {
-                            //TODO set up sd card view 
-
-                            //MainWindow.EnableView(false, ViewType.GCodeViewer);
-                        }
-                        else if (AppConfig.Settings.GCodeViewer.IsEnabled)
-                        {
-                            if (filename.StartsWith("Wizard:"))
-                            {
-
-                                _renderView.Open(GCode.File.Tokens);
-                            }
-                            else if (!string.IsNullOrEmpty(filename))
-                            {
-
-                                GCodeSender.EnablePolling(false);
-                                _renderView.Open(GCode.File.Tokens);
-                                GCodeSender.EnablePolling(true);
-                            }
-                        }
-
-                        break;
-                }
-            }
-        }
-
-
-        public ViewType ViewType { get { return ViewType.GRBL; } }
-
-        public void Activate(bool activate, ViewType chgMode)
-        {
-            if (activate)
-            {
-                GCodeSender.RewindFile();
-                GCodeSender.CallHandler(GCode.File.IsLoaded ? StreamingState.Idle : (_model.IsSDCardJob ? StreamingState.Start : StreamingState.NoFile), false);
-
-                _model.ResponseLogFilterOk = AppConfig.Settings.Base.FilterOkResponse;
-
-                if (Controller == null)
-                    Controller = new Controller(_model);
-
-                if (initOK != true)
-                {
-                    focusedControl = this;
-
-                    switch (Controller.Restart())
-                    {
-                        case Controller.RestartResult.Ok:
-                            if (!isBooted)
-                                Dispatcher.BeginInvoke(new System.Action(() => OnBooted()), DispatcherPriority.ApplicationIdle);
-                            initOK = InitSystem();
-                            break;
-
-                        case Controller.RestartResult.Close:
-                            MainWindow.ui.Close();
-                            break;
-
-                        case Controller.RestartResult.Exit:
-                            Environment.Exit(-1);
-                            break;
-                    }
-
-                    _model.Message = Controller.Message;
-                }
-
-                if (initOK == null)
-                    initOK = false;
-
-
-                if (GCode.File.IsLoaded)
-                    MainWindow.ui.WindowTitle = ((GrblViewModel)DataContext).FileName;
-
-                _model.Keyboard.JogStepDistance = AppConfig.Settings.Jog.LinkStepJogToUI ? AppConfig.Settings.JogUiMetric.Distance0 : AppConfig.Settings.Jog.StepDistance;
-                _model.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowDistance;
-                _model.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastDistance;
-                _model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Step] = AppConfig.Settings.Jog.StepFeedrate;
-                _model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowFeedrate;
-                _model.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastFeedrate;
-
-                _model.Keyboard.IsJoggingEnabled = AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI;
-
-                if (!GrblInfo.IsGrblHAL)
-                    _model.Keyboard.IsContinuousJoggingEnabled = AppConfig.Settings.Jog.KeyboardEnable;
-            }
-            else if (ViewType != ViewType.Shutdown)
-            {
-                DRO.IsFocusable = false;
-
-                focusedControl = focusedControl = AppConfig.Settings.Base.KeepMdiFocus &&
-                                  Keyboard.FocusedElement is TextBox &&
-                                   (Keyboard.FocusedElement as TextBox).Tag is string &&
-                                    (string)(Keyboard.FocusedElement as TextBox).Tag == "MDI"
-                                  ? Keyboard.FocusedElement
-                                  : this;
-            }
-
-            if (GCodeSender.Activate(activate))
-            {
-
-                Task.Delay(500).ContinueWith(t => DRO.EnableFocus());
-                Application.Current.Dispatcher.BeginInvoke(new System.Action(() =>
-                {
-                    focusedControl.Focus();
-                }), DispatcherPriority.Render);
-            }
-        }
-
-        public void CloseFile()
-        {
-            _renderView.Close();
-        }
-
-        private void OnBooted()
-        {
-            isBooted = true;
-            string filename = CNC.Core.Resources.Path + string.Format("KeyMap{0}.xml", (int)AppConfig.Settings.Jog.Mode);
-
-            if (System.IO.File.Exists(filename))
-                _model.Keyboard.LoadMappings(filename);
-
-            if (GrblInfo.NumAxes > 3)
-                GCode.File.AddTransformer(typeof(GCodeWrapViewModel), "Wrap to rotary (WIP)", MainWindow.UIViewModel.TransformMenuItems);
-        }
 
         private bool InitSystem()
         {
@@ -280,13 +83,6 @@ namespace ioSenderTouch
 
             GrblCommand.ToolChange = GrblInfo.ManualToolChange ? "M61Q{0}" : "T{0}";
 
-            if (AppConfig.Settings.Jog.Mode == JogConfig.JogMode.Keypad)
-            {
-                jogControl.Visibility = Visibility.Hidden;
-                //joggerRow.MaxHeight = 0;
-            }
-
-
 
             if (_model.HasSDCard)
             {
@@ -306,16 +102,6 @@ namespace ioSenderTouch
 
             }
             return true;
-        }
-
-
-
-        #region UIevents
-
-        void DRO_DROEnabledChanged(bool enabled)
-        {
-            if (!enabled)
-                Focus();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -339,7 +125,6 @@ namespace ioSenderTouch
             return _model.Keyboard.ProcessKeypress(e, !(MdiControl.IsFocused || DRO.IsFocused || spindleControl.IsFocused || workParametersControl.IsFocused));
         }
 
-        #endregion
         private void Button_ClickSDView(object sender, RoutedEventArgs e)
         {
             FillBorder.Child = _sdView;
@@ -362,6 +147,7 @@ namespace ioSenderTouch
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            
             FillBorder.Child = _grblAppSettings;
 
         }
@@ -383,6 +169,23 @@ namespace ioSenderTouch
         public void ConfiguationLoaded(UIViewModel uiViewModel, AppConfig settings)
         {
             _grblAppSettings.Setup(uiViewModel, settings);
+        }
+
+        private void File_FileLoaded(object sender, bool fileLoaded)
+        {
+            if (fileLoaded) return;
+            FileClosedEnableConsole();
+        }
+
+        private void FileClosedEnableConsole()
+        {
+            if (CodeListControl.Visibility == Visibility.Visible)
+            {
+                CodeListControl.Visibility = Visibility.Hidden;
+                ConsoleControl.Visibility = Visibility.Visible;
+            }
+
+            btnShowConsole.Content = ConsoleControl.Visibility == Visibility.Hidden ? "Console" : "GCode Viewer";
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

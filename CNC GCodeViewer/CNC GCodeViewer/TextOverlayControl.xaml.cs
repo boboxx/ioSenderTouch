@@ -39,6 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using CNC.Core;
 
 namespace CNC.Controls.Viewer
@@ -49,16 +50,22 @@ namespace CNC.Controls.Viewer
     public partial class TextOverlayControl : UserControl
     {
         GrblViewModel model = null;
-
+        
         public TextOverlayControl()
         {
             InitializeComponent();
+            
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if(DataContext is GrblViewModel)
+            if (DataContext is GrblViewModel)
+            {
                 model = DataContext as GrblViewModel;
+               Foreground =  AppConfig.Settings.GCodeViewer.BlackBackground? 
+                   Brushes.White : Brushes.Black;
+            }
+               
 
             if (Visibility != Visibility.Visible)
                 DataContext = null;
@@ -66,6 +73,8 @@ namespace CNC.Controls.Viewer
 
         private void OnVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            if (DataContext is GrblViewModel)
+                model = DataContext as GrblViewModel;
             DataContext = (bool)e.NewValue ? model : null;
         }
     }

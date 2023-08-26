@@ -32,7 +32,6 @@ namespace ioSenderTouch.ViewModels
         private OffsetView _offsetView;
         private UtilityView _utilityView;
 
-        public GrblViewModel GrblViewModel { get; set; }
         public ICommand ChangeView { get; }
         public UserControl View
         {
@@ -57,169 +56,11 @@ namespace ioSenderTouch.ViewModels
             AppConfig.Settings.SetupAndOpen(_grblViewModel, Application.Current.Dispatcher);
             InitSystem();
             ChangeView = new Command(SetNewView);
-            _grblViewModel.PropertyChanged += OnDataContextPropertyChanged;
+           
 
         }
 
-        private void OnDataContextPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-
-            switch (e.PropertyName)
-            {
-                case nameof(GrblViewModel.GrblState):
-                    if (_controller != null && !_controller.ResetPending)
-                    {
-                        if (isBooted && initOK == false && _grblViewModel.GrblState.State != GrblStates.Alarm)
-                            InitSystem();
-                    }
-                    break;
-
-                case nameof(GrblViewModel.IsGCLock):
-
-                    break;
-
-                case nameof(GrblViewModel.IsSleepMode):
-
-                    break;
-
-                case nameof(GrblViewModel.IsJobRunning):
-
-                    if (GrblInfo.ManualToolChange)
-                        GrblCommand.ToolChange = _grblViewModel.IsJobRunning ? "T{0}M6" : "M61Q{0}";
-                    break;
-
-                case nameof(GrblViewModel.IsToolChanging):
-
-                    break;
-
-                case nameof(GrblViewModel.Tool):
-                    if (GrblInfo.ManualToolChange && _grblViewModel.Tool != GrblConstants.NO_TOOL)
-                        GrblWorkParameters.RemoveNoTool();
-                    break;
-
-                case nameof(GrblViewModel.GrblReset):
-                    if (_grblViewModel.IsReady)
-                    {
-                        if (!_controller.ResetPending && _grblViewModel.GrblReset)
-                        {
-                            initOK = null;
-                            Activate(true, ViewType.GRBL);
-                        }
-                    }
-                    break;
-                case nameof(GrblViewModel.ParserState):
-                    if (!_controller.ResetPending && _grblViewModel.GrblReset)
-                    {
-
-                        _grblViewModel.GrblReset = false;
-                    }
-                    break;
-
-                case nameof(GrblViewModel.FileName):
-                    string filename = _grblViewModel.FileName;
-                    MainWindow.ui.WindowTitle = filename;
-
-                    if (string.IsNullOrEmpty(filename))
-                        MainWindow.CloseFile();
-                    else if (_grblViewModel.IsSDCardJob)
-                    {
-                        //TODO set up sd card view 
-
-                        //MainWindow.EnableView(false, ViewType.GCodeViewer);
-                    }
-                    else if (AppConfig.Settings.GCodeViewer.IsEnabled)
-                    {
-                        if (filename.StartsWith("Wizard:"))
-                        {
-
-                            _renderView.Open(GCode.File.Tokens);
-                        }
-                        else if (!string.IsNullOrEmpty(filename))
-                        {
-                            _grblViewModel.Poller.SetState(0);
-                            _renderView.Open(GCode.File.Tokens);
-                            _grblViewModel.Poller.SetState(AppConfig.Settings.Base.PollInterval);
-                            _renderView.Open(GCode.File.Tokens);
-                        }
-                    }
-
-                    break;
-
-            }
-        }
-
-        public void Activate(bool activate, ViewType chgMode)
-        {
-            if (activate)
-            {
-                //GCodeSender.RewindFile();
-                //GCodeSender.CallHandler(GCode.File.IsLoaded ? StreamingState.Idle : (_grblViewModel.IsSDCardJob ? StreamingState.Start : StreamingState.NoFile), false);
-
-                _grblViewModel.ResponseLogFilterOk = AppConfig.Settings.Base.FilterOkResponse;
-
-                if (_controller == null)
-                    _controller = new Controller(_grblViewModel);
-
-                if (initOK != true)
-                {
-                    switch (_controller.Restart())
-                    {
-                        case Controller.RestartResult.Ok:
-                            if (!isBooted)
-                                OnBooted();
-                            initOK = InitSystem();
-                            break;
-
-                        case Controller.RestartResult.Close:
-                            MainWindow.ui.Close();
-                            break;
-
-                        case Controller.RestartResult.Exit:
-                            Environment.Exit(-1);
-                            break;
-                    }
-
-                    _grblViewModel.Message = _controller.Message;
-                }
-
-                if (initOK == null)
-                    initOK = false;
-
-
-                if (GCode.File.IsLoaded)
-                    MainWindow.ui.WindowTitle = _grblViewModel.FileName;
-
-                _grblViewModel.Keyboard.JogStepDistance = AppConfig.Settings.Jog.LinkStepJogToUI ? AppConfig.Settings.JogUiMetric.Distance0 : AppConfig.Settings.Jog.StepDistance;
-                _grblViewModel.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowDistance;
-                _grblViewModel.Keyboard.JogDistances[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastDistance;
-                _grblViewModel.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Step] = AppConfig.Settings.Jog.StepFeedrate;
-                _grblViewModel.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Slow] = AppConfig.Settings.Jog.SlowFeedrate;
-                _grblViewModel.Keyboard.JogFeedrates[(int)KeypressHandler.JogMode.Fast] = AppConfig.Settings.Jog.FastFeedrate;
-                _grblViewModel.Keyboard.IsJoggingEnabled = AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI;
-
-                if (!GrblInfo.IsGrblHAL)
-                    _grblViewModel.Keyboard.IsContinuousJoggingEnabled = AppConfig.Settings.Jog.KeyboardEnable;
-            }
-
-        }
-
-        public void CloseFile()
-        {
-            _renderView.Close();
-        }
-
-        private void OnBooted()
-        {
-            isBooted = true;
-            string filename = Resources.Path + $"KeyMap{(int)AppConfig.Settings.Jog.Mode}.xml";
-
-            if (System.IO.File.Exists(filename))
-                _grblViewModel.Keyboard.LoadMappings(filename);
-
-            if (GrblInfo.NumAxes > 3)
-                GCode.File.AddTransformer(typeof(GCodeWrapViewModel), "Wrap to rotary (WIP)", MainWindow.UIViewModel.TransformMenuItems);
-        }
-
+        
         private bool InitSystem()
         {
             initOK = true;
@@ -272,6 +113,8 @@ namespace ioSenderTouch.ViewModels
             }
             return true;
         }
+
+
         private void Button_ClickSDView(object sender, RoutedEventArgs e)
         {
             //  FillBorder.Child = _sdView;
