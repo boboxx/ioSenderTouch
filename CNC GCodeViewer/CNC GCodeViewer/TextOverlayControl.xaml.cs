@@ -65,8 +65,7 @@ namespace CNC.Controls.Viewer
                Foreground =  AppConfig.Settings.GCodeViewer.BlackBackground? 
                    Brushes.White : Brushes.Black;
             }
-               
-
+            
             if (Visibility != Visibility.Visible)
                 DataContext = null;
         }

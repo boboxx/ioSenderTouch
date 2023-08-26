@@ -346,11 +346,11 @@ namespace CNC.Controls
                 if (alwaysScrollToEnd)
                 {
                     tb.ScrollToEnd();
-                    tb.TextChanged += TextChanged;
+                    //tb.TextChanged += TextChanged;
                 }
                 else
                 {
-                    tb.TextChanged -= TextChanged;
+                    //tb.TextChanged -= TextChanged;
                 }
             }
             else
@@ -381,7 +381,7 @@ namespace CNC.Controls
 
         private static void TextChanged(object sender, TextChangedEventArgs e)
         {
-            ((TextBox)sender).ScrollToEnd();
+            //((TextBox)sender).ScrollToEnd();
         }
     }
 }

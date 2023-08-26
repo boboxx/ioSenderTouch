@@ -130,14 +130,14 @@ namespace CNC.Controls
 
             for (int i = 0; i < streamingHandlers.Length; i++)
                 streamingHandlers[i].Handler = (StreamingHandler)i;
-
-            //            Thread.Sleep(100);
-
             Loaded += JobControl_Loaded;
         }
 
         private void JobControl_Loaded(object sender, RoutedEventArgs e)
         {
+            serialSize = Math.Min(AppConfig.Settings.Base.MaxBufferSize, (int)(GrblInfo.SerialBufferSize * 0.9f));
+            GCode.File.Parser.Dialect = GrblInfo.IsGrblHAL ? Dialect.GrblHAL : Dialect.Grbl;
+            GCode.File.Parser.ExpressionsSupported = GrblInfo.ExpressionsSupported;
             model = Grbl.GrblViewModel;
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
@@ -190,8 +190,7 @@ namespace CNC.Controls
             GCodeParser.IgnoreM7 = AppConfig.Settings.Base.IgnoreM7;
             GCodeParser.IgnoreM8 = AppConfig.Settings.Base.IgnoreM8;
             GCodeParser.IgnoreG61G64 = AppConfig.Settings.Base.IgnoreG61G64;
-
-            useBuffering = AppConfig.Settings.Base.UseBuffering; // && GrblInfo.IsGrblHAL;
+            useBuffering = AppConfig.Settings.Base.UseBuffering;
         }
 
         private void JobControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -1056,21 +1055,11 @@ namespace CNC.Controls
         {
             if (streamingHandler.Count)
             {
-                //if(response == "pending")
-                //{
-                //    job.ToolChangeLine = job.PendingLine - 1;
-                //    GCode.File.Data.Rows[job.ToolChangeLine]["Sent"] = response;
-                //    return;
-                //}
-
                 if (job.ACKPending > 0)
                     job.ACKPending--;
 
                 if (!job.IsSDFile && (job.IsChecking || (string)GCode.File.Data.Rows[job.PendingLine]["Sent"] == "*"))
                     job.serialUsed = Math.Max(0, job.serialUsed - (int)GCode.File.Data.Rows[job.PendingLine]["Length"]);
-
-                //if (streamingState == StreamingState.Send || streamingState == StreamingState.Paused)
-                //{
                 bool isError = response.StartsWith("error");
 
                 if (!(job.IsSDFile || job.IsChecking))
@@ -1102,8 +1091,6 @@ namespace CNC.Controls
                     streamingHandler.Call(StreamingState.JobFinished, true);
                 else if (streamingHandler.Count && response == "ok")
                     SendNextLine();
-                //}
-
                 if (job.Transferred)
                 {
                     job.Transferred = false;
@@ -1150,7 +1137,7 @@ namespace CNC.Controls
             while (job.NextRow != null)
             {
 
-                string line = (string)job.NextRow["Data"]; //  GCodeUtils.StripSpaces((string)currentRow["Data"]);
+                string line = (string)job.NextRow["Data"];;
 
                 // Send comment lines as empty comment
                 if ((bool)job.NextRow["IsComment"])

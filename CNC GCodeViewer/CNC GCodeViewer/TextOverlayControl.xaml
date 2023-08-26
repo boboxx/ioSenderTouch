@@ -21,14 +21,14 @@
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        <TextBlock HorizontalAlignment="Right">
+        <!--<TextBlock HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource PositionConverter}">
                     <Binding Path="MachinePosition" Mode="OneWay"/>
                     <Binding Path="Format" Mode="OneWay"/>
                 </MultiBinding>
             </TextBlock.Text>
-        </TextBlock>
+        </TextBlock>-->
         <TextBlock HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource FeedSpeedConverter}">
