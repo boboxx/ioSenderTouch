@@ -264,7 +264,7 @@ namespace CNC.Controls
 
                 default:
                     widget.Format.Replace(" ", "");
-                    wTextBox = new TextBox
+                    wTextBox = new ConfigTextBox()
                     {
                         Name = "tb_name_xxx",
                         MaxLength = widget.Format.Length,

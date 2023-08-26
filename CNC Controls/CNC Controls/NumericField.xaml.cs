@@ -50,52 +50,16 @@ namespace CNC.Controls
     /// Interaction logic for NumericField.xaml
     /// </summary>
     public partial class NumericField : UserControl
-    {
+    {   
+
         protected string format;
         protected bool metric = true, allow_dp = true, allow_sign = false;
         protected int precision = 3;
-        private VirtualKeyBoard _keyBoard;
 
         public NumericField()
         {
             InitializeComponent();
-
             data.DataContext = this;
-            Loaded += NumericField_Loaded;
-            this.LostFocus += ControlLostFocus;
-            this.IsVisibleChanged += ControlIsVisibleChanged;
-        }
-
-        private void ControlIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is bool b)
-            {
-                if (!b)
-                {
-                    _keyBoard.Close();
-                }
-
-            }
-        }
-
-        private void ControlLostFocus(object sender, RoutedEventArgs e)
-        {
-            _keyBoard.Close();
-        }
-
-        private void NumericField_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (_keyBoard == null)
-            {
-                _keyBoard = new VirtualKeyBoard
-                {
-                    Owner = Application.Current.MainWindow,
-                    WindowStartupLocation = WindowStartupLocation.Manual,
-                    Left = 875,
-                    Top = 500,
-                    Topmost = true
-                };
-            }
         }
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericField), new PropertyMetadata(double.NaN, new PropertyChangedCallback(OnValueChanged)), new ValidateValueCallback(IsValidReading));
@@ -180,30 +144,7 @@ namespace CNC.Controls
             data.Clear();
         }
 
-        private void Data_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if ((sender is NumericTextBox uiElement))
-            {
-                void Close(object senders, EventArgs es)
-                {
-                    _keyBoard.VBClosing -= Close;
-                    _keyBoard.TextChanged -= TextChanged;
-                }
-
-                void TextChanged(object senders, string t)
-                {
-                    if (double.TryParse(t, out var num))
-                        uiElement.Value = num;
-                }
-
-                if (_keyBoard.Visibility == Visibility.Visible) return;
-                _keyBoard.Show();
-                _keyBoard.TextChanged -= TextChanged;
-                _keyBoard.TextChanged += TextChanged;
-                _keyBoard.VBClosing -= Close;
-                _keyBoard.VBClosing += Close;
-            }
-        }
+      
     }
 }
 

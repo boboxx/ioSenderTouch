@@ -42,6 +42,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CNC.Controls.Views;
 
 namespace CNC.Controls
 {
@@ -50,14 +51,75 @@ namespace CNC.Controls
         private NumericProperties np = new NumericProperties();
 
         private bool updateText = true;
-
+        private VirtualKeyBoard _keyBoard;
         public NumericTextBox()
         {
             Height = 24;
             HorizontalContentAlignment = HorizontalAlignment.Right;
             VerticalContentAlignment = VerticalAlignment.Bottom;
             TextWrapping = TextWrapping.NoWrap;
+            Loaded += NumericTextBox_Loaded;
+            IsVisibleChanged += NumericTextBox_IsVisibleChanged;
+            LostFocus += NumericTextBox_LostFocus;
+            MouseDoubleClick += NumericTextBox_MouseDoubleClick;
         }
+
+        private void NumericTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((sender is NumericTextBox uiElement))
+            {
+                void Close(object senders, EventArgs es)
+                {
+                    _keyBoard.VBClosing -= Close;
+                    _keyBoard.TextChanged -= TextChanged;
+                }
+
+                void TextChanged(object senders, string t)
+                {
+                    if (double.TryParse(t, out var num))
+                        uiElement.Value = num;
+                }
+
+                if (_keyBoard.Visibility == Visibility.Visible) return;
+                _keyBoard.Show();
+                _keyBoard.TextChanged -= TextChanged;
+                _keyBoard.TextChanged += TextChanged;
+                _keyBoard.VBClosing -= Close;
+                _keyBoard.VBClosing += Close;
+            }
+        }
+
+        private void NumericTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _keyBoard.Close();
+        }
+
+        private void NumericTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is bool b)
+            {
+                if (!b)
+                {
+                    _keyBoard.Close();
+                }
+            }
+        }
+
+        private void NumericTextBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_keyBoard == null)
+            {
+                _keyBoard = new VirtualKeyBoard
+                {
+                    Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Left = 875,
+                    Top = 500,
+                    Topmost = true
+                };
+            }
+        }
+
 
         public new string Text { get { return base.Text; } set { base.Text = value; } }
         public NumberStyles Styles { get { return np.Styles; } }
