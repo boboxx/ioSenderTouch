@@ -192,7 +192,7 @@ namespace CNC.Controls
                             wCheckBox.Margin = new Thickness(0, 6, 0, 0);
                         }
                         else
-                            grid.Height = 20;
+                            grid.Height = 25;
                         grid.Children.Add(wCheckBox);
                         Grid.SetColumn(wCheckBox, 1);
                         wCheckBox.Click += wWidget_TextChanged;

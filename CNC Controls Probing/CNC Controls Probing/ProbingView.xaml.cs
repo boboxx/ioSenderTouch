@@ -37,12 +37,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+using System;
 using System.Windows;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.Threading.Tasks;
+using CNC.Controls.Views;
 using CNC.Core;
 using CNC.GCode;
 
@@ -60,13 +61,14 @@ namespace CNC.Controls.Probing
         private ProbingViewModel model = null;
         private ProbingProfiles profiles = new ProbingProfiles();
         private IInputElement focusedControl = null;
-        private  GrblViewModel _grblViewModel;
+        private GrblViewModel _grblViewModel;
+        private VirtualKeyBoard _keyBoard;
 
         public ProbingView()
         {
             InitializeComponent();
             profiles.Load();
-          
+
         }
         public ProbingView(GrblViewModel grbl)
         {
@@ -74,12 +76,30 @@ namespace CNC.Controls.Probing
             InitializeComponent();
             profiles.Load();
             DataContext = model = new ProbingViewModel(_grblViewModel, profiles);
+            this.LostFocus += ProbingView_LostFocus;
+            this.IsVisibleChanged += ProbingView_IsVisibleChanged;
         }
 
+        private void ProbingView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is bool b)
+            {
+                if (!b)
+                {
+                    _keyBoard.Close();
+                }
+
+            }
+        }
+
+        private void ProbingView_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _keyBoard.Close();
+        }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-           
+
 
             if (!keyboardMappingsOk && DataContext is GrblViewModel)
             {
@@ -89,6 +109,68 @@ namespace CNC.Controls.Probing
                 keyboard.AddHandler(Key.S, ModifierKeys.Alt, StopProbe, this);
                 keyboard.AddHandler(Key.C, ModifierKeys.Alt, ProbeConnectedToggle, this);
                 _grblViewModel.OnCameraProbe += addCameraPosition;
+
+            }
+
+            if (_keyBoard == null)
+            {
+                _keyBoard = new VirtualKeyBoard
+                {
+                    Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Left = 750,
+                    Top = 400,
+                    Topmost = true
+                };
+            }
+
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //if ((sender is NumericField uiElement))
+            //{
+            //    void Close(object senders, EventArgs es)
+            //    {
+            //        _keyBoard.VBClosing -= Close;
+            //        _keyBoard.TextChanged -= TextChanged;
+            //    }
+
+            //    void TextChanged(object senders, string t)
+            //    {
+            //        uiElement.Value = double.Parse(t);
+            //    }
+
+            //    if (_keyBoard.Visibility == Visibility.Visible) return;
+            //    _keyBoard.Show();
+            //    _keyBoard.TextChanged -= TextChanged;
+            //    _keyBoard.TextChanged += TextChanged;
+            //    _keyBoard.VBClosing -= Close;
+            //    _keyBoard.VBClosing += Close;
+            //}
+        }
+
+        private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if ((sender is ComboBox uiElement))
+            {
+                void Close(object senders, EventArgs es)
+                {
+                    _keyBoard.VBClosing -= Close;
+                    _keyBoard.TextChanged -= TextChanged;
+                }
+
+                void TextChanged(object senders, string t)
+                {
+                    uiElement.Text = t;
+                }
+
+                if (_keyBoard.Visibility == Visibility.Visible) return;
+                _keyBoard.Show();
+                _keyBoard.TextChanged -= TextChanged;
+                _keyBoard.TextChanged += TextChanged;
+                _keyBoard.VBClosing -= Close;
+                _keyBoard.VBClosing += Close;
             }
         }
 
@@ -96,7 +178,7 @@ namespace CNC.Controls.Probing
         {
             if (_grblViewModel.IsProbing)
             {
-                if(model.CameraPositions == 0)
+                if (model.CameraPositions == 0)
                 {
                     model.PreviewText = string.Empty;
                     model.PreviewEnable = true;
@@ -105,7 +187,7 @@ namespace CNC.Controls.Probing
                 model.Positions.Add(position);
                 var positions = model.CameraPositions = model.Positions.Count;
 
-                if(positions == model.CameraPositions) // model.CameraPositions may have been changed elsewhere!
+                if (positions == model.CameraPositions) // model.CameraPositions may have been changed elsewhere!
                     model.PreviewText += (model.PreviewText == string.Empty ? string.Empty : "\n") + string.Format((string)FindResource("CameraPosition"), model.CameraPositions, position.X.ToInvariantString(), position.Y.ToInvariantString());
 
                 Jog.Focus();
@@ -137,10 +219,10 @@ namespace CNC.Controls.Probing
 
         private bool StartProbe(Key key)
         {
-            
-                focusedControl = Keyboard.FocusedElement;
-                getView(tab.SelectedItem as TabItem)?.Start(model.PreviewEnable);
-        
+
+            focusedControl = Keyboard.FocusedElement;
+            getView(tab.SelectedItem as TabItem)?.Start(model.PreviewEnable);
+
 
             return true;
         }
@@ -181,7 +263,8 @@ namespace CNC.Controls.Probing
         {
             var grbl = sender as GrblViewModel;
 
-            switch (e.PropertyName) {
+            switch (e.PropertyName)
+            {
 
                 case nameof(GrblViewModel.IsJobRunning):
                     foreach (TabItem tabitem in tab.Items)
@@ -342,11 +425,11 @@ namespace CNC.Controls.Probing
             switch ((string)((MenuItem)sender).Header)
             {
                 case "Add":
-                    cbxProfile.SelectedValue = profiles.Add(cbxProfile.Text, model);                
+                    cbxProfile.SelectedValue = profiles.Add(cbxProfile.Text, model);
                     break;
 
                 case "Update":
-                    if(model.Profile != null)
+                    if (model.Profile != null)
                         profiles.Update(model.Profile.Id, cbxProfile.Text, model);
                     break;
 
@@ -381,7 +464,7 @@ namespace CNC.Controls.Probing
         {
             if (!(e.Handled = ProcessKeyPreview(e)))
             {
-                if (Keyboard.Modifiers == (ModifierKeys.Control|ModifierKeys.Shift))
+                if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
                     Jog.Focus();
                 base.OnPreviewKeyDown(e);
             }
@@ -426,7 +509,7 @@ namespace CNC.Controls.Probing
                     if (GrblInfo.IsGrblHAL)
                         Comms.com.WriteByte(GrblConstants.CMD_STATUS_REPORT_ALL);
 
-                    if(e.RemovedItems.Count == 1)
+                    if (e.RemovedItems.Count == 1)
                         getView(e.RemovedItems[0] as TabItem).Activate(false);
 
                     view.Activate(true);

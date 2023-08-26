@@ -45,6 +45,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Threading;
+using System.Windows.Input;
 
 namespace CNC.Controls
 {
@@ -334,6 +335,15 @@ namespace CNC.Controls
                 ShowSetting(e.NewValue as GrblSettingDetails, true);
             else
                 details.Visibility = Visibility.Hidden;
+        }
+
+
+        private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (!(e.OriginalSource is TreeViewItem tvi) || e.Handled) return;
+
+            tvi.IsExpanded = !tvi.IsExpanded;
+            e.Handled = true;
         }
     }
 }

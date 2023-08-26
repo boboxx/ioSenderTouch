@@ -48,36 +48,14 @@ namespace CNC.Controls
 {
     public partial class WorkParametersControlTouch : UserControl
     {
-       
+        public new bool IsFocused => cbxTool.IsFocused || cbxOffset.IsFocused;
+
         public WorkParametersControlTouch()
         {
-            
             InitializeComponent();
-          
         }
 
-        #region Properties
 
-       
-        public new bool IsFocused { get { return cbxTool.IsFocused || cbxOffset.IsFocused; } }
-
-        public static readonly DependencyProperty IsToolChangingProperty = DependencyProperty.Register(nameof(IsToolChanging), typeof(bool), typeof(WorkParametersControlTouch), new PropertyMetadata(false, new PropertyChangedCallback(IsToolChangingChanged)));
-        public bool IsToolChanging
-        {
-            get { return (bool)GetValue(IsToolChangingProperty); }
-            set { SetValue(IsToolChangingProperty, value); }
-        }
-        private static void IsToolChangingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            (d as WorkParametersControlTouch).bgTool.Background = ((bool)e.NewValue ? Brushes.Salmon : ((WorkParametersControlTouch)d).Background);
-            (d as WorkParametersControlTouch).cbxTool.IsEnabled = !(bool)e.NewValue;
-        }
-
-        #endregion
-
-        #region UIEvents
-
-     
         void cbxTool_KeyPress(object sender, KeyEventArgs e)
         {
             // UIUtils.ProcessMask((Control)sender, e);
@@ -94,15 +72,13 @@ namespace CNC.Controls
         private void cbxOffset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 1 && ((ComboBox)sender).IsDropDownOpen)
-                (DataContext as GrblViewModel).ExecuteCommand(((CoordinateSystem)e.AddedItems[0]).Code);
+                (DataContext as GrblViewModel)?.ExecuteCommand(((CoordinateSystem)e.AddedItems[0]).Code);
         }
 
         private void cbxTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 1 && ((ComboBox)sender).IsDropDownOpen)
-                (DataContext as GrblViewModel).ExecuteCommand(string.Format(GrblCommand.ToolChange, ((Tool)e.AddedItems[0]).Code));
+                (DataContext as GrblViewModel)?.ExecuteCommand(string.Format(GrblCommand.ToolChange, ((Tool)e.AddedItems[0]).Code));
         }
-
-        #endregion
     }
 }
