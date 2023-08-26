@@ -306,7 +306,7 @@ namespace CNC.Controls
                     SendCommand("$RTC=" + DateTime.Now.ToLocalTime().ToString("s"));
             }
 
-            //EnablePolling(activate);
+            EnablePolling(activate);
 
             isActive = activate;
 
@@ -496,7 +496,7 @@ namespace CNC.Controls
         {
             var b = Convert.ToInt32(command[0]);
 
-            if (b > 255) 
+            if (b > 255)
                 switch (b)
                 {
                     case 8222:
@@ -978,26 +978,6 @@ namespace CNC.Controls
         {
             if (grblState.State == GrblStates.Jog)
                 model.IsJobRunning = false;
-            if (newstate.State == GrblStates.Tool)
-            {
-                if (grblState.State != GrblStates.Jog)
-                {
-                    if (JobTimer.IsRunning && job.PendingLine > 0 && !model.IsSDCardJob)
-                    {
-                        job.ToolChangeLine = job.PendingLine - 1;
-                        GCode.File.Data.Rows[job.ToolChangeLine]["Sent"] = "pending";
-                        //      ResponseReceived("pending");
-                    }
-                    streamingHandler.Call(StreamingState.ToolChange, true);
-                    if (!grblState.MPG)
-                        Comms.com.WriteByte(GrblConstants.CMD_TOOL_ACK);
-                    grblState.State = newstate.State;
-                    grblState.Substate = newstate.Substate;
-                    grblState.MPG = newstate.MPG;
-                    return;
-                }
-            }
-            if (!model.IsFileLoaded || !model.IsPhysicalFileLoaded) return;
             switch (newstate.State)
             {
                 case GrblStates.Idle:
