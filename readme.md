@@ -27,11 +27,11 @@ Creates Button on  Home Screen in Utility Section to run the job
 ---
 
 ### Priority issues and work
--Reset button and logic needs to be added 
+~~Reset button and logic needs to be added~~ (8/26/23 Implemented needs more testing)
 <br>
--Virtual keyboard support for probing ui
+~~Virtual keyboard support for probing ui (8/26/23 Implemented)~~
 <br>
--Finish utility section for material surfacing (8/22/23 Implemented needs more testing)
+~~Finish utility section for material surfacing~~ (8/22/23 Implemented needs more testing)
 <br>
 -Create axis alignment/squaring helper under utility 
 <br>
