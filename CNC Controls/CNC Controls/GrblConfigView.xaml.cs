@@ -40,12 +40,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Windows;
 using System.Windows.Controls;
 using CNC.Core;
-using Microsoft.Win32;
 using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace CNC.Controls
 {
@@ -166,11 +172,8 @@ namespace CNC.Controls
                 MessageBox.Show((string)FindResource("SettingsInvalid"));
             else
             {
-                
                 bool? res = null;
                 CancellationToken cancellationToken = new CancellationToken();
-
-                // List of settings that have other dependent settings and have to be set before them
                 dep.Add((int)GrblSetting.HomingEnable);
 
                 foreach (var cmd in lines)
@@ -181,30 +184,6 @@ namespace CNC.Controls
                         Comms.com.WriteCommand(cmd);
 
                     }
-                    // retval = string.Empty;
-
-                    //new Thread(() =>
-                    //{
-                    //    res = WaitFor.AckResponse<string>(
-                    //        cancellationToken,
-                    //        response => Process(response),
-                    //        a => _model.OnResponseReceived += a,
-                    //        a => _model.OnResponseReceived -= a,
-                    //        400, () => Comms.com.WriteCommand(cmd));
-                    //}).Start();
-
-                    //while (res == null)
-                    //    EventUtils.DoEvents();
-
-                    //if (retval != string.Empty)
-                    //{
-                    //    if (MessageBox.Show(string.Format((string)FindResource("SettingsError"),
-                    //            cmd, retval), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
-                    //        break;
-                    //}
-                    //else if (res == false && MessageBox.Show(string.Format((string)FindResource("SettingsTimeout"), cmd),
-                    //             "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
-                    //    break;
                 }
 
                 foreach (var d in dep)
@@ -218,30 +197,73 @@ namespace CNC.Controls
                         }
                     }
                 }
+                LoadSettings(settings);
+            }
+            return settings.Count > 0;
+        }
 
-                foreach (var setting in settings)
+        private List<string> LoadSettings(Dictionary<int, string> grblSettings)
+        {
+            try
+            {
+                var retVal = new List<string>();
+                bool? res = null;
+                var cancellationToken = new CancellationToken();
+                _model.Poller.SetState(0);
+
+                void ProcessSettings(string response)
                 {
-                    if (!dep.Contains(setting.Key))
+                    if (response != "ok")
                     {
-                        if (!SetSetting(setting))
-                            break;
+                        retVal.Add(response);
                     }
                 }
 
-                if (lines[0] == "%")
+                void SendSettings()
                 {
-                    Comms.com.WriteCommand("%");
+                    Comms.com.DataReceived -= ProcessSettings;
+                    Comms.com.DataReceived += ProcessSettings;
+                    foreach (var setting in grblSettings)
+                    {
+
+                        var cmdr = $"${setting.Key}={setting.Value}";
+                        Comms.com.WriteCommand(cmdr);
+                        Thread.Sleep(50);
+                    }
+                    _model.Poller.SetState(_model.PollingInterval);
+                    Comms.com.DataReceived -= ProcessSettings;
+                    SetLoaded(retVal);
                 }
 
+                Task.Factory.StartNew(SendSettings, cancellationToken);
+
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                _model.Poller.SetState(200);
+                return null;
+            }
+        }
+        private void SetLoaded(List<string> reList)
+        {
+
+            Application.Current.Dispatcher.BeginInvoke(new System.Action(() =>
+            {
+                Comms.com.WriteCommand("%");
                 using (new UIUtils.WaitCursor())
                 {
                     GrblSettings.Load();
                 }
-            }
-            _model.Message = string.Empty;
-            return settings.Count > 0;
-        }
 
+                var errors = reList;
+                _model.Message = string.Empty;
+                var messageString = errors.Count > 1 ? "Settings Loaded with Errors" : "Settings Loaded";
+                MessageBox.Show( messageString, "Settings Restore Completed", MessageBoxButton.OK);
+
+            }));
+        }
 
         private bool SetSetting(KeyValuePair<int, string> setting)
         {
@@ -263,7 +285,7 @@ namespace CNC.Controls
             {
                 EventUtils.DoEvents();
             }
-            
+
             if (retval != string.Empty)
             {
                 if (retval.StartsWith("error:"))
@@ -299,7 +321,7 @@ namespace CNC.Controls
             {
                 //filtering out homing error and machine state from the setting responses.
                 //TODO FIX FOR LATTER.  Better fix would be to stop state polling while sending setting 
-                if (data.StartsWith("error:9") || data.StartsWith("<Alarm|MPos:") || data.StartsWith("<Idle|MPos:"))return;
+                if (data.StartsWith("error:9") || data.StartsWith("<Alarm|MPos:") || data.StartsWith("<Idle|MPos:")) return;
                 {
                     retval = data;
                 }
@@ -328,7 +350,7 @@ namespace CNC.Controls
             if (e.AddedItems.Count == 1)
                 ShowSetting(e.AddedItems[0] as GrblSettingDetails, true);
         }
-        
+
         private void treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e != null && e.NewValue is GrblSettingDetails && (e.NewValue as GrblSettingDetails).Value != null)

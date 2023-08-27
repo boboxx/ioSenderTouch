@@ -154,12 +154,16 @@ namespace CNC.Controls.Probing
 
             try
             {
-                StreamReader reader = new StreamReader(Core.Resources.Path + "ProbingProfiles.xml");
-                Profiles = (ObservableCollection<ProbingProfile>)xs.Deserialize(reader);
-                reader.Close();
+                if (File.Exists(Core.Resources.Path + "ProbingProfiles.xml"))
+                {
+                    StreamReader reader = new StreamReader(Core.Resources.Path + "ProbingProfiles.xml");
+                    Profiles = (ObservableCollection<ProbingProfile>)xs.Deserialize(reader);
+                    reader.Close();
 
-                foreach (ProbingProfile profile in Profiles)
-                    profile.Id = id++;
+                    foreach (ProbingProfile profile in Profiles)
+                        profile.Id = id++;
+                }
+               
             }
             catch
             {
