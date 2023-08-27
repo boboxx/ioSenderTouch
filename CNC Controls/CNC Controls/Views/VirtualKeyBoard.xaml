@@ -11,7 +11,7 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="VirtualKeyBoard" Height="365" Width="775">
+        Title="VirtualKeyBoard" Height="365" Width="786">
     <Window.DataContext>
         <viewModels:VirtualKeyboardViewModel />
     </Window.DataContext>
@@ -52,8 +52,8 @@
                      Command="{Binding CharKeys}" CommandParameter="+"></Button>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <Button  Name="ButtonDel" Height="55" Width="55" Content="Del" HorizontalAlignment="Center" Margin="2,2" 
-                     Command="{Binding FunctionKeys}" CommandParameter="Delete"></Button>
+            <Button  Name="ButtonDel" Height="55" Width="55" Content="" HorizontalAlignment="Center" Margin="2,2" 
+                     Command="{Binding FunctionKeys}" CommandParameter="Future"></Button>
             <Button  Name="ButtonQ" Height="55" Width="55" Content="Q" HorizontalAlignment="Center" Margin="2,2" 
                      Command="{Binding CharKeys}" CommandParameter="Q"></Button>
             <Button  Name="ButtonW" Height="55" Width="55" Content="W" HorizontalAlignment="Center" Margin="2,2" 
@@ -104,8 +104,10 @@
                      Command="{Binding FunctionKeys}" CommandParameter="ENTER"></Button>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Button  Name="ButtonLeft" Height="55" Width="105" Content="" HorizontalAlignment="Center" Margin="2,2"
-                     Command="{Binding FunctionKeys}" CommandParameter="LEFT"></Button>
+            <Button  Name="ButtonG0" Height="55" Width="85" Content="G0" HorizontalAlignment="Center" Margin="2,2"
+                     Command="{Binding CharKeys}" CommandParameter="G0"></Button>
+            <Button  Name="ButtonG1" Height="55" Width="85" Content="G1" HorizontalAlignment="Center" Margin="2,2"
+                     Command="{Binding CharKeys}" CommandParameter="G1"></Button>
             <Button  Name="ButtonZ" Height="55" Width="55" Content="Z" HorizontalAlignment="Center" Margin="2,2" 
                      Command="{Binding CharKeys}" CommandParameter="Z"></Button>
             <Button  Name="ButtonX" Height="55" Width="55" Content="X" HorizontalAlignment="Center" Margin="2,2" 
@@ -126,12 +128,18 @@
                      Command="{Binding CharKeys}" CommandParameter="."></Button>
             <Button  Name="ButtonForwardBracket" Height="55" Width="55" Content="/" HorizontalAlignment="Center" Margin="2,2" 
                      Command="{Binding CharKeys}" CommandParameter="/"></Button>
-            <Button  Name="ButtonRight" Height="55" Width="65" Content=">" HorizontalAlignment="Center" Margin="2,2" 
-                     Command="{Binding FunctionKeys}" CommandParameter="RIGHT"></Button>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
-            <Button  Name="ButtonSpace" Height="55" Width="350" Content="Space" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,2" 
+            <Button  Name="ButtonG90" Height="55" Width="100" Content="G90" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,2" 
+                     Command="{Binding CharKeys}" CommandParameter="G90"></Button>
+            <Button  Name="ButtonG91" Height="55" Width="100" Content="G91" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,2" 
+                     Command="{Binding CharKeys}" CommandParameter="G91"></Button>
+            <Button  Name="ButtonSpace" Height="55" Width="348" Content="Space" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,2" 
                      Command="{Binding FunctionKeys}" CommandParameter="SPACE"></Button>
+            <Button  Name="ButtonX0" Height="55" Width="100" Content="X0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,2" 
+                     Command="{Binding CharKeys}" CommandParameter="X0"></Button>
+            <Button  Name="ButtonY0" Height="55" Width="100" Content="Y0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,2" 
+                     Command="{Binding CharKeys}" CommandParameter="Y0"></Button>
         </StackPanel>
     </Grid>
 </Window>
