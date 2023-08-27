@@ -88,7 +88,6 @@ namespace CNC.Controls.Probing
                 {
                     _keyBoard.Close();
                 }
-
             }
         }
 
@@ -99,8 +98,6 @@ namespace CNC.Controls.Probing
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-
-
             if (!keyboardMappingsOk && DataContext is GrblViewModel)
             {
                 KeypressHandler keyboard = _grblViewModel.Keyboard;
@@ -124,30 +121,6 @@ namespace CNC.Controls.Probing
                 };
             }
 
-        }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //if ((sender is NumericField uiElement))
-            //{
-            //    void Close(object senders, EventArgs es)
-            //    {
-            //        _keyBoard.VBClosing -= Close;
-            //        _keyBoard.TextChanged -= TextChanged;
-            //    }
-
-            //    void TextChanged(object senders, string t)
-            //    {
-            //        uiElement.Value = double.Parse(t);
-            //    }
-
-            //    if (_keyBoard.Visibility == Visibility.Visible) return;
-            //    _keyBoard.Show();
-            //    _keyBoard.TextChanged -= TextChanged;
-            //    _keyBoard.TextChanged += TextChanged;
-            //    _keyBoard.VBClosing -= Close;
-            //    _keyBoard.VBClosing += Close;
-            //}
         }
 
         private void ComboBox_GotFocus(object sender, RoutedEventArgs e)

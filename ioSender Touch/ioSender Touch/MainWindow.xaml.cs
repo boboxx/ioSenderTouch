@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -11,7 +12,7 @@ namespace ioSenderTouch
 {
     public partial class MainWindow : Window
     {
-        private const string Version = "1.0.0";
+        private const string Version = "0.0.1";
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
@@ -23,7 +24,8 @@ namespace ioSenderTouch
         public bool JobRunning => _viewModel.IsJobRunning;
         public MainWindow()
         {
-            CNC.Core.Resources.Path = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config"+Path.DirectorySeparatorChar);
+            CNC.Core.Resources.Path = path;
             InitializeComponent();
             ui = this;
             Title = string.Format(Title, Version);

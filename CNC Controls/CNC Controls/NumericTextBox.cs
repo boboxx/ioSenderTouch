@@ -58,12 +58,14 @@ namespace CNC.Controls
             HorizontalContentAlignment = HorizontalAlignment.Right;
             VerticalContentAlignment = VerticalAlignment.Bottom;
             TextWrapping = TextWrapping.NoWrap;
-            Loaded += NumericTextBox_Loaded;
             IsVisibleChanged += NumericTextBox_IsVisibleChanged;
             LostFocus += NumericTextBox_LostFocus;
             MouseDoubleClick += NumericTextBox_MouseDoubleClick;
+            Loaded += NumericTextBox_Loaded;
+
         }
 
+        
         private void NumericTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if ((sender is NumericTextBox uiElement))
@@ -86,6 +88,7 @@ namespace CNC.Controls
                 _keyBoard.TextChanged += TextChanged;
                 _keyBoard.VBClosing -= Close;
                 _keyBoard.VBClosing += Close;
+              
             }
         }
 
@@ -107,16 +110,23 @@ namespace CNC.Controls
 
         private void NumericTextBox_Loaded(object sender, RoutedEventArgs e)
         {
-            if (_keyBoard == null)
+            try
             {
-                _keyBoard = new VirtualKeyBoard
+                if (_keyBoard == null)
                 {
-                    Owner = Application.Current.MainWindow,
-                    WindowStartupLocation = WindowStartupLocation.Manual,
-                    Left = 875,
-                    Top = 500,
-                    Topmost = true
-                };
+                    _keyBoard = new VirtualKeyBoard
+                    {
+                        Owner = Application.Current.MainWindow,
+                        WindowStartupLocation = WindowStartupLocation.Manual,
+                        Left = 875,
+                        Top = 500,
+                        Topmost = true
+                    };
+                }
+            }
+            catch (Exception)
+            {
+
             }
         }
 

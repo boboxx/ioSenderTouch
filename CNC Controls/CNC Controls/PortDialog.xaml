@@ -72,19 +72,12 @@
                     <CheckBox x:Uid="lbl_websocket" Content="WebSocket" IsChecked="{Binding Path=IsWebSocket, Mode=TwoWay}" Margin="80,5,0,0"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <Label x:Uid="lbl_netPort" Content="Port:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80"/>
-                        <local:NumericTextBox Style="{StaticResource PortErrorStyle}" Format="####0">
-                            <local:NumericTextBox.Value>
-                                <Binding Path="NetPort" Mode="TwoWay" ValidatesOnNotifyDataErrors="True" ValidatesOnDataErrors="True" NotifyOnValidationError="True" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <local:NumericRangeRule Min="0" Max="65535" ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </local:NumericTextBox.Value>
-                        </local:NumericTextBox>
+                        <TextBox Text="{Binding Path=NetPort,Mode=TwoWay }" MouseDoubleClick="TextBox_MouseDoubleClick" PreviewTextInput="NumberValidationTextBox" Width="95" Height="25" Background="WhiteSmoke" Foreground="Black" >
+                        </TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="37">
                         <Label x:Uid="lbl_ipAddress" Content="IP address:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80"/>
-                        <TextBox Style="{StaticResource Ip4ErrorStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Bottom" Height="24" Width="95" MaxLength="15">
+                        <TextBox Style="{StaticResource Ip4ErrorStyle}" MouseDoubleClick="TextBox_MouseDoubleClick" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Bottom" Height="24" Width="95" MaxLength="15">
                             <TextBox.Text>
                                 <Binding Path="IpAddress" Mode="TwoWay" ValidatesOnNotifyDataErrors="True" ValidatesOnDataErrors="True" NotifyOnValidationError="True" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>

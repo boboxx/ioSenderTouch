@@ -63,7 +63,7 @@
                     </Button>
                 </StackPanel>
                 <GroupBox x:Uid="grp_probeTipOrTool" Header="Probe tip/tool" HorizontalAlignment="Stretch">
-                    <Controls:NumericField x:Uid="fld_diameter" Label="Diameter:" Value="{Binding Path=ProbeDiameter, Mode=TwoWay}" IsEnabled="{Binding Path=ProbeDiameterEnable}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0" MouseDoubleClick="TextBox_GotFocus" VerticalAlignment="Top"/>
+                    <Controls:NumericField x:Uid="fld_diameter" Label="Diameter:" Value="{Binding Path=ProbeDiameter, Mode=TwoWay}" IsEnabled="{Binding Path=ProbeDiameterEnable}" ColonAt="102" HorizontalAlignment="Left" Margin="0,2,0,0"  VerticalAlignment="Top"/>
                 </GroupBox>
                 <GroupBox x:Uid="grp_touchOrFixture" Header="Touch plate/fixture height" HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Vertical">

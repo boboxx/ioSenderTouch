@@ -457,8 +457,8 @@ namespace CNC.Controls
             bool selectPort = false;
             int jogMode = -1;
             string port = string.Empty, baud = string.Empty;
-
-            CNC.Core.Resources.Path = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config"+Path.DirectorySeparatorChar);
+            Resources.Path = path;
 
             string[] args = Environment.GetCommandLineArgs();
 

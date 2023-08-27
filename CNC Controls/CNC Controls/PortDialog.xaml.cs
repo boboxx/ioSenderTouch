@@ -40,7 +40,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Windows;
 using CNC.Core;
 using System;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
+using CNC.Controls.Views;
 
 namespace CNC.Controls
 {
@@ -48,12 +52,88 @@ namespace CNC.Controls
     {
         private string port = null;
         private PortProperties prop;
+        private VirtualKeyBoard _keyBoard;
         public PortDialog()
         {
             InitializeComponent();
 
             DataContext = prop = new PortProperties();
+            IsVisibleChanged += TextBox_IsVisibleChanged;
+            Loaded += PortDialog_Loaded;
+            LostFocus += TextBox_LostFocus;
+            MouseDoubleClick += TextBox_MouseDoubleClick;
+            Closing += PortDialog_Closing;
         }
+
+        private void PortDialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _keyBoard.Shutdown(true);
+        }
+
+        private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((sender is TextBox uiElement))
+            {
+                void CloseKeyBoard(object senders, EventArgs es)
+                {
+                    _keyBoard.VBClosing -= CloseKeyBoard;
+                    _keyBoard.TextChanged -= TextChanged;
+                }
+
+                void TextChanged(object senders, string t)
+                {
+                    uiElement.Text = t;
+                }
+
+                if (_keyBoard.Visibility == Visibility.Visible) return;
+                _keyBoard.Show();
+                _keyBoard.TextChanged -= TextChanged;
+                _keyBoard.TextChanged += TextChanged;
+                _keyBoard.VBClosing -= CloseKeyBoard;
+                _keyBoard.VBClosing += CloseKeyBoard;
+
+            }
+        }
+
+        private void PortDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_keyBoard == null)
+                {
+                    _keyBoard = new VirtualKeyBoard
+                    {
+                         
+                        WindowStartupLocation = WindowStartupLocation.Manual,
+                        Left = 875,
+                        Top = 500,
+                        Topmost = true
+                    };
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _keyBoard.Close();
+        }
+
+        private void TextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is bool b)
+            {
+                if (!b)
+                {
+                    _keyBoard.Close();
+                }
+            }
+        }
+
+     
 
         private void CbxPorts_DropDownOpened(object sender, System.EventArgs e)
         {
@@ -86,7 +166,8 @@ namespace CNC.Controls
 
         public string ShowDialog(string orgport)
         {
-            if (!string.IsNullOrEmpty(orgport)) {
+            if (!string.IsNullOrEmpty(orgport))
+            {
 
                 if ((prop.IsWebSocket = orgport.ToLower().StartsWith("ws://")))
                     parsenet(orgport.Substring(5));
@@ -125,13 +206,19 @@ namespace CNC.Controls
             return port;
         }
 
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
             if (tab.SelectedIndex == 1)
             {
                 port = string.Format("{0}{1}:{2}", prop.IsWebSocket ? "ws://" : string.Empty, prop.IpAddress, prop.NetPort.ToString());
             }
-            else if(prop.Com.Ports.Count > 0)
+            else if (prop.Com.Ports.Count > 0)
             {
                 port = prop.Com.SelectedPort + ":" + prop.Com.SelectedBaud + ",N,8,1";
                 if (prop.Com.SelectedMode.Mode != Comms.ResetMode.None)
@@ -154,9 +241,11 @@ namespace CNC.Controls
         int netport = 23;
 
         public SerialPorts Com { get; private set; } = new SerialPorts();
-        public bool IsWebSocket {
+        public bool IsWebSocket
+        {
             get { return isWebSocket; }
-            set {
+            set
+            {
                 if (isWebSocket != value)
                     NetPort = value ? 80 : 23;
                 isWebSocket = value;

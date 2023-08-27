@@ -151,8 +151,7 @@ namespace CNC.Controls
         public bool AllowNull { get; set; } = false;
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-        {
-            double v = (double)value;
+        { double v = (double)value;
 
             if (!(v == 0d && AllowNull))
             {
