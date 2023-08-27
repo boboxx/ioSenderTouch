@@ -7,13 +7,13 @@
              xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              mc:Ignorable="d" 
              Loaded="OnLoaded" Visibility="Collapsed" IsVisibleChanged="OnVisibleChanged"
-             d:DesignHeight="40" d:DesignWidth="200">
+             d:DesignHeight="40" d:DesignWidth="210">
     <UserControl.Resources>
         <Controls:PositionToStringConverter x:Key="PositionConverter" />
         <Controls:FeedSpeedToStringConverter x:Key="FeedSpeedConverter" />
     </UserControl.Resources>
     <StackPanel Orientation="Vertical">
-        <TextBlock HorizontalAlignment="Right">
+        <TextBlock HorizontalAlignment="Right" FontSize="20" Margin="0,0,3,0">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource PositionConverter}">
                     <Binding Path="Position" Mode="OneWay"/>
@@ -29,7 +29,7 @@
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>-->
-        <TextBlock HorizontalAlignment="Right">
+        <TextBlock HorizontalAlignment="Right" FontSize="18" Margin="0,0,3,0">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource FeedSpeedConverter}">
                     <Binding Path="FeedRate" Mode="OneWay"/>
