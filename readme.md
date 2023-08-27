@@ -6,6 +6,7 @@ Goal was to create a application that will run on a cheap mini PC with a UI desi
 
 Changes in UI 
 ![Home Screen](media/HomeScreen.png)
+![Home Screen](media/Tool.png)
 
 Probing carried over from ioSender 
 ![Probe Screen](media/Probe.png)
