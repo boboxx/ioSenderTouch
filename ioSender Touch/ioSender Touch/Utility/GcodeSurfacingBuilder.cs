@@ -76,11 +76,11 @@ namespace ioSenderTouch.Utility
 
             if (_mist)
             {
-                header.Add("M7");
+                header.Add(Mist);
             }
             if (_flood)
             {
-                header.Add("M8");
+                header.Add(Flood);
             }
 
             return header;
