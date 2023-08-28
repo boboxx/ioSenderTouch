@@ -106,7 +106,7 @@ namespace ioSenderTouch.ViewModels
             _grblViewModel.UtilityMacros.Add(new Macro
             {
                 Name = "Quick Z Probe",
-                Code = "G91F100\nG38.3F100Z-10\nG0Z0.5\nG38.3F25Z-2\nG0Z0\nG0Y0\nG0X0\nG10L2P1Z0",
+                Code = "G91F100\nG38.3F100Z-10\nG10L20P0Z0.000\nG0Z5.000",
                 Id = 1,
                 ConfirmOnExecute = true,
             });
