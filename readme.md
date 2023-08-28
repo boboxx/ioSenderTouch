@@ -38,3 +38,5 @@ Creates Button on  Home Screen in Utility Section to run the job
 <br>
 -Add support for portrait orientation 
 <br><br>
+
+Note: Lathe, rotatry axis, and 5th axis are not supported 
