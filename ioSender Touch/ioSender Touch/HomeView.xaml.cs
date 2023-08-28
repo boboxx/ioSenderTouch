@@ -49,9 +49,9 @@ namespace ioSenderTouch
             FillBorder.Child = _renderView;
             AppConfig.Settings.OnConfigFileLoaded += AppConfiguationLoaded;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
-            BuildOptionalUi();
             _model.PollingInterval = AppConfig.Settings.Base.PollInterval;
             InitSystem();
+            BuildOptionalUi();
             GCode.File.FileLoaded += File_FileLoaded;
         }
 
