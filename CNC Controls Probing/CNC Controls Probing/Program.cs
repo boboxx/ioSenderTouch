@@ -358,7 +358,7 @@ namespace CNC.Controls.Probing
                 if (hasPause)
                     probing.PropertyChanged -= Probing_PropertyChanged;
                 isRunning = Grbl.IsJobRunning = false;
-                Grbl.ExecuteCommand(probing.DistanceMode == DistanceMode.Absolute ? "G90" : "G91");
+                Comms.com.WriteCommand(probing.DistanceMode == DistanceMode.Absolute ? "G90" : "G91");
             }
             if(!_isComplete || probing.IsSuccess)
                 probing.Message = message;
@@ -399,7 +399,8 @@ namespace CNC.Controls.Probing
                     probing.Message = LibStrings.FindResource("Probing");
 
                 cmd_response = string.Empty;
-                Grbl.ExecuteCommand(_program[step]);
+                Comms.com.WriteCommand(_program[step]);
+               // Grbl.ExecuteCommand(_program[step]);
 
                 while (!_isComplete)
                 {
@@ -444,7 +445,8 @@ namespace CNC.Controls.Probing
                                     //if ((isProbing = _program[step].Contains("G38")) && !IsProbeReady())
                                     //    response = "probe!";
                                     //else
-                                        Grbl.ExecuteCommand(_program[step]);
+                                    Comms.com.WriteCommand(_program[step]);
+                                        //Grbl.ExecuteCommand(_program[step]);
                                 }
                             }
                         }

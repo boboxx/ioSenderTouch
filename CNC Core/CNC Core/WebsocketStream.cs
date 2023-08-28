@@ -116,19 +116,19 @@ namespace CNC.Core
 
         public void WriteByte(byte data)
         {
-            websocket.Send(new byte[1] { data });
+            websocket?.Send(new byte[1] { data });
         }
 
         public void WriteBytes(byte[] bytes, int len)
         {
-            websocket.Send(bytes);
+            websocket?.Send(bytes);
         }
 
         public void WriteString(string data)
         {
             byte[] bytes = Encoding.Default.GetBytes(data);
 
-            websocket.Send(bytes);
+            websocket?.Send(bytes);
         }
 
         public void WriteCommand(string command)

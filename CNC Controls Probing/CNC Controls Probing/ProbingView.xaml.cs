@@ -242,7 +242,7 @@ namespace CNC.Controls.Probing
                 case nameof(GrblViewModel.IsJobRunning):
                     foreach (TabItem tabitem in tab.Items)
                         tabitem.IsEnabled = !grbl.IsJobRunning || tabitem == tab.SelectedItem;
-                    if (!grbl.IsJobRunning && focusedControl != null)
+                    if (!_grblViewModel.IsJobRunning && focusedControl != null)
                     {
                         Application.Current.Dispatcher.BeginInvoke(new System.Action(() =>
                         {
@@ -253,15 +253,15 @@ namespace CNC.Controls.Probing
                     break;
 
                 case nameof(GrblViewModel.Position):
-                    DisplayPosition(grbl);
+                    DisplayPosition(_grblViewModel);
                     break;
 
                 case nameof(GrblViewModel.Signals):
-                    probeTriggered = grbl.Signals.Value.HasFlag(Signals.Probe);
-                    probeDisconnected = grbl.Signals.Value.HasFlag(Signals.ProbeDisconnected);
-                    DisplayPosition(grbl);
+                    probeTriggered = _grblViewModel.Signals.Value.HasFlag(Signals.Probe);
+                    probeDisconnected = _grblViewModel.Signals.Value.HasFlag(Signals.ProbeDisconnected);
+                    DisplayPosition(_grblViewModel);
                     var signals = ((GrblViewModel)sender).Signals.Value;
-                    if (!grbl.IsJobRunning && signals.HasFlag(Signals.CycleStart) && !signals.HasFlag(Signals.Hold) && !cycleStartSignal)
+                    if (!_grblViewModel.IsJobRunning && signals.HasFlag(Signals.CycleStart) && !signals.HasFlag(Signals.Hold) && !cycleStartSignal)
                         StartProbe(Key.R);
                     cycleStartSignal = signals.HasFlag(Signals.CycleStart);
                     break;

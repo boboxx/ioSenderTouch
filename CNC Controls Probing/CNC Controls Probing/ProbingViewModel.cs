@@ -181,7 +181,7 @@ namespace CNC.Controls.Probing
                 null,
                 a => Grbl.OnResponseReceived += a,
                 a => Grbl.OnResponseReceived -= a,
-                5000, () => Grbl.ExecuteCommand(command));
+                5000, () => Comms.com.WriteCommand(command));
             }); t.Start();
 
             while (res == null)
@@ -208,7 +208,7 @@ namespace CNC.Controls.Probing
                     null,
                     a => Grbl.OnResponseReceived += a,
                     a => Grbl.OnResponseReceived -= a,
-                    1000, () => Grbl.ExecuteCommand(command));
+                    1000, () => Comms.com.WriteCommand(command));
                 }).Start();
 
                 while (res == null)
@@ -321,7 +321,7 @@ namespace CNC.Controls.Probing
                 null,
                 a => Grbl.OnResponseReceived += a,
                 a => Grbl.OnResponseReceived -= a,
-                1000, () => Grbl.ExecuteCommand(command));
+                1000, () => Comms.com.WriteCommand(command));
             }).Start();
 
             while (res == null)

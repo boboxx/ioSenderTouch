@@ -70,6 +70,7 @@ namespace ioSenderTouch
             Comms.com.DataReceived -= _viewModel.DataReceived;
             using (new UIUtils.WaitCursor())
             {
+                _viewModel.Poller.SetState(0);
                 Comms.com.Close(); // disconnecting from websocket may take some time...
                 AppConfig.Settings.Shutdown();
             }
