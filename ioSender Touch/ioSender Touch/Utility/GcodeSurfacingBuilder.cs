@@ -93,7 +93,7 @@ namespace ioSenderTouch.Utility
         public IEnumerable<string> BuildSurfaceLayer()
         {
             var overlapMeasurement = _toolDiameter * _overLapPercent;
-            _width += overlapMeasurement;
+            //_width += overlapMeasurement;
             _length += overlapMeasurement;
             var lines = _width / _toolDiameter;
             double y = 0;
@@ -101,6 +101,7 @@ namespace ioSenderTouch.Utility
             var gcodeList = new List<string> { $";Layer{layer}" };
             for (int i = 0; i <= lines; i++)
             {
+                if(y>=_width)break;
                 gcodeList.Add($"G1 Y{y:f4}");
                 gcodeList.Add($"G1 X{_length}");
                 y += overlapMeasurement;

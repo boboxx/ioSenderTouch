@@ -250,6 +250,7 @@ namespace CNC.Core
         private void SetResetCommand(object obj)
         {
             Grbl.Reset();
+            ResetSystem();
         }
 
         private void SetDefaults()
@@ -534,6 +535,7 @@ namespace CNC.Core
                 OnPropertyChanged();
             }
         }
+
         public void ExecuteCommand(string command)
         {
             if (command != null)
@@ -1673,7 +1675,7 @@ namespace CNC.Core
                 GrblReset = true;
                 OnGrblReset?.Invoke(data);
                 Message = msg;
-                ResetSystem();
+                //ResetSystem();
                 _reset = false;
                 OnPropertyChanged(nameof(IsCheckMode));
                 OnPropertyChanged(nameof(IsSleepMode));
@@ -1724,7 +1726,7 @@ namespace CNC.Core
             OnResponseReceived?.Invoke(data);
         }
 
-        
+
 
         private void ResetSystem()
         {
@@ -1733,40 +1735,39 @@ namespace CNC.Core
             {
                 Poller.SetState(0);
             }
-            {
 
-                while (!GrblInfo.Get())
+            while (!GrblInfo.Get())
+            {
+                if (--timeout == 0)
                 {
-                    if (--timeout == 0)
-                    {
-                        Message = ("MsgNoResponse");
-                        
-                    }
-                    Thread.Sleep(500);
+                    Message = ("MsgNoResponse");
+
                 }
-                GrblAlarms.Get();
-                GrblErrors.Get();
-                GrblSettings.Load();
-                if (GrblInfo.IsGrblHAL)
-                {
-                    GrblParserState.Get();
-                    GrblWorkParameters.Get();
-                }
-                else
-                    GrblParserState.Get(true);
+                Thread.Sleep(500);
+            }
+            GrblAlarms.Get();
+            GrblErrors.Get();
+            GrblSettings.Load();
+            if (GrblInfo.IsGrblHAL)
+            {
+                GrblParserState.Get();
+                GrblWorkParameters.Get();
+            }
+            else
+            {
+                GrblParserState.Get(true);
             }
 
             GrblCommand.ToolChange = GrblInfo.ManualToolChange ? "M61Q{0}" : "T{0}";
             if (!Poller.IsEnabled)
                 Poller.SetState(PollingInterval);
-            Task.Factory.StartNew(DelayClearAlarm)
-            ;
+            Task.Factory.StartNew(DelayClearAlarm);
 
         }
 
         private void DelayClearAlarm()
         {
-            Thread.Sleep(PollingInterval*2);
+            Thread.Sleep(PollingInterval * 2);
             ClearAlarm();
         }
     }
