@@ -142,6 +142,27 @@ namespace CNC.Controls
         private int _passes = 1;
         private double _feedRate;
         private double _spindleRpm;
+        private bool _mist;
+        private bool _flood;
+
+        public bool Flood
+        {
+            get => _flood;
+            set
+            {
+                _flood = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool Mist
+        {
+            get => _mist;
+            set
+            {
+                _mist = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string FilePath { get { return _filePath; } set { _filePath = value;  OnPropertyChanged(); } }
         public bool IsInches { get { return _isInches; } set { _isInches = value; OnPropertyChanged(); } }

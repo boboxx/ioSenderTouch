@@ -38,9 +38,12 @@ namespace ioSenderTouch.ViewModels
         private bool _metric;
         private bool _inches;
         private string _measurement;
+        private bool _mist;
+        private bool _flood;
 
         public ICommand ShowView { get; }
         public ICommand SurfacingCommand { get; set; }
+
         public double ToolDiameter { get; set; }
         public double StockLength { get; set; }
         public double StockWidth { get; set; }
@@ -50,6 +53,29 @@ namespace ioSenderTouch.ViewModels
         public double SpindleRpm { get; set; }
         public double OverLap { get; set; }
         public string FilePath { get; set; }
+
+        public bool Flood
+        {
+            get => _flood;
+            set
+            {
+                if (value == _flood) return;
+                _flood = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool Mist
+        {
+            get => _mist;
+            set
+            {
+                if (value == _mist) return;
+                _mist = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Measurement
         {
             get => _measurement;
@@ -124,7 +150,8 @@ namespace ioSenderTouch.ViewModels
         {
             _usingInches = config.IsInches;
             Measurement = _usingInches ? Inches : Metric;
-
+            Mist = config.Mist;
+            Flood = config.Flood;
             SpindleRpm = config.SpindleRPM;
             Passes = config.Passes;
             FeedRate = config.FeedRate;
@@ -176,6 +203,8 @@ namespace ioSenderTouch.ViewModels
             var depth = DepthOfCut;
             var overlap = OverLap;
             var safeHeight = Safe_Height;
+            var mist = Mist;
+            var flood = Flood;
             if (_usingInches)
             {
                 width = width * Inches_To_MM;
@@ -186,7 +215,7 @@ namespace ioSenderTouch.ViewModels
                 depth = depth * Inches_To_MM;
             }
 
-            var surfaceGcode = new GcodeSurfacingBuilder(width, length, feedRate, dia, numberOfPasses, depth, overlap, rpm, safeHeight);
+            var surfaceGcode = new GcodeSurfacingBuilder(width, length, feedRate, dia, numberOfPasses, depth, overlap, rpm, safeHeight, mist,flood);
             var macro = new Macro
             {
                 Name = "Quick Surfacing",
@@ -221,7 +250,9 @@ namespace ioSenderTouch.ViewModels
                 Overlap = (int)OverLap,
                 StockLength = StockLength,
                 StockWidth = StockWidth,
-                TooDiameter = ToolDiameter
+                TooDiameter = ToolDiameter,
+                Flood = Flood,
+                Mist = Mist
             };
             AppConfig.Settings.Save();
         }

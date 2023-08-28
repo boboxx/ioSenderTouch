@@ -6,7 +6,8 @@
              xmlns:viewModel="clr-namespace:ioSenderTouch.ViewModels"
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:convertors="clr-namespace:ioSenderTouch.Convertors"
-             mc:Ignorable="d" Width="525" Height="510" HorizontalAlignment="Left" Margin="10,0,0,5">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" Width="525" Height="525" HorizontalAlignment="Left" Margin="10,0,0,5">
     <UserControl.Resources>
         <convertors:RadioBoolToIntConverter x:Key="RadioBoolToIntConverter" />
     </UserControl.Resources>
@@ -38,40 +39,70 @@
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
                         </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Row="0" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="0"  Orientation="Horizontal">
+                            <ToggleButton Name="Mist" Content="Mist" FontWeight="Bold"  IsChecked="{Binding Mist, Mode=TwoWay}"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          Width="60"
+                                          ToolTip="MaterialDesignSwitchToggleButton with Custom Track Background" Margin="10,0,10,0">
+                                <materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
+                                    <SolidColorBrush
+                                        Color="Green"/>
+                                </materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
+                                <materialDesign:ToggleButtonAssist.SwitchTrackOffBackground>
+                                    <SolidColorBrush
+                                        Color="Red" />
+                                </materialDesign:ToggleButtonAssist.SwitchTrackOffBackground>
+                            </ToggleButton>
+                            <ToggleButton Name="Flood" Content="Flood" FontWeight="Bold" Margin="10,0,10,0"  IsChecked="{Binding Flood, Mode=TwoWay}"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          Width="60"
+                                          ToolTip="MaterialDesignSwitchToggleButton with Custom Track Background">
+                                <materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
+                                    <SolidColorBrush
+                                        Color="Green"/>
+                                </materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
+                                <materialDesign:ToggleButtonAssist.SwitchTrackOffBackground>
+                                    <SolidColorBrush
+                                        Color="Red" />
+                                </materialDesign:ToggleButtonAssist.SwitchTrackOffBackground>
+                            </ToggleButton>
+                        </StackPanel>
+                         
+                        <StackPanel Grid.Row="1" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Tool Diameter:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="ToolDiameter"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding ToolDiameter, StringFormat={}{0:F2}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Name="DiaUnitLabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
                                    Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+
+                        <StackPanel Grid.Row="2" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Stock Length(X):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="StockLength"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding StockLength, StringFormat={}{0:F2},Mode=TwoWay}"  FontWeight ="Bold" 
                                       FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label  FontSize ="12" Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Visibility="Visible" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" 
                                     Width="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="3" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Stock Width(Y):" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox Name ="StockWidth"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding StockWidth, StringFormat={}{0:F2},Mode=TwoWay}"    FontWeight ="Bold" FontSize="20"  
                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="3" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="4" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Depth of Cut:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="CutDepth"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding DepthOfCut, StringFormat={}{0:F2},Mode= TwoWay}"   FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding  Unit, UpdateSourceTrigger=PropertyChanged}"   VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="4" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="5" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Overlap:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="Overlap"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding OverLap, StringFormat={}{0:},Mode= TwoWay}"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="%"   VerticalAlignment="Center"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="5" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="6" Width="250" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Number of Passes:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <Grid Height="30">
                                 <Grid.ColumnDefinitions>
@@ -82,13 +113,13 @@
                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30" />
                             </Grid>
                         </StackPanel>
-                        <StackPanel Grid.Row="6" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="7" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Feed Rate:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="CutRate" Text="{Binding FeedRate, StringFormat={}{0:},Mode= TwoWay}"  MouseDoubleClick="TextBox_GotFocus"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Content="{Binding  UnitPerMin, UpdateSourceTrigger=PropertyChanged}"    VerticalAlignment="Center"  HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="7" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Grid.Row="8" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Spindle RPM:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="SpindleRpm" Text="{Binding SpindleRpm, StringFormat={}{0:},Mode= TwoWay}"   MouseDoubleClick="TextBox_GotFocus" FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>

@@ -31,10 +31,12 @@ namespace ioSenderTouch.Utility
         private double _depth;
         private double _rpm;
         private double _safeHeight;
+        private readonly bool _mist;
+        private readonly bool _flood;
         private double _overLapPercent;
 
         public string FilePath { get; set; }
-        public GcodeSurfacingBuilder(double width, double length, double feedRate, double dia, int numberOfPasses, double depth, double overlap, double rpm, double safeHeight)
+        public GcodeSurfacingBuilder(double width, double length, double feedRate, double dia, int numberOfPasses, double depth, double overlap, double rpm, double safeHeight, bool mist , bool flood)
         {
             _width = width;
             _length = length;
@@ -44,6 +46,8 @@ namespace ioSenderTouch.Utility
             _depth = depth;
             _rpm = rpm;
             _safeHeight = safeHeight;
+            _mist = mist;
+            _flood = flood;
             _overLapPercent = overlap / 100;
             GenerateGcode();
         }
@@ -69,6 +73,16 @@ namespace ioSenderTouch.Utility
                 $"{SpindleOn}S{_rpm}",
                 $"{Pause}P4",
             };
+
+            if (_mist)
+            {
+                header.Add("M7");
+            }
+            if (_flood)
+            {
+                header.Add("M8");
+            }
+
             return header;
         }
         private List<string> BuildGcodeRamp()
