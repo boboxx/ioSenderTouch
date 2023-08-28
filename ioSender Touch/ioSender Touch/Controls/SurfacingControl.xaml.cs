@@ -19,6 +19,9 @@ namespace ioSenderTouch.Controls
             IsVisibleChanged += SurfacingControl_IsVisibleChanged;
             this.Loaded += SurfacingControl_Loaded;
             this.LostFocus += SurfacingControl_LostFocus1;
+            //TODO temp until passes is support 
+            PassesTextBox.IsReadOnly = true;
+            PassesTextBox.IsEnabled = false;
         }
 
         private void SurfacingControl_LostFocus1(object sender, RoutedEventArgs e)
@@ -76,5 +79,6 @@ namespace ioSenderTouch.Controls
             _keyBoard.VBClosing += Close;
 
         }
+
     }
 }

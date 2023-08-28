@@ -257,6 +257,9 @@
   <ItemGroup>
     <Resource Include="Resources\Symbols_Stop_32xLG.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\surface1.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.10.0-ci317\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.10.0-ci317\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
