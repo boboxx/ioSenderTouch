@@ -25,6 +25,12 @@ Creates Button on  Home Screen in Utility Section to run the job
 ![Surface](media/Surface3.png)
 
 <br><br>
+
+Portrait Orientation 
+![Home Screen](media/Portrait.png)
+
+![Home Screen](media/PortraitFlyout.png)
+
 ---
 
 ### Priority issues and work
@@ -36,7 +42,7 @@ Creates Button on  Home Screen in Utility Section to run the job
 <br>
 -Create axis alignment/squaring helper under utility 
 <br>
--Add support for portrait orientation 
+~~Add support for portrait orientation~~ (release v0.0.3)
 <br><br>
 
 Note: Lathe, rotatry axis, and 5th axis are not supported 
