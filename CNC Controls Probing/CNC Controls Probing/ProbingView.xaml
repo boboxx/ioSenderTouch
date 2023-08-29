@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:CNC.Controls.Probing"
              mc:Ignorable="d"
              Loaded="UserControl_Loaded"
-             SizeChanged="ProbingView_SizeChanged" Height="Auto" Width="1258.643" VerticalAlignment="Top">
+             SizeChanged="ProbingView_SizeChanged" Height="619.344" Width="1258.643" VerticalAlignment="Top">
     <UserControl.Resources>
         <system:String x:Uid="str_runMacro" x:Key="RunMacro">Run {0} macro?</system:String>
         <system:String x:Uid="str_jogActive" x:Key="JogActive">Keyboard jogging active</system:String>
@@ -41,7 +41,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <DockPanel Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,0,8">
+    <DockPanel Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,0,8" Height="678">
         <DockPanel x:Name="dp" DockPanel.Dock="Left" Margin="5,5,5,0" Width="270" HorizontalAlignment="Left" VerticalAlignment="Stretch">
             <StackPanel x:Name="t1" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch" DockPanel.Dock="Right" IsEnabled="{Binding Path=Grbl.IsJobRunning, Converter={StaticResource IsVisibleConverter}}" Margin="0,0,0,67">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Stretch">
@@ -118,7 +118,7 @@
                     <local:HeightMapControl HorizontalAlignment="Left" VerticalAlignment="Top" Height="500" Margin="0,0,0,0"/>
                 </TabItem>
             </TabControl>
-            <TextBlock TextWrapping="Wrap" Height="65" Margin="0,2,0,0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <TextBlock TextWrapping="Wrap" Height="53" Margin="0,2,0,0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <Run Text="{Binding Path=Instructions, Mode=OneWay}"/>
             <LineBreak/>
             <Run x:Uid="txt_warning" Text="Warning! Use with care - incorrect parameters may damage your probe!" Foreground="Red" FontWeight="Bold"/>
