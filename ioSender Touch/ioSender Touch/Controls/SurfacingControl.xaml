@@ -7,7 +7,7 @@
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:convertors="clr-namespace:ioSenderTouch.Convertors"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" Width="525" Height="525" HorizontalAlignment="Left" Margin="10,0,0,5">
+             mc:Ignorable="d" Width="525" Height="525" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,5">
     <UserControl.Resources>
         <convertors:RadioBoolToIntConverter x:Key="RadioBoolToIntConverter" />
     </UserControl.Resources>

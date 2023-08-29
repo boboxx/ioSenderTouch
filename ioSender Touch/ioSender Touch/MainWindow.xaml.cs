@@ -2,10 +2,12 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using CNC.Controls;
 using CNC.Converters;
 using CNC.Core;
+using ioSenderTouch.Controls;
 
 
 namespace ioSenderTouch
@@ -16,9 +18,9 @@ namespace ioSenderTouch
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
-        private bool saveWinSize = false;
         private readonly GrblViewModel _viewModel;
         private readonly HomeView _homeView;
+        private readonly HomeViewPortrait _homeViewPortrait;
 
         public string BaseWindowTitle { get; set; }
         public bool JobRunning => _viewModel.IsJobRunning;
@@ -32,17 +34,49 @@ namespace ioSenderTouch
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
-            // _viewModel  = new GrblViewModel();
+             _viewModel  = new GrblViewModel();
             BaseWindowTitle = Title;
-            _viewModel = DataContext as GrblViewModel;
-            _homeView = new HomeView(_viewModel);
-            DockPanel.SetDock(_homeView, Dock.Left);
-            DockPanel.Children.Add(_homeView);
+
+            if (SystemInformation.ScreenOrientation ==ScreenOrientation.Angle90)
+            {
+                _homeViewPortrait = new HomeViewPortrait(_viewModel);
+                DockPanel.SetDock(_homeViewPortrait, Dock.Left);
+                DockPanel.Children.Add(_homeViewPortrait);
+                MenuBorder.Child = new PortraitMenu();
+                MenuBorder.DataContext = _viewModel;
+            }
+            else
+            {
+                _homeView = new HomeView(_viewModel);
+                DockPanel.SetDock(_homeView, Dock.Left);
+                DockPanel.Children.Add(_homeView);
+                var menu = new LandScapeMenu
+                {
+                    VerisonLabel =
+                    {
+                        Content = $"{App_Name} {Version}"
+                    }
+                };
+                MenuBorder.Child =menu;
+                MenuBorder.DataContext = _viewModel;
+            }
+            _viewModel.OnShutDown += _viewModel_OnShutDown;
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
-            VerisonLabel.Content = $"{App_Name} {Version}";
+
         }
 
+        private void _viewModel_OnShutDown(object sender, EventArgs e)
+        {
+            AppConfig.Settings.Shutdown();
+            Close();
+        }
+
+        private int GetOrientation()
+        {
+            return ((int)System.Windows.Forms.SystemInformation.ScreenOrientation);
+        }
+       
         private void Window_Load(object sender, EventArgs e)
         {
 
@@ -67,13 +101,14 @@ namespace ioSenderTouch
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Comms.com.DataReceived -= _viewModel.DataReceived;
-            using (new UIUtils.WaitCursor())
-            {
-                _viewModel.Poller.SetState(0);
-                Comms.com.Close(); // disconnecting from websocket may take some time...
-                AppConfig.Settings.Shutdown();
-            }
+            // Comms.com.DataReceived -= _viewModel.DataReceived;
+           // AppConfig.Settings.Shutdown();
+            //using (new UIUtils.WaitCursor())
+            //{
+               // _viewModel.Poller.SetState(0);
+               // Comms.com.Close(); // disconnecting from websocket may take some time...
+               
+            //}
         }
         private void Pipe_FileTransfer(string filename)
         {
