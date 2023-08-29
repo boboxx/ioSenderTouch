@@ -53,6 +53,8 @@ namespace CNC.Core
 {
     public class GrblViewModel : MeasureViewModel
     {
+        public event EventHandler OnShutDown;
+
         private string _tool, _message, _WPos, _MPos, _wco, _wcs, _a, _fs, _ov, _pn, _sc, _sd, _fans, _d, _gc, _h, _thcv, _thcs;
         private string _mdiCommand, _fileName;
         private string[] _rtState = new string[3];
@@ -100,7 +102,7 @@ namespace CNC.Core
 
         public delegate void GrblResetHandler();
 
-
+        public ICommand ShutDownCommand { get; }
         public ICommand WcsCommand { get; }
         public ICommand ClearAlarmCommand { get; }
         public ICommand SettingsCommand { get; }
@@ -221,7 +223,9 @@ namespace CNC.Core
             ProbePosition.PropertyChanged += ProbePosition_PropertyChanged;
             ToolOffset.PropertyChanged += ToolOffset_PropertyChanged;
 
-            //TODO new command linking 
+            //TODO new command linking  
+
+            ShutDownCommand = new Command(SetShutDown);
 
             ClearAlarmCommand = new Command(_ =>
             {
@@ -246,6 +250,28 @@ namespace CNC.Core
             ResetCommand = new Command(SetResetCommand);
             SetDefaults();
             Connected = false;
+        }
+
+
+
+        public void SetShutDown(object obj)
+        {
+            try
+            {
+                Poller.SetState(0);
+                Comms.com.DataReceived -= DataReceived;
+                Comms.com.Close();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                OnShutDown?.Invoke(this, null);
+            }
+           
+
         }
 
         private void SetResetCommand(object obj)
@@ -357,8 +383,11 @@ namespace CNC.Core
         }
         private void ClearAlarm()
         {
-            if (GrblState.State != GrblStates.Alarm) return;
-            Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK);
+            if (GrblState.State == GrblStates.Alarm || GrblState.State == GrblStates.Unknown)
+            {
+                Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK);
+            }
+
         }
 
         private void Axisletter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1016,7 +1045,7 @@ namespace CNC.Core
                 if (newstate == GrblStates.Alarm && substate > 0)
                 {
                     _grblState.LastAlarm = substate;
-                    AlarmConText = $" Clear Alarm: {substate}";
+                    AlarmConText = $" Clear Alarm:{substate}";
                 }
 
 

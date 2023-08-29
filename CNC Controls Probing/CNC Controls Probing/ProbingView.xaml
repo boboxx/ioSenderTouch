@@ -6,9 +6,9 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:local="clr-namespace:CNC.Controls.Probing"
-             mc:Ignorable="d" d:DesignWidth="Auto"
+             mc:Ignorable="d"
              Loaded="UserControl_Loaded"
-             SizeChanged="ProbingView_SizeChanged" Height="671">
+             SizeChanged="ProbingView_SizeChanged" Height="Auto" Width="1258.643" VerticalAlignment="Top">
     <UserControl.Resources>
         <system:String x:Uid="str_runMacro" x:Key="RunMacro">Run {0} macro?</system:String>
         <system:String x:Uid="str_jogActive" x:Key="JogActive">Keyboard jogging active</system:String>
@@ -41,7 +41,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <DockPanel Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,8">
+    <DockPanel Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,0,8">
         <DockPanel x:Name="dp" DockPanel.Dock="Left" Margin="5,5,5,0" Width="270" HorizontalAlignment="Left" VerticalAlignment="Stretch">
             <StackPanel x:Name="t1" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch" DockPanel.Dock="Right" IsEnabled="{Binding Path=Grbl.IsJobRunning, Converter={StaticResource IsVisibleConverter}}" Margin="0,0,0,67">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Stretch">

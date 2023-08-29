@@ -133,8 +133,14 @@
     <Compile Include="Controls\JogCoontrolT.xaml.cs">
       <DependentUpon>JogCoontrolT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LandScapeMenu.xaml.cs">
+      <DependentUpon>LandScapeMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MacroEditor.xaml.cs">
       <DependentUpon>MacroEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PortraitMenu.xaml.cs">
+      <DependentUpon>PortraitMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SurfacingControl.xaml.cs">
       <DependentUpon>SurfacingControl.xaml</DependentUpon>
@@ -143,6 +149,9 @@
       <DependentUpon>UtilityMacroControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Convertors\RadioBoolToIntConverter.cs" />
+    <Compile Include="HomeViewPortrait.xaml.cs">
+      <DependentUpon>HomeViewPortrait.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\GcodeSurfacingBuilder.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\UtilityViewModel.cs" />
@@ -153,15 +162,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\LandScapeMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MacroEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\PortraitMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SurfacingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\UtilityMacroControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="HomeViewPortrait.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
