@@ -55,7 +55,7 @@ namespace CNC.Controls
 
         private void btn_Clear(object sender, RoutedEventArgs e)
         {
-            (DataContext as GrblViewModel).ResponseLog.Clear();
+            (DataContext as GrblViewModel)?.ResponseLog.Clear();
         }
     }
 }

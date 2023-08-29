@@ -245,6 +245,7 @@ namespace CNC.Core
             WcsCommand = new Command(SetWcs);
             ResetCommand = new Command(SetResetCommand);
             SetDefaults();
+            Connected = false;
         }
 
         private void SetResetCommand(object obj)

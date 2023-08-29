@@ -22,9 +22,8 @@
         </StackPanel>
 
         <TextBox Name="TextBox" Grid.Row="1" IsReadOnly="True" TextWrapping="NoWrap" 
-                     local:TextBoxUtilities.AlwaysScrollToEnd="True" FontSize="10" FontFamily="Verdana"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                      FontSize="10" FontFamily="Verdana" HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility ="Auto">
             <TextBox.Text>
                 <MultiBinding Converter="{StaticResource OcToString}">
                     <Binding Path="ResponseLog" Mode="OneWay"/>
@@ -34,5 +33,4 @@
         </TextBox>
         <Button Grid.Row="2" x:Uid="btn_clear" Width="Auto" Content="Clear" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center"  Click="btn_Clear"/>
     </Grid>
-    <!--> </GroupBox> </!-->
 </UserControl>
