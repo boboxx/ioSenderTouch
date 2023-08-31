@@ -262,7 +262,7 @@ namespace CNC.Core
                 Comms.com.DataReceived -= DataReceived;
                 Comms.com.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
@@ -270,7 +270,7 @@ namespace CNC.Core
             {
                 OnShutDown?.Invoke(this, null);
             }
-           
+
 
         }
 
@@ -383,7 +383,7 @@ namespace CNC.Core
         }
         private void ClearAlarm()
         {
-            if (GrblState.State == GrblStates.Alarm || GrblState.State == GrblStates.Unknown)
+            if (GrblState.State == GrblStates.Alarm)
             {
                 Comms.com.WriteCommand(GrblConstants.CMD_UNLOCK);
             }
@@ -1091,6 +1091,9 @@ namespace CNC.Core
                         _grblState.Color = Colors.White;
                         break;
 
+
+                    case GrblStates.Idle:
+                        _grblState.Color = Colors.White;
                         break;
                     default:
                         _grblState.Color = Colors.White;

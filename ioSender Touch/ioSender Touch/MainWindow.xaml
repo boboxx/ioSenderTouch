@@ -12,7 +12,6 @@
         WindowStyle="None"
         WindowState="Maximized"
         Loaded="Window_Load"
-        Closing="Window_Closing"
         Icon="App.ico" 
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -35,43 +34,7 @@
     </Window.DataContext>
     <DockPanel LastChildFill="True" Name="DockPanel">
         <Border Height="45" Name="MenuBorder" BorderThickness="1" DockPanel.Dock="Top">
-            <!--<Grid  Name="Panel" Margin="0,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="165"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Name="VerisonLabel" Width="1" Grid.Column="0" HorizontalContentAlignment="Left"  VerticalContentAlignment="Center"></Label>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                    --><!--<Label  Name ="ConnectionLabel" Content="{Binding IsConnected}" FontSize="20" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>-->
-                    <!--<Label Name ="ConnectionColorLabel" Background="{Binding ConnectionColor}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>-->
-                    <!--<Label  Name = "GRBLState" Content="GRBL State:"  FontSize="16" HorizontalContentAlignment="Center"  VerticalAlignment="Center"/>--><!--
-                    <Label  Name = "StateLabel" Content="{Binding GrblCurentState}" ContentStringFormat="GRBL State: {0}" FontSize=" 16" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
-                    <Label Name ="StateColorLabel" Background="{Binding Path =GrblState, Converter={StaticResource StateColorConverter}}" Width="25" Height="25" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <Label  Name="JogDistance" Content="{Binding JogStep}" ContentStringFormat="Jog Distance: {0}" BorderThickness="1" FontSize="16"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
-                    <Label  Name="JogFeed" Content="{Binding JogRate}" ContentStringFormat="Jog Feed: {0}"  BorderThickness="1" FontSize="16"  VerticalAlignment="Center"  HorizontalContentAlignment="Center"/>
-                    <Label  Name="WCS" Content="{Binding WorkCoordinateSystem}"  ContentStringFormat="WCS:{0}"   BorderThickness="1" FontSize="16"  VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
-                    <Label  Name="Signals" Content="Signals:"  BorderThickness="1" FontSize="16" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0"/>
-                    <cnccontrols:SignalsControl VerticalAlignment="Top" Width="155" ></cnccontrols:SignalsControl>
-                    <Label  Name="ToolNumber" Content="{Binding Tool}" ContentStringFormat="Tool#: {0}" VerticalAlignment="Center"  BorderThickness="1" FontSize="16" HorizontalContentAlignment="Center"/>
-                   
-                </StackPanel>
-                <Button Grid.Column="2"  FontSize="14" VerticalContentAlignment="Center" 
-                        materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                        materialDesign:ButtonProgressAssist.Value="-1" Width="135" Height="40" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" 
-                        BorderBrush="Red"
-                        Content="{Binding AlarmConText}"
-                        Background="Red" Command="{ Binding ClearAlarmCommand}"
-                        Visibility="{Binding ShowAlarmButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-                
-                <Button Grid.Column="3" Content="Shut Down" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" 
-                        VerticalContentAlignment="Center" Height="40" Width="100" Click="ButtonBase_OnClick" ></Button>
-            </Grid>-->
         </Border>
-
         <Border Height="25"  BorderThickness="1" DockPanel.Dock="Top">
             <StatusBar>
                 <StatusBar.ItemsPanel>

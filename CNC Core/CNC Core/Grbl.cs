@@ -2679,52 +2679,6 @@ namespace CNC.Core
             return Grbl.GrblViewModel != null && Load(Grbl.GrblViewModel);
         }
 
-        //TODO try the GRBL setting loading with this 
-        public static List<string> LoadSetting(Dictionary<int, string> grblSettings, GrblViewModel model)
-        {
-            try
-            {
-                var retVal = new List<string>();
-                bool? res = null;
-                var cancellationToken = new CancellationToken();
-                PollGrbl.Suspend();
-
-                void ProcessSettings(string response)
-                {
-                    if (response != "ok")
-                    {
-                        retVal.Add(response);
-                    }
-                }
-
-                foreach (var setting in grblSettings)
-                {
-                    var cmdr = $"${setting.Key}={setting.Value}";
-                    new Thread(() =>
-                    {
-                        res = cancellationToken.AckResponse<string>(ProcessSettings,
-                            a => model.OnResponseReceived += a,
-                            a => model.OnResponseReceived -= a,
-                            400, () => Comms.com.WriteCommand(cmdr));
-                    }).Start();
-
-                    while (res == null)
-                    {
-                        EventUtils.DoEvents();
-                    }
-                }
-                return retVal;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return null;
-            }
-            finally
-            {
-                PollGrbl.Resume();
-            }
-        }
 
         public static bool HasChanges()
         {
@@ -3020,14 +2974,9 @@ namespace CNC.Core
             }
         }
 
-        public static string RunTime
-        {
-            get
-            {
-                return IsRunning ? string.Format("{0:00}:{1:00}:{2:00}", stopWatch.Elapsed.Hours, stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds)
-                                 : "00:00:00";
-            }
-        }
+        public static string RunTime =>
+            IsRunning ? $"{stopWatch.Elapsed.Hours:00}:{stopWatch.Elapsed.Minutes:00}:{stopWatch.Elapsed.Seconds:00}"
+                : "00:00:00";
 
         public static void Start()
         {

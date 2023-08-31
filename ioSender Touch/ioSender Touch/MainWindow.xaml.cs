@@ -34,7 +34,7 @@ namespace ioSenderTouch
             int res;
             //if ((res = AppConfig.Settings.SetupAndOpen(Title, (GrblViewModel)DataContext, App.Current.Dispatcher)) != 0)
             //    Environment.Exit(res);
-             _viewModel  = new GrblViewModel();
+            _viewModel = DataContext as GrblViewModel ?? new GrblViewModel();
             BaseWindowTitle = Title;
 
             if (SystemInformation.ScreenOrientation ==ScreenOrientation.Angle90)
@@ -72,11 +72,6 @@ namespace ioSenderTouch
             Close();
         }
 
-        private int GetOrientation()
-        {
-            return ((int)System.Windows.Forms.SystemInformation.ScreenOrientation);
-        }
-       
         private void Window_Load(object sender, EventArgs e)
         {
 
@@ -99,26 +94,12 @@ namespace ioSenderTouch
             GCode.File.AddTransformer(typeof(ArcsToLines), (string)FindResource("MenuArcsToLines"), UIViewModel.TransformMenuItems);
             GCode.File.AddTransformer(typeof(GCodeCompress), (string)FindResource("MenuCompress"), UIViewModel.TransformMenuItems);
         }
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            // Comms.com.DataReceived -= _viewModel.DataReceived;
-           // AppConfig.Settings.Shutdown();
-            //using (new UIUtils.WaitCursor())
-            //{
-               // _viewModel.Poller.SetState(0);
-               // Comms.com.Close(); // disconnecting from websocket may take some time...
-               
-            //}
-        }
+  
         private void Pipe_FileTransfer(string filename)
         {
             if (!JobRunning)
                 GCode.File.Load(filename);
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
     }
 }
