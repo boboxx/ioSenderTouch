@@ -66,7 +66,7 @@
                         
                     </Grid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="35" Margin="0,0,0,50">
-                        <Button Name="GenGcodeBtn" Content="Generate"  Command="{Binding Path= SurfacingCommand}"  CommandParameter="{Binding ElementName=GenGcodeBtn, Path=Content}"
+                        <Button Name="CaliButton" Content="Run"  Command="{Binding Path= RunCalibration}"  CommandParameter="{Binding ElementName=CaliButton, Path=Content}"
                             Margin="0,0,20,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105"></Button>
                     </StackPanel>
                 </Grid>
