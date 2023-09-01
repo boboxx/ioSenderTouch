@@ -130,6 +130,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\CalibrationControl.xaml.cs">
+      <DependentUpon>CalibrationControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\JogCoontrolT.xaml.cs">
       <DependentUpon>JogCoontrolT.xaml</DependentUpon>
     </Compile>
@@ -158,6 +161,10 @@
     <Compile Include="Views\UtilityView.xaml.cs">
       <DependentUpon>UtilityView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\CalibrationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\JogCoontrolT.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -281,6 +288,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\surface1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Triangle.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.10.0-ci317\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.10.0-ci317\build\MaterialDesignThemes.targets')" />

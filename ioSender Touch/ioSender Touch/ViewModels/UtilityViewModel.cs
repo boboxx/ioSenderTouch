@@ -28,7 +28,7 @@ namespace ioSenderTouch.ViewModels
         private readonly ErrorsAndAlarms _alarmAndError;
         private MacroEditor _macroEditor;
         private SurfacingControl _surfacingControl;
-        
+
 
         private const double Inches_To_MM = 25.4;
         private const double Safe_Height = .12;
@@ -40,6 +40,7 @@ namespace ioSenderTouch.ViewModels
         private string _measurement;
         private bool _mist;
         private bool _flood;
+        private readonly CalibrationControl _xyCalibrationControl;
 
         public ICommand ShowView { get; }
         public ICommand SurfacingCommand { get; set; }
@@ -111,20 +112,22 @@ namespace ioSenderTouch.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public UtilityViewModel(GrblViewModel grblViewModel)
         {
             _grblViewModel = grblViewModel;
             ShowView = new Command(SetView);
             _alarmAndError = new ErrorsAndAlarms("");
             _surfacingControl = new SurfacingControl();
+            _xyCalibrationControl = new CalibrationControl();
             _macroEditor = new MacroEditor();
             SurfacingCommand = new Command(ExecuteMethod);
             Passes = 1;
             OverLap = 50;
             BuildProbeMacro();
             AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
-            
+            CalculateAngle(400, 300, 500);
+            CalculateAngle(400, 300, 500.1714);
         }
 
         private void BuildProbeMacro()
@@ -140,7 +143,7 @@ namespace ioSenderTouch.ViewModels
 
         private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
         {
-           
+
             var surface = AppConfig.Settings.Base.Surface;
             if (surface == null) return;
             PopulateUI(surface);
@@ -215,7 +218,7 @@ namespace ioSenderTouch.ViewModels
                 depth = depth * Inches_To_MM;
             }
 
-            var surfaceGcode = new GcodeSurfacingBuilder(width, length, feedRate, dia, numberOfPasses, depth, overlap, rpm, safeHeight, mist,flood);
+            var surfaceGcode = new GcodeSurfacingBuilder(width, length, feedRate, dia, numberOfPasses, depth, overlap, rpm, safeHeight, mist, flood);
             var macro = new Macro
             {
                 Name = "Quick Surfacing",
@@ -235,6 +238,7 @@ namespace ioSenderTouch.ViewModels
             }
             _grblViewModel.UtilityMacros.Add(macro);
             SaveMacro();
+
         }
 
         private void SaveMacro()
@@ -282,7 +286,32 @@ namespace ioSenderTouch.ViewModels
                 case "Surfacing":
                     Control = _surfacingControl;
                     break;
+                case "Calibration":
+                    Control = _xyCalibrationControl;
+                    break;
             }
+        }
+
+        public void CalculateAngle(double a, double b, double c)
+        {
+            var aSqr = Math.Pow(a, 2);
+            var bSqr = Math.Pow(b, 2);
+            var cSqr = Math.Pow(c, 2);
+            var aAngle = (bSqr + cSqr - aSqr) / ((b * c) * 2);
+            var bAngle = (aSqr + cSqr - bSqr) / ((a * c) * 2);
+            var cAngle = (aSqr + bSqr - cSqr) / ((a * b) * 2);
+            var radA = Math.Acos(aAngle);
+            var radB = Math.Acos(bAngle);
+            var radC = Math.Acos(cAngle);
+            var angleA = radA * (180 / Math.PI);
+            var angleB = radB * (180 / Math.PI);
+            var angleC = radC * (180 / Math.PI);
+            var formattedAngleC = Math.Round(angleA, 4);
+            var formattedAngleA = Math.Round(angleB, 4);
+            var formatted90 = Math.Round(angleC, 4);
+            var cor = 90 - formatted90;
+            var delta =Math.Sin(cor * (Math.PI / 180))*b;
+            var formattedDelta = Math.Round(delta, 3);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
