@@ -50,8 +50,9 @@ namespace ioSenderTouch
             AppConfig.Settings.OnConfigFileLoaded += AppConfiguationLoaded;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
             InitSystem();
-            BuildOptionalUi();
+            //BuildOptionalUi();
             GCode.File.FileLoaded += File_FileLoaded;
+          
         }
 
         private void BuildOptionalUi()
@@ -64,6 +65,13 @@ namespace ioSenderTouch
             if (_model.HasATC)
             {
                 _toolView = new ToolView(_model);
+            }
+            if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
+            {
+                _model.HasProbing = true;
+                _probeView = new ProbingView(_model);
+                _probeView.Activate(true, ViewType.Probing);
+
             }
         }
 

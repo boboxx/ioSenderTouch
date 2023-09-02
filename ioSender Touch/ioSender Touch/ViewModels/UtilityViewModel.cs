@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -19,6 +20,14 @@ namespace ioSenderTouch.ViewModels
 {
     public class UtilityViewModel : INotifyPropertyChanged
     {
+        private  string _instructions =
+            "-Load spindle with center point bit\n such 90 degrees chamfer bit or pointed dial.\n\r" +
+            "-Zero stock at lower left corner.\n\r" +
+            "-Enter measurement of desired triangle.\r"+
+            "The larger the triangle the increase in accuracy\r\n"+
+            "-Note: Using low tac tape at point A, B and C\nmay increase visibility of imprint marks \n"+
+            "smaller imprint marks using less Z depth will help increase accuracy\n" +
+            "but may increase difficulty in measuring";
 
         private const string Metric = "Metric";
         private const string Inches = "Inches";
@@ -26,8 +35,9 @@ namespace ioSenderTouch.ViewModels
         private readonly GrblViewModel _grblViewModel;
         private UIElement _control;
         private readonly ErrorsAndAlarms _alarmAndError;
-        private MacroEditor _macroEditor;
-        private SurfacingControl _surfacingControl;
+        private readonly MacroEditor _macroEditor;
+        private readonly SurfacingControl _surfacingControl;
+        private readonly CalibrationControl _xyCalibrationControl;
 
 
         private const double Inches_To_MM = 25.4;
@@ -40,10 +50,22 @@ namespace ioSenderTouch.ViewModels
         private string _measurement;
         private bool _mist;
         private bool _flood;
-        private readonly CalibrationControl _xyCalibrationControl;
+        private double _measureA;
+        private double _lengthA;
+        private double _lengthB;
+        private double _depthCalibration;
+        private double _measureB;
+        private double _measureC;
+        private double _feedRateCalibration;
+        private string _measurementResults;
+        private readonly CalibrationTriangle _calibrationTriangle
+            ;
+
 
         public ICommand ShowView { get; }
         public ICommand SurfacingCommand { get; set; }
+        public ICommand CalibrationRunCommand { get; set; }
+        public ICommand CalibrationResultsCommand { get; set; }
 
         public double ToolDiameter { get; set; }
         public double StockLength { get; set; }
@@ -54,6 +76,8 @@ namespace ioSenderTouch.ViewModels
         public double SpindleRpm { get; set; }
         public double OverLap { get; set; }
         public string FilePath { get; set; }
+
+      
 
         public bool Flood
         {
@@ -113,10 +137,112 @@ namespace ioSenderTouch.ViewModels
             }
         }
 
+        public string Instructions
+        {
+            get => _instructions;
+            set
+            {
+                if (value == _instructions) return;
+                _instructions = value;
+                OnPropertyChanged();
+            }
+        }
+        public double LengthA
+        {
+            get => _lengthA;
+            set
+            {
+                if (value.Equals(_lengthA)) return;
+                _lengthA = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double LengthB
+        {
+            get => _lengthB;
+            set
+            {
+                if (value.Equals(_lengthB)) return;
+                _lengthB = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double DepthCalibration
+        {
+            get => _depthCalibration;
+            set
+            {
+                if (value.Equals(_depthCalibration)) return;
+                _depthCalibration = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double FeedRateCalibration
+        {
+            get => _feedRateCalibration;
+            set
+            {
+                if (value.Equals(_feedRateCalibration)) return;
+                _feedRateCalibration = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double MeasureA
+        {
+            get => _measureA;
+            set
+            {
+                if (value.Equals(_measureA)) return;
+                _measureA = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double MeasureB
+        {
+            get => _measureB;
+            set
+            {
+                if (value.Equals(_measureB)) return;
+                _measureB = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double MeasureC
+        {
+            get => _measureC;
+            set
+            {
+                if (value.Equals(_measureC)) return;
+                _measureC = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string MeasurementResults
+        {
+            get => _measurementResults;
+            set
+            {
+                if (value == _measurementResults) return;
+                _measurementResults = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+     
         public UtilityViewModel(GrblViewModel grblViewModel)
         {
             _grblViewModel = grblViewModel;
             ShowView = new Command(SetView);
+            CalibrationResultsCommand = new Command(CreateCalibrationResults);
+            CalibrationRunCommand = new Command(CreateCalibrationJob);
             _alarmAndError = new ErrorsAndAlarms("");
             _surfacingControl = new SurfacingControl();
             _xyCalibrationControl = new CalibrationControl();
@@ -126,8 +252,10 @@ namespace ioSenderTouch.ViewModels
             OverLap = 50;
             BuildProbeMacro();
             AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
-            CalculateAngle(400, 300, 500);
-            CalculateAngle(400, 300, 500.1714);
+            _calibrationTriangle = new CalibrationTriangle();
+            //CalculateAngle(400, 300, 500);
+            //CalculateAngle(400, 300, 500.1714);
+            //CalculateTriangle(400, 300);
         }
 
         private void BuildProbeMacro()
@@ -169,7 +297,24 @@ namespace ioSenderTouch.ViewModels
             BuildJobMacro(config);
 
         }
-
+        private void SetView(object view)
+        {
+            switch (view.ToString())
+            {
+                case "Alarm":
+                    Control = _alarmAndError;
+                    break;
+                case "Macro":
+                    Control = _macroEditor;
+                    break;
+                case "Surfacing":
+                    Control = _surfacingControl;
+                    break;
+                case "Calibration":
+                    Control = _xyCalibrationControl;
+                    break;
+            }
+        }
         public void BuildJobMacro(SurfaceConfig config)
         {
             _grblViewModel.UtilityMacros.Add(new Macro
@@ -272,46 +417,18 @@ namespace ioSenderTouch.ViewModels
             }
         }
 
-
-        private void SetView(object view)
+        private void CreateCalibrationJob(object x)
         {
-            switch (view.ToString())
-            {
-                case "Alarm":
-                    Control = _alarmAndError;
-                    break;
-                case "Macro":
-                    Control = _macroEditor;
-                    break;
-                case "Surfacing":
-                    Control = _surfacingControl;
-                    break;
-                case "Calibration":
-                    Control = _xyCalibrationControl;
-                    break;
-            }
+            _calibrationTriangle.CalculateTriangle(LengthA, LengthB);
         }
 
-        public void CalculateAngle(double a, double b, double c)
+        private void CreateCalibrationResults(object x)
         {
-            var aSqr = Math.Pow(a, 2);
-            var bSqr = Math.Pow(b, 2);
-            var cSqr = Math.Pow(c, 2);
-            var aAngle = (bSqr + cSqr - aSqr) / ((b * c) * 2);
-            var bAngle = (aSqr + cSqr - bSqr) / ((a * c) * 2);
-            var cAngle = (aSqr + bSqr - cSqr) / ((a * b) * 2);
-            var radA = Math.Acos(aAngle);
-            var radB = Math.Acos(bAngle);
-            var radC = Math.Acos(cAngle);
-            var angleA = radA * (180 / Math.PI);
-            var angleB = radB * (180 / Math.PI);
-            var angleC = radC * (180 / Math.PI);
-            var formattedAngleC = Math.Round(angleA, 4);
-            var formattedAngleA = Math.Round(angleB, 4);
-            var formatted90 = Math.Round(angleC, 4);
-            var cor = 90 - formatted90;
-            var delta =Math.Sin(cor * (Math.PI / 180))*b;
-            var formattedDelta = Math.Round(delta, 3);
+          var triangle =  _calibrationTriangle.CalculateResults(MeasureA, MeasureB, MeasureC);
+        
+         var delta = _calibrationTriangle.CalculateDelta(triangle);
+         var leftDelta = delta * -1;
+         MeasurementResults = $"Move Left Axis: { leftDelta}\n or Right Axis: { delta}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
