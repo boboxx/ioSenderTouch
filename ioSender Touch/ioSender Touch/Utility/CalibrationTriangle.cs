@@ -8,8 +8,8 @@ namespace ioSenderTouch.Utility
 {
      public class CalibrationTriangle
     {
-        public Triangle HypotenuseTriangle { get; set; }
-        public Triangle ActualTriangle { get; set; }
+        
+        
         public double Delta { get; set; }
 
         public CalibrationTriangle()
@@ -17,21 +17,20 @@ namespace ioSenderTouch.Utility
             
         }
 
-        public void CalculateTriangle(double a, double b)
+        public Triangle CalculateTriangle(double a, double b)
         {
             var aSqr = Math.Pow(a, 2);
             var bSqr = Math.Pow(b, 2);
 
             //radian 1.5708 = 90 degrees  × π/180
-            var c = Math.Sqrt(bSqr + aSqr - 2 * (b * a) * Math.Cos(1.5708));
-            var formattedC = Math.Round(c, 3);
-            HypotenuseTriangle = CalculateAngle(a, b, c);
+            var cSide = Math.Sqrt(bSqr + aSqr - 2 * (b * a) * Math.Cos(1.5708));
+            return CalculateAngle(a, b, cSide);
         }
 
 
         public Triangle CalculateResults(double a, double b, double c)
         {
-          return  ActualTriangle = CalculateAngle(a, b, c);
+          return   CalculateAngle(a, b, c);
         }
         public Triangle CalculateAngle(double a, double b, double c)
         {
@@ -50,9 +49,6 @@ namespace ioSenderTouch.Utility
             var formattedAngleC = Math.Round(angleA, 4);
             var formattedAngleA = Math.Round(angleB, 4);
             var formattedAngleB = Math.Round(angleC, 4);
-            //var cor = 90 - formattedAngleB;
-            //var delta = Math.Sin(cor * (Math.PI / 180)) * b;
-            //var formattedDelta = Math.Round(delta, 3);
             return new Triangle(a, b, c, formattedAngleA, formattedAngleB, formattedAngleC);
         
         }
@@ -61,7 +57,7 @@ namespace ioSenderTouch.Utility
         {
             var cor = 90 - triangle.AngleB;
             var delta = Math.Sin(cor * (Math.PI / 180)) * triangle.AngleB;
-            var formattedDelta = Math.Round(delta, 3);
+            var formattedDelta = Math.Round(delta, 4);
             return formattedDelta;
         }
 

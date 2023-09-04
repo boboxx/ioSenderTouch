@@ -155,7 +155,8 @@ namespace CNC.Controls
                 }
                 catch (Exception e)
                 {
-                    if (MessageBox.Show(((string)FindResource("SettingsFail")).Replace("\\n", "\r\r"), e.Message, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show(((string)FindResource("SettingsFail")).Replace("\\n", "\r\r"), 
+                            e.Message, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         block = sr.ReadLine();
                     else
                     {
@@ -230,8 +231,8 @@ namespace CNC.Controls
                         Comms.com.WriteCommand(cmdr);
                         Thread.Sleep(50);
                     }
-                    _model.Poller.SetState(_model.PollingInterval);
                     Comms.com.DataReceived -= ProcessSettings;
+                    _model.Poller.SetState(_model.PollingInterval);
                     SetLoaded(retVal);
                 }
 

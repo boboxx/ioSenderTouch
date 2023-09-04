@@ -6,7 +6,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using CNC.Controls;
 using CNC.Controls.Views;
@@ -20,12 +23,12 @@ namespace ioSenderTouch.ViewModels
 {
     public class UtilityViewModel : INotifyPropertyChanged
     {
-        private  string _instructions =
+        private string _instructions =
             "-Load spindle with center point bit\n such 90 degrees chamfer bit or pointed dial.\n\r" +
             "-Zero stock at lower left corner.\n\r" +
-            "-Enter measurement of desired triangle.\r"+
-            "The larger the triangle the increase in accuracy\r\n"+
-            "-Note: Using low tac tape at point A, B and C\nmay increase visibility of imprint marks \n"+
+            "-Enter measurement of desired triangle.\r" +
+            "The larger the triangle the increase in accuracy\r\n" +
+            "-Note: Using low tac tape at point A, B and C\nmay increase visibility of imprint marks \n" +
             "smaller imprint marks using less Z depth will help increase accuracy\n" +
             "but may increase difficulty in measuring";
 
@@ -42,6 +45,8 @@ namespace ioSenderTouch.ViewModels
 
         private const double Inches_To_MM = 25.4;
         private const double Safe_Height = .12;
+        private const double Z_Safe_Height_MM = 50.8;
+        private const double Z_Safe_Height_IN = 50.8;
         private bool _usingInches;
         private string _unit;
         private string _unitPerMin;
@@ -58,10 +63,9 @@ namespace ioSenderTouch.ViewModels
         private double _measureC;
         private double _feedRateCalibration;
         private string _measurementResults;
-        private readonly CalibrationTriangle _calibrationTriangle
-            ;
-
-
+        private readonly CalibrationTriangle _calibrationTriangle;
+        private readonly GCodeTriangle _triangleGcode;
+        private bool _calibrationRan;
         public ICommand ShowView { get; }
         public ICommand SurfacingCommand { get; set; }
         public ICommand CalibrationRunCommand { get; set; }
@@ -77,7 +81,7 @@ namespace ioSenderTouch.ViewModels
         public double OverLap { get; set; }
         public string FilePath { get; set; }
 
-      
+        public Triangle HypothesesTriangle { get; set; }
 
         public bool Flood
         {
@@ -234,9 +238,16 @@ namespace ioSenderTouch.ViewModels
                 OnPropertyChanged();
             }
         }
-
-
-     
+        public bool CalibrationRan
+        {
+            get => _calibrationRan;
+            set
+            {
+                if (value == _calibrationRan) return;
+                _calibrationRan = value;
+                OnPropertyChanged();
+            }
+        }
         public UtilityViewModel(GrblViewModel grblViewModel)
         {
             _grblViewModel = grblViewModel;
@@ -253,9 +264,7 @@ namespace ioSenderTouch.ViewModels
             BuildProbeMacro();
             AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
             _calibrationTriangle = new CalibrationTriangle();
-            //CalculateAngle(400, 300, 500);
-            //CalculateAngle(400, 300, 500.1714);
-            //CalculateTriangle(400, 300);
+            _triangleGcode = new GCodeTriangle();
         }
 
         private void BuildProbeMacro()
@@ -271,7 +280,6 @@ namespace ioSenderTouch.ViewModels
 
         private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
         {
-
             var surface = AppConfig.Settings.Base.Surface;
             if (surface == null) return;
             PopulateUI(surface);
@@ -355,12 +363,12 @@ namespace ioSenderTouch.ViewModels
             var flood = Flood;
             if (_usingInches)
             {
-                width = width * Inches_To_MM;
-                length = length * Inches_To_MM;
-                feedRate = feedRate * Inches_To_MM;
-                dia = dia * Inches_To_MM;
+                width *= Inches_To_MM;
+                length *= Inches_To_MM;
+                feedRate *= Inches_To_MM;
+                dia *= Inches_To_MM;
                 safeHeight = Safe_Height * Inches_To_MM;
-                depth = depth * Inches_To_MM;
+                depth *= Inches_To_MM;
             }
 
             var surfaceGcode = new GcodeSurfacingBuilder(width, length, feedRate, dia, numberOfPasses, depth, overlap, rpm, safeHeight, mist, flood);
@@ -383,7 +391,6 @@ namespace ioSenderTouch.ViewModels
             }
             _grblViewModel.UtilityMacros.Add(macro);
             SaveMacro();
-
         }
 
         private void SaveMacro()
@@ -417,18 +424,122 @@ namespace ioSenderTouch.ViewModels
             }
         }
 
+        private void RunJob(List<string> job)
+        {
+            try
+            {
+                var lineCount = job.Count - 1;
+                var index = 1;
+                var jobComplete = false;
+                var cancellationToken = new CancellationToken();
+              
+                _grblViewModel.Poller.SetState(0);
+
+                void ProcessSettings(string response)
+                {
+                    if (response == "ok")
+                    {
+                        SendLine(index);
+                        index++;
+
+                    }
+                }
+
+                void SendLine(int line)
+                {
+                    if (line <= lineCount)
+                    {
+                        var command = job[line];
+                        Comms.com.WriteCommand(command);
+                    }
+                    else
+                    {
+                        jobComplete = true;
+                    }
+
+                }
+
+                void ProcessJob(List<string> jobList)
+                {
+                    Comms.com.DataReceived -= ProcessSettings;
+                    Comms.com.DataReceived += ProcessSettings;
+                    Comms.com.WriteCommand(jobList[0]);
+                    while (!jobComplete)
+                    {
+                        Thread.Sleep(50);
+                    }
+                    Comms.com.DataReceived -= ProcessSettings;
+                    _grblViewModel.Poller.SetState(_grblViewModel.PollingInterval);
+                }
+
+                Task.Factory.StartNew(() => ProcessJob(job), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+               
+                _grblViewModel.Poller.SetState(200);
+                Console.WriteLine(ex);
+               
+            }
+        }
         private void CreateCalibrationJob(object x)
         {
-            _calibrationTriangle.CalculateTriangle(LengthA, LengthB);
+            HypothesesTriangle = _calibrationTriangle.CalculateTriangle(LengthA, LengthB);
+            double lengthA;
+            double lengthB;
+            double feedRate;
+            double depth;
+            double safeHeight;
+            if (_usingInches)
+            {
+                 lengthA = HypothesesTriangle.SideA * Inches_To_MM;
+                 lengthB = HypothesesTriangle.SideB * Inches_To_MM;
+                 feedRate = FeedRateCalibration * Inches_To_MM;
+                 depth = DepthCalibration * Inches_To_MM;
+                 safeHeight = Z_Safe_Height_IN;
+            }
+            else
+            {
+                 lengthA = HypothesesTriangle.SideA;
+                 lengthB = HypothesesTriangle.SideB;
+                 feedRate = FeedRateCalibration;
+                 depth = DepthCalibration;
+                 safeHeight = Z_Safe_Height_MM;
+            }
+            var gCodeJob = _triangleGcode.CreateJob(lengthA, lengthB, feedRate,
+                 depth, safeHeight);
+            RunJob(gCodeJob);
+            CalibrationRan = true;
         }
 
         private void CreateCalibrationResults(object x)
         {
-          var triangle =  _calibrationTriangle.CalculateResults(MeasureA, MeasureB, MeasureC);
-        
-         var delta = _calibrationTriangle.CalculateDelta(triangle);
-         var leftDelta = delta * -1;
-         MeasurementResults = $"Move Left Axis: { leftDelta}\n or Right Axis: { delta}";
+            MeasurementResults = string.Empty;
+            var triangle = _calibrationTriangle.CalculateResults(MeasureA, MeasureB, MeasureC);
+            var delta = _calibrationTriangle.CalculateDelta(triangle);
+            if (_usingInches)
+            {
+                delta /= Inches_To_MM;
+            }
+            delta = Math.Round(delta, 3);
+            var leftDelta = delta * -1;
+            var tolerance = _usingInches ? .001 : .0254;
+            if (Math.Abs(triangle.SideA - HypothesesTriangle.SideA) > tolerance)
+            {
+                MeasurementResults += "X axis measurements not equal\nCalibrate X steps\n\r";
+            }
+            if (Math.Abs(triangle.SideB - HypothesesTriangle.SideB) > tolerance)
+            {
+                MeasurementResults += "Y axis measurements not equal\nCalibrate Y steps\n\r";
+            }
+            var results = Math.Abs(HypothesesTriangle.SideC - triangle.SideC);
+            var forMattedResults = Math.Round(results, 3);
+            if (forMattedResults <= tolerance)
+            {
+                MeasurementResults += "Gantry is Square\n\r";
+            }
+            MeasurementResults += $"Move Left Axis: { leftDelta}\n or Right Axis: { delta}";
+            MeasurementResults += _usingInches ? " Inches" : " MM";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

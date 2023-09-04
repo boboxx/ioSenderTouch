@@ -14,7 +14,6 @@ namespace ioSenderTouch.Utility
         private const string TravelFeedRate = "G1";
         private const string RapidFeedRate = "G0";
         private const string Metric = "G21";
-        private const string Standard = "G20";
         private const string AbsolutePos = "G91";
         private const string IncrementalPos = "G90";
         private const string X0 = "X0";
