@@ -99,6 +99,7 @@ namespace CNC.Core
         private string _isConnected;
         private bool _connected;
         private bool _hasAtc;
+        private bool _isIndividualHomingEnabled;
 
         public delegate void GrblResetHandler();
 
@@ -224,7 +225,7 @@ namespace CNC.Core
             ToolOffset.PropertyChanged += ToolOffset_PropertyChanged;
 
             //TODO new command linking  
-
+           
             ShutDownCommand = new Command(SetShutDown);
 
             ClearAlarmCommand = new Command(_ =>
@@ -778,6 +779,19 @@ namespace CNC.Core
         public string Scaling { get { return _sc; } private set { _sc = value; OnPropertyChanged(); } }
         public string SDCardStatus { get { return _sd; } private set { _sd = value; OnPropertyChanged(); } }
         public bool IsHomingEnabled { get { return GrblInfo.HomingEnabled; } }
+
+        public bool IsIndividualHomingEnabled
+        {
+            get => _isIndividualHomingEnabled;
+            set
+            {
+                if (value == _isIndividualHomingEnabled) return;
+                _isIndividualHomingEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public HomedState HomedState { get { return _homedState; } private set { _homedState = value; OnPropertyChanged(); } }
         public LatheMode LatheMode
         {
@@ -1802,6 +1816,13 @@ namespace CNC.Core
         {
             Thread.Sleep(PollingInterval * 2);
             ClearAlarm();
+        }
+
+        public void SettingsLoaded()
+        {
+            var result = GrblSettings.Get(grblHALSetting.HomingEnable).Value;
+            var bitValue =(byte)int.Parse(result);
+            IsIndividualHomingEnabled = ((bitValue & 0x02) == 0x02);
         }
     }
 }

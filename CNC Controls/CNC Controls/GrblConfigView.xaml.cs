@@ -94,6 +94,7 @@ namespace CNC.Controls
             _model.Message = string.Empty;
 
             GrblSettings.Save();
+            _model.SettingsLoaded();
         }
 
         void btnReload_Click(object sender, RoutedEventArgs e)

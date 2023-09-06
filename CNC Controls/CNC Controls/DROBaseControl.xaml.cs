@@ -40,6 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CNC.Controls
@@ -52,14 +53,10 @@ namespace CNC.Controls
         public event ZeroClickHandler ZeroClick;
 
         public event EventHandler OnAxisHomeClick;
-        //public delegate void HomeClickHandler(object sender, RoutedEventArgs e);
-        //public event HomeClickHandler HomeClick;
 
         public DROBaseControl()
         {
             InitializeComponent();
-
-            ScaledOff = btnScaled.Background;
         }
 
         public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(nameof(Label), typeof(string), typeof(DROBaseControl), new PropertyMetadata());
@@ -101,7 +98,7 @@ namespace CNC.Controls
         }
         private static void OnIsScaledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((DROBaseControl)d).btnScaled.Background = (bool)e.NewValue ? ScaledOn : ScaledOff;
+           // ((DROBaseControl)d).btnScaled.Background = (bool)e.NewValue ? ScaledOn : ScaledOff;
         }
 
         public new object Tag
@@ -117,6 +114,7 @@ namespace CNC.Controls
         {
             ZeroClick?.Invoke(sender, e);
         }
+
     }
 }
 

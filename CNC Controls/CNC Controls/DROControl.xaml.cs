@@ -251,6 +251,12 @@ namespace CNC.Controls
            (DataContext as GrblViewModel)?.ExecuteCommand("$H");
             
         }
+
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
+
     }
 }
 

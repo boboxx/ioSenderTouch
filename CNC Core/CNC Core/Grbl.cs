@@ -320,7 +320,7 @@ namespace CNC.Core
         LimitV = 1 << 7,
         LimitW = 1 << 8,
         EStop = 1 << 9,
-        Probe  = 1 << 10,
+        Probe = 1 << 10,
         Reset = 1 << 11,
         SafetyDoor = 1 << 12,
         Hold = 1 << 13,
@@ -501,7 +501,7 @@ namespace CNC.Core
             get { return _suspend; }
             set
             {
-                if(!(_suspend = value))
+                if (!(_suspend = value))
                 {
                     //for(int i = 0; i < Length; i++)
                     //  //  if(!double.IsNaN((double)arr[i]))
@@ -517,10 +517,10 @@ namespace CNC.Core
             get { return arr[i]; }
             set
             {
-                if(!value.Equals(arr[i]))
+                if (!value.Equals(arr[i]))
                 {
                     arr[i] = value;
-                    if(!_suspend)
+                    if (!_suspend)
                         OnPropertyChanged("XYZABCUVW".Substring(i, 1));
                 }
             }
@@ -547,7 +547,7 @@ namespace CNC.Core
             for (i = 0; i < map.Length; i++)
                 Values[i] = map.Substring(i, 1);
 
-            for(; i < Values.Length; i++)
+            for (; i < Values.Length; i++)
                 Values[i] = "-";
         }
 
@@ -670,9 +670,9 @@ namespace CNC.Core
             return a;
         }
 
-        public void Add (Position pos)
+        public void Add(Position pos)
         {
-            foreach(int i in GrblInfo.AxisFlags.ToIndices())
+            foreach (int i in GrblInfo.AxisFlags.ToIndices())
                 Values[i] += pos.Values[i];
 
             if (!Values.SuspendNotifications)
@@ -876,10 +876,10 @@ namespace CNC.Core
 
         public static bool IsEnabled { get { return DigitalInputs + DigitalOutputs + AnalogInputs + AnalogOutputs > 0; } }
 
-        internal static void ParseConfig (string config)
+        internal static void ParseConfig(string config)
         {
             var values = config.Split(':')[1].TrimEnd(']').Split(',');
-            if(values.Length == 4)
+            if (values.Length == 4)
             {
                 DigitalInputs = int.Parse(values[0]);
                 DigitalOutputs = int.Parse(values[1]);
@@ -920,7 +920,7 @@ namespace CNC.Core
         public static bool ExpressionsSupported { get; private set; } = false;
         public static int NumAxes
         {
-            get { return _numAxes;  }
+            get { return _numAxes; }
             private set
             {
                 _numAxes = LatheModeEnabled ? Math.Max(value, 3) : value;
@@ -929,7 +929,7 @@ namespace CNC.Core
                 for (int i = 0; i < _numAxes; i++)
                 {
                     flags = (flags << 1) | 0x01;
-                    if(!LatheModeEnabled || i != 1)
+                    if (!LatheModeEnabled || i != 1)
                         PositionFormatString += AxisIndexToLetter(i) + ": {" + i.ToString() + "}  ";
                 }
                 if (LatheModeEnabled && _numAxes == 3)
@@ -1044,20 +1044,20 @@ namespace CNC.Core
             model.Firmware = Firmware;
             model.HasFans = NumFans > 0;
 
-            if(!Resources.IsLegacyController)
+            if (!Resources.IsLegacyController)
                 IsGrblHAL = IsGrblHAL || Firmware == "grblHAL";
 
             return res == true;
         }
 
-        internal static void OnSettingsLoaded (GrblViewModel model)
+        internal static void OnSettingsLoaded(GrblViewModel model)
         {
             model.IsMetric = GrblSettings.GetInteger(GrblSetting.ReportInches) != 1;
             model.Keyboard.IsContinuousJoggingEnabled = IsGrblHAL;
             model.Keyboard.SoftLimits = GrblSettings.GetInteger(GrblSetting.SoftLimitsEnable) == 1;
             model.Keyboard.LimitSwitchesClearance = GrblSettings.GetDouble(GrblSetting.HomingPulloff);
             model.GrblState = model.GrblState; // Temporary hack to enable the Home button when homing is enabled
-         
+
             HomingDirection = (AxisFlags)GrblSettings.GetInteger(GrblSetting.HomingDirMask);
 
             if (AxisFlags == AxisFlags.None)
@@ -1072,10 +1072,10 @@ namespace CNC.Core
                 } while (!double.IsNaN(stepsmm) && i < TravelResolution.Values.Length);
             }
             else foreach (int i in AxisFlags.ToIndices())
-            {
-                TravelResolution.Values[i] = 1d / GrblSettings.GetDouble(GrblSetting.TravelResolutionBase + i);
-                MaxTravel.Values[i] = GrblSettings.GetDouble(GrblSetting.MaxTravelBase + i);
-            }
+                {
+                    TravelResolution.Values[i] = 1d / GrblSettings.GetDouble(GrblSetting.TravelResolutionBase + i);
+                    MaxTravel.Values[i] = GrblSettings.GetDouble(GrblSetting.MaxTravelBase + i);
+                }
 
             if (HasFirmwareJog)
             {
@@ -1147,7 +1147,7 @@ namespace CNC.Core
                 while (res == null)
                     EventUtils.DoEvents();
             }
-            else if(!Resources.IsLegacyController)
+            else if (!Resources.IsLegacyController)
                 IsGrblHAL = model.Firmware == "grblHAL";
 
             PollGrbl.Resume();
@@ -1155,7 +1155,7 @@ namespace CNC.Core
             return Comms.com.Reply;
         }
 
-        private static void DetectNumAxes (string rt_report)
+        private static void DetectNumAxes(string rt_report)
         {
             var s = rt_report.Split('|');
             if (s.Length > 1)
@@ -1231,7 +1231,8 @@ namespace CNC.Core
                     case "AXS":
                         NumAxes = int.Parse(valuepair[1], CultureInfo.InvariantCulture);
                         AxisLetters = valuepair[2];
-                        if (Grbl.GrblViewModel != null) {
+                        if (Grbl.GrblViewModel != null)
+                        {
                             Grbl.GrblViewModel.AxisLetter.Remap(AxisLetters);
                             AxisLetters = Grbl.GrblViewModel.AxisLetter.All;
                             SignalLetters = AxisLetters + SignalLetters.Substring(9);
@@ -1248,84 +1249,84 @@ namespace CNC.Core
                             if (value.StartsWith("TMC="))
                                 TrinamicDrivers = value.Substring(4);
                             else switch (value)
-                            {
-                                case "ENUMS":
-                                    HasEnums = true;
-                                    break;
+                                {
+                                    case "ENUMS":
+                                        HasEnums = true;
+                                        break;
 
-                                case "EXPR":
-                                    ExpressionsSupported = true;
-                                    break;
+                                    case "EXPR":
+                                        ExpressionsSupported = true;
+                                        break;
 
-                                case "TC":
-                                    ManualToolChange = true;
-                                    break;
+                                    case "TC":
+                                        ManualToolChange = true;
+                                        break;
 
-                                case "ATC":
-                                    HasATC = true;
-                                    break;
+                                    case "ATC":
+                                        HasATC = true;
+                                        break;
 
-                                case "RTC":
-                                    HasRTC = true;
-                                    break;
+                                    case "RTC":
+                                        HasRTC = true;
+                                        break;
 
-                                case "ETH":
-                                    break;
+                                    case "ETH":
+                                        break;
 
-                                case "HOME":
-                                    HomingEnabled = true;
-                                    break;
+                                    case "HOME":
+                                        HomingEnabled = true;
+                                        break;
 
-                                case "SD":
-                                    HasSDCard = true;
-                                    break;
+                                    case "SD":
+                                        HasSDCard = true;
+                                        break;
 
-                                case "SED":
-                                    HasSettingDescriptions = true;
-                                    break;
+                                    case "SED":
+                                        HasSettingDescriptions = true;
+                                        break;
 
-                                case "YM":
-                                    if(UploadProtocol == string.Empty)
-                                        UploadProtocol = "YModem";
-                                    break;
+                                    case "YM":
+                                        if (UploadProtocol == string.Empty)
+                                            UploadProtocol = "YModem";
+                                        break;
 
-                                case "FTP":
-                                    UploadProtocol = "FTP";
-                                    break;
+                                    case "FTP":
+                                        UploadProtocol = "FTP";
+                                        break;
 
-                                case "PID":
-                                    HasPIDLog = true;
-                                    break;
+                                    case "PID":
+                                        HasPIDLog = true;
+                                        break;
 
-                                case "NOPROBE":
-                                    HasProbe = false;
-                                    break;
+                                    case "NOPROBE":
+                                        HasProbe = false;
+                                        break;
 
-                                case "LATHE":
-                                    LatheModeEnabled = true;
-                                    break;
+                                    case "LATHE":
+                                        LatheModeEnabled = true;
+                                        break;
 
-                                case "BD":
-                                    OptionalSignals |= Signals.BlockDelete;
-                                    break;
+                                    case "BD":
+                                        OptionalSignals |= Signals.BlockDelete;
+                                        break;
 
-                                case "ES":
-                                    OptionalSignals |= Signals.EStop;
-                                    break;
+                                    case "ES":
+                                        OptionalSignals |= Signals.EStop;
+                                        break;
 
-                                case "MW":
-                                    OptionalSignals |= Signals.MotorWarning;
-                                    break;
+                                    case "MW":
+                                        OptionalSignals |= Signals.MotorWarning;
+                                        break;
 
-                                case "OS":
-                                    OptionalSignals |= Signals.OptionalStop;
-                                    break;
+                                    case "OS":
+                                        OptionalSignals |= Signals.OptionalStop;
+                                        break;
 
-                                case "RT+":
-                                case "RT-":
-                                    UseLegacyRTCommands = false;
-                                    break;
-                            }
+                                    case "RT+":
+                                    case "RT-":
+                                        UseLegacyRTCommands = false;
+                                        break;
+                                }
                         }
                         break;
 
@@ -1392,12 +1393,12 @@ namespace CNC.Core
 
         public static bool Get(bool addMissing)
         {
-            if(addMissing && (addMissing = Grbl.GrblViewModel != null && Get(Grbl.GrblViewModel) && GrblWorkParameters.Get()))
+            if (addMissing && (addMissing = Grbl.GrblViewModel != null && Get(Grbl.GrblViewModel) && GrblWorkParameters.Get()))
             {
                 if (IsActive("G43.1") == null || IsActive("G49") == null)
                 {
                     var isOffset = IsPositionOffset(GrblWorkParameters.ToolLengtOffset);
-                    if((isOffset ? IsActive("G43.1") : IsActive("G49")) == null)
+                    if ((isOffset ? IsActive("G43.1") : IsActive("G49")) == null)
                         state.Add(isOffset ? "G43.1" : "G49", "");
                 }
 
@@ -1462,224 +1463,225 @@ namespace CNC.Core
         public static bool Process(string data)
         {
             if (data.StartsWith("[GC:")) try
-            {
-                state.Clear();
-                string[] s = data.Substring(4).TrimEnd(']').Split(' ');
-                foreach (string val in s)
                 {
-                    if (val.StartsWith("G51"))
-                        state.Add(val.Substring(0, 3), val.Substring(4));
-                    else if (val.StartsWith("G5") && val.Length > 2 && "G54G55G56G57G58G59".Contains(val.Substring(0, 3)))
-                        WorkOffset = val;
-                    else if ("FST".Contains(val.Substring(0, 1)))
+                    state.Clear();
+                    string[] s = data.Substring(4).TrimEnd(']').Split(' ');
+                    foreach (string val in s)
                     {
-                        state.Add(val.Substring(0, 1), val.Substring(1));
-                        if (val.Substring(0, 1) == "T")
+                        if (val.StartsWith("G51"))
+                            state.Add(val.Substring(0, 3), val.Substring(4));
+                        else if (val.StartsWith("G5") && val.Length > 2 && "G54G55G56G57G58G59".Contains(val.Substring(0, 3)))
+                            WorkOffset = val;
+                        else if ("FST".Contains(val.Substring(0, 1)))
                         {
-                            _tool = val.Substring(1);
+                            state.Add(val.Substring(0, 1), val.Substring(1));
+                            if (val.Substring(0, 1) == "T")
+                            {
+                                _tool = val.Substring(1);
 
-                            if (_tool == "0")
-                                _tool = GrblConstants.NO_TOOL;
+                                if (_tool == "0")
+                                    _tool = GrblConstants.NO_TOOL;
+                            }
+                        }
+                        else
+                        {
+                            state.Add(val, "");
+                            switch (val)
+                            {
+                                case "G0":
+                                    MotionMode = MotionMode.G0;
+                                    break;
+
+                                case "G1":
+                                    MotionMode = MotionMode.G1;
+                                    break;
+
+                                case "G2":
+                                    MotionMode = MotionMode.G2;
+                                    break;
+
+                                case "G3":
+                                    MotionMode = MotionMode.G3;
+                                    break;
+
+                                case "G5":
+                                    MotionMode = MotionMode.G5;
+                                    break;
+
+                                case "G7":
+                                    LatheMode = LatheMode.Diameter;
+                                    break;
+
+                                case "G8":
+                                    LatheMode = LatheMode.Radius;
+                                    break;
+
+                                case "G17":
+                                    Plane = Plane.XY;
+                                    break;
+
+                                case "G18":
+                                    Plane = Plane.XZ;
+                                    break;
+
+                                case "G19":
+                                    Plane = Plane.YZ;
+                                    break;
+
+                                case "G20":
+                                    Units = Units.Imperial;
+                                    break;
+
+                                case "G21":
+                                    Units = Units.Metric;
+                                    break;
+
+                                case "G33":
+                                    MotionMode = MotionMode.G33;
+                                    break;
+
+                                case "G38.2":
+                                    MotionMode = MotionMode.G38_2;
+                                    break;
+
+                                case "G38.3":
+                                    MotionMode = MotionMode.G38_3;
+                                    break;
+
+                                case "G38.4":
+                                    MotionMode = MotionMode.G38_4;
+                                    break;
+
+                                case "G38.5":
+                                    MotionMode = MotionMode.G38_5;
+                                    break;
+
+                                case "G43":
+                                    ToolLengthOffset = ToolLengthOffset.Enable;
+                                    break;
+
+                                case "G43.1":
+                                    ToolLengthOffset = ToolLengthOffset.EnableDynamic;
+                                    break;
+
+                                case "G43.2":
+                                    ToolLengthOffset = ToolLengthOffset.ApplyAdditional;
+                                    break;
+
+                                case "G49":
+                                    ToolLengthOffset = ToolLengthOffset.Cancel;
+                                    break;
+
+                                case "G50":
+                                case "G51":
+                                    IsScalingActive = val == "G51";
+                                    break;
+
+                                case "G73":
+                                    MotionMode = MotionMode.G73;
+                                    break;
+
+                                case "G76":
+                                    MotionMode = MotionMode.G76;
+                                    break;
+
+                                case "G80":
+                                    MotionMode = MotionMode.G80;
+                                    break;
+
+                                case "G81":
+                                    MotionMode = MotionMode.G81;
+                                    break;
+
+                                case "G82":
+                                    MotionMode = MotionMode.G82;
+                                    break;
+
+                                case "G83":
+                                    MotionMode = MotionMode.G83;
+                                    break;
+
+                                case "G84":
+                                    MotionMode = MotionMode.G84;
+                                    break;
+
+                                case "G85":
+                                    MotionMode = MotionMode.G85;
+                                    break;
+
+                                case "G86":
+                                    MotionMode = MotionMode.G86;
+                                    break;
+
+                                case "G87":
+                                    MotionMode = MotionMode.G87;
+                                    break;
+
+                                case "G88":
+                                    MotionMode = MotionMode.G88;
+                                    break;
+
+                                case "G89":
+                                    MotionMode = MotionMode.G89;
+                                    break;
+
+                                case "G90":
+                                    DistanceMode = DistanceMode.Absolute;
+                                    break;
+
+                                case "G90.1": // not supported or reported by grbl
+                                    IJKMode = IJKMode.Absolute;
+                                    break;
+
+                                case "G91":
+                                    DistanceMode = DistanceMode.Incremental;
+                                    break;
+
+                                case "G91.1": // not reported by grbl, default state
+                                    IJKMode = IJKMode.Incremental;
+                                    break;
+
+                                case "G93":
+                                    FeedRateMode = FeedRateMode.InverseTime;
+                                    break;
+
+                                case "G94":
+                                    FeedRateMode = FeedRateMode.UnitsPerMin;
+                                    break;
+
+                                case "G95":
+                                    FeedRateMode = FeedRateMode.UnitsPerRev;
+                                    break;
+
+                                case "M3":
+                                    SpindleState = SpindleState.CW;
+                                    break;
+
+                                case "M4":
+                                    SpindleState = SpindleState.CCW;
+                                    break;
+
+                                case "M5":
+                                    SpindleState = SpindleState.Off;
+                                    break;
+
+                                case "M7":
+                                    CoolantState |= CoolantState.Mist;
+                                    break;
+
+                                case "M8":
+                                    CoolantState |= CoolantState.Flood;
+                                    break;
+
+                                case "M9":
+                                    CoolantState = CoolantState.Off;
+                                    break;
+                            }
                         }
                     }
-                    else {
-                        state.Add(val, "");
-                        switch (val)
-                        {
-                            case "G0":
-                                MotionMode = MotionMode.G0;
-                                break;
-
-                            case "G1":
-                                MotionMode = MotionMode.G1;
-                                break;
-
-                            case "G2":
-                                MotionMode = MotionMode.G2;
-                                break;
-
-                            case "G3":
-                                MotionMode = MotionMode.G3;
-                                break;
-
-                            case "G5":
-                                MotionMode = MotionMode.G5;
-                                break;
-
-                            case "G7":
-                                LatheMode = LatheMode.Diameter;
-                                break;
-
-                            case "G8":
-                                LatheMode = LatheMode.Radius;
-                                break;
-
-                            case "G17":
-                                Plane = Plane.XY;
-                                break;
-
-                            case "G18":
-                                Plane = Plane.XZ;
-                                break;
-
-                            case "G19":
-                                Plane = Plane.YZ;
-                                break;
-
-                            case "G20":
-                                Units = Units.Imperial;
-                                break;
-
-                            case "G21":
-                                Units = Units.Metric;
-                                break;
-
-                            case "G33":
-                                MotionMode = MotionMode.G33;
-                                break;
-
-                            case "G38.2":
-                                MotionMode = MotionMode.G38_2;
-                                break;
-
-                            case "G38.3":
-                                MotionMode = MotionMode.G38_3;
-                                break;
-
-                            case "G38.4":
-                                MotionMode = MotionMode.G38_4;
-                                break;
-
-                            case "G38.5":
-                                MotionMode = MotionMode.G38_5;
-                                break;
-
-                            case "G43":
-                                ToolLengthOffset = ToolLengthOffset.Enable;
-                                break;
-
-                            case "G43.1":
-                                ToolLengthOffset = ToolLengthOffset.EnableDynamic;
-                                break;
-
-                            case "G43.2":
-                                ToolLengthOffset = ToolLengthOffset.ApplyAdditional;
-                                break;
-
-                            case "G49":
-                                ToolLengthOffset = ToolLengthOffset.Cancel;
-                                break;
-
-                            case "G50":
-                            case "G51":
-                                IsScalingActive = val == "G51";
-                                break;
-
-                            case "G73":
-                                MotionMode = MotionMode.G73;
-                                break;
-
-                            case "G76":
-                                MotionMode = MotionMode.G76;
-                                break;
-
-                            case "G80":
-                                MotionMode = MotionMode.G80;
-                                break;
-
-                            case "G81":
-                                MotionMode = MotionMode.G81;
-                                break;
-
-                            case "G82":
-                                MotionMode = MotionMode.G82;
-                                break;
-
-                            case "G83":
-                                MotionMode = MotionMode.G83;
-                                break;
-
-                            case "G84":
-                                MotionMode = MotionMode.G84;
-                                break;
-
-                            case "G85":
-                                MotionMode = MotionMode.G85;
-                                break;
-
-                            case "G86":
-                                MotionMode = MotionMode.G86;
-                                break;
-
-                            case "G87":
-                                MotionMode = MotionMode.G87;
-                                break;
-
-                            case "G88":
-                                MotionMode = MotionMode.G88;
-                                break;
-
-                            case "G89":
-                                MotionMode = MotionMode.G89;
-                                break;
-
-                            case "G90":
-                                DistanceMode = DistanceMode.Absolute;
-                                break;
-
-                            case "G90.1": // not supported or reported by grbl
-                                IJKMode = IJKMode.Absolute;
-                                break;
-
-                            case "G91":
-                                DistanceMode = DistanceMode.Incremental;
-                                break;
-
-                            case "G91.1": // not reported by grbl, default state
-                                IJKMode = IJKMode.Incremental;
-                                break;
-
-                            case "G93":
-                                FeedRateMode = FeedRateMode.InverseTime;
-                                break;
-
-                            case "G94":
-                                FeedRateMode = FeedRateMode.UnitsPerMin;
-                                break;
-
-                            case "G95":
-                                FeedRateMode = FeedRateMode.UnitsPerRev;
-                                break;
-
-                            case "M3":
-                                SpindleState = SpindleState.CW;
-                                break;
-
-                            case "M4":
-                                SpindleState = SpindleState.CCW;
-                                break;
-
-                            case "M5":
-                                SpindleState = SpindleState.Off;
-                                break;
-
-                            case "M7":
-                                CoolantState |= CoolantState.Mist;
-                                break;
-
-                            case "M8":
-                                CoolantState |= CoolantState.Flood;
-                                break;
-
-                            case "M9":
-                                CoolantState = CoolantState.Off;
-                                break;
-                        }
-                    }
+                    return true;
                 }
-                return true;
-            }
-            catch { }
+                catch { }
             return false;
         }
     }
@@ -1706,15 +1708,15 @@ namespace CNC.Core
         public static double ConvertX(LatheMode source, LatheMode target, double value)
         {
             if (source != target) switch (target)
-            {
-                case LatheMode.Radius:
-                    value /= 2.0d;
-                    break;
+                {
+                    case LatheMode.Radius:
+                        value /= 2.0d;
+                        break;
 
-                case LatheMode.Diameter:
-                    value *= 2.0d;
-                    break;
-            }
+                    case LatheMode.Diameter:
+                        value *= 2.0d;
+                        break;
+                }
 
             return value;
         }
@@ -1764,7 +1766,7 @@ namespace CNC.Core
                 Tools.Add(new Tool("4"));
             }
 
-//            GrblParserState.Tool = GrblParserState.Tool;    // Add tool to Tools if not in list
+            //            GrblParserState.Tool = GrblParserState.Tool;    // Add tool to Tools if not in list
             model.Tool = model.Tool;                        // Force UI update
             model.ToolOffset.Z = ToolLengtOffset.Z;
 
@@ -1882,14 +1884,15 @@ namespace CNC.Core
 
                     case "TLR":
                         double tlr;
-                        if(double.TryParse(parameters, out tlr))
+                        if (double.TryParse(parameters, out tlr))
                             ToolLengthOffsetReference = tlr;
                         break;
 
                     case "PRB":
                         {
                             var p = parameters.Split(':');
-                            if (p.Length == 2) {
+                            if (p.Length == 2)
+                            {
                                 ProbePosition.Parse(p[0]);
                                 ProbeSuccesful = p[1] == "1";
                             }
@@ -1937,7 +1940,7 @@ namespace CNC.Core
                 PollGrbl.Resume();
             }
 
-            if ((noload = messages.Count == 0 ) || Resources.Locale != "en-US")
+            if ((noload = messages.Count == 0) || Resources.Locale != "en-US")
             {
                 try
                 {
@@ -2147,7 +2150,7 @@ namespace CNC.Core
             get { return GrblSettings.Settings.Where(x => x.GroupId == Id); }
         }
 
-        public GrblSettingGroup (string data)
+        public GrblSettingGroup(string data)
         {
             string[] values = data.Split('|');
 
@@ -2206,7 +2209,7 @@ namespace CNC.Core
                         while (line != null)
                         {
                             string[] columns = line.Split('\t');
-                            
+
                             if (columns.Length == 3)
                             {
                                 var group = Groups.Where(x => x.Id == int.Parse(columns[0])).FirstOrDefault();
@@ -2232,7 +2235,7 @@ namespace CNC.Core
         {
             List<GrblSettingGroup> remove = new List<GrblSettingGroup>();
 
-            foreach(var group in Groups)
+            foreach (var group in Groups)
             {
                 if (GrblSettings.Settings.Where(x => x.GroupId == group.Id).FirstOrDefault() == null)
                     remove.Add(group);
@@ -2346,7 +2349,8 @@ namespace CNC.Core
         public int Id { get; internal set; }
         public int GroupId { get; internal set; }
         public string Name { get; internal set; }
-        public string Value {
+        public string Value
+        {
             get { return _value; }
             set
             {
@@ -2370,7 +2374,7 @@ namespace CNC.Core
                 if (_value == null)
                     return "n/a";
 
-                switch(DataType)
+                switch (DataType)
                 {
                     case DataTypes.BOOL:
                         return _value == "0" ? "false" : "true";
@@ -2382,11 +2386,11 @@ namespace CNC.Core
                         return _value == "0" ? "disabled" : string.Format("enabled ({0})", _value);
 
                     case DataTypes.AXISMASK:
-                        if(_value != "0")
+                        if (_value != "0")
                         {
                             int axes = int.Parse(_value), idx = 0;
                             string res = string.Empty;
-                            while(axes != 0)
+                            while (axes != 0)
                             {
                                 if ((axes & 0x01) != 0)
                                     res += GrblInfo.AxisIndexToLetter(idx);
@@ -2411,10 +2415,11 @@ namespace CNC.Core
         public double Max { get; internal set; }
         public bool AllowNull { get; internal set; }
         public bool RebootRequired { get; internal set; }
-        public string Description {
+        public string Description
+        {
             get
             {
-                if(_description == null)
+                if (_description == null)
                 {
                     if (Grbl.GrblViewModel == null)
                         _description = String.Empty;
@@ -2592,85 +2597,87 @@ namespace CNC.Core
             {
                 GrblSettingGroups.RemoveUnused();
 
-                if(!GrblInfo.IsGrblHAL || !GrblInfo.HasSettingDescriptions || Resources.Locale != "en-US") try
-                {
-                    StreamReader file;
-                    string filename = string.Format("{0}{1}setting_codes_{2}.txt",
-                                                    Resources.Path,
-                                                    GrblInfo.IsGrblHAL ? "hal_" : string.Empty,
-                                                    Resources.Locale == "en-US" ? "en_US" : Resources.Locale);
-
-                    file = FileUtils.OpenFile(filename);
-
-                    if(file == null && Resources.Locale != "en-US")
-                        file = FileUtils.OpenFile(filename.Replace(Resources.Locale, "en_US"));
-
-                    if (file != null)
+                if (!GrblInfo.IsGrblHAL || !GrblInfo.HasSettingDescriptions || Resources.Locale != "en-US")
+                    try
                     {
-                        string line = file.ReadLine();
+                        StreamReader file;
+                        string filename = string.Format("{0}{1}setting_codes_{2}.txt",
+                                                        Resources.Path,
+                                                        GrblInfo.IsGrblHAL ? "hal_" : string.Empty,
+                                                        Resources.Locale == "en-US" ? "en_US" : Resources.Locale);
 
-                        line = file.ReadLine(); // Skip header  
+                        file = FileUtils.OpenFile(filename);
 
-                        while (line != null)
+                        if (file == null && Resources.Locale != "en-US")
+                            file = FileUtils.OpenFile(filename.Replace(Resources.Locale, "en_US"));
+
+                        if (file != null)
                         {
-                            string[] values = line.Split('\t');
+                            string line = file.ReadLine();
 
-                            if (values.Length >= 6)
+                            line = file.ReadLine(); // Skip header  
+
+                            while (line != null)
                             {
-                                var setting = Settings.Where(x => x.Id == int.Parse(values[0])).FirstOrDefault();
+                                string[] values = line.Split('\t');
 
-                                if (setting != null) {
+                                if (values.Length >= 6)
+                                {
+                                    var setting = Settings.Where(x => x.Id == int.Parse(values[0])).FirstOrDefault();
 
-                                    if(setting.Name == string.Empty)
+                                    if (setting != null)
                                     {
-                                        try
+
+                                        if (setting.Name == string.Empty)
                                         {
-                                            setting.DataType = (GrblSettingDetails.DataTypes)Enum.Parse(typeof(GrblSettingDetails.DataTypes), values[3].ToUpperInvariant());
+                                            try
+                                            {
+                                                setting.DataType = (GrblSettingDetails.DataTypes)Enum.Parse(typeof(GrblSettingDetails.DataTypes), values[3].ToUpperInvariant());
+                                            }
+                                            catch
+                                            {
+                                                setting.DataType = GrblSettingDetails.DataTypes.TEXT;
+                                            }
+
+                                            setting.Name = values[1];
+                                            setting.Format = values[4];
+
+                                            if (setting.DataType == GrblSettingDetails.DataTypes.INTEGER || setting.DataType == GrblSettingDetails.DataTypes.FLOAT)
+                                                setting.Unit = values[2];
+
+                                            if (values.Length > 6)
+                                                setting.Min = values[6] == string.Empty ? double.NaN : dbl.Parse(values[6]);
+
+                                            if (values.Length > 7)
+                                                setting.Max = values[7] == string.Empty ? double.NaN : dbl.Parse(values[7]);
                                         }
-                                        catch
+                                        else if (Resources.Locale != "en-US")
                                         {
-                                            setting.DataType = GrblSettingDetails.DataTypes.TEXT;
+                                            setting.Name = values[1];
+
+                                            if (setting.DataType == GrblSettingDetails.DataTypes.INTEGER || setting.DataType == GrblSettingDetails.DataTypes.FLOAT)
+                                                setting.Unit = values[2];
                                         }
-                                        
-                                        setting.Name = values[1];
-                                        setting.Format = values[4];
 
-                                        if (setting.DataType == GrblSettingDetails.DataTypes.INTEGER || setting.DataType == GrblSettingDetails.DataTypes.FLOAT)
-                                            setting.Unit = values[2];
-
-                                        if(values.Length > 6)
-                                            setting.Min = values[6] == string.Empty ? double.NaN : dbl.Parse(values[6]);
-
-                                        if (values.Length > 7)
-                                            setting.Max = values[7] == string.Empty ? double.NaN : dbl.Parse(values[7]);
+                                        setting.Description = values[5].Replace("\\n", "\r\n");
                                     }
-                                    else if(Resources.Locale != "en-US")
-                                    {
-                                        setting.Name = values[1];
-
-                                        if (setting.DataType == GrblSettingDetails.DataTypes.INTEGER || setting.DataType == GrblSettingDetails.DataTypes.FLOAT)
-                                            setting.Unit = values[2];
-                                    }
-
-                                    setting.Description = values[5].Replace("\\n", "\r\n");
                                 }
+                                line = file.ReadLine();
                             }
-                            line = file.ReadLine();
+                            file.Close();
+                            file.Dispose();
                         }
-                        file.Close();
-                        file.Dispose();
                     }
-                }
-                catch (Exception ex)
-                {
-                }
+                    catch (Exception ex)
+                    {
+                    }
             }
 
-            if(!GrblInfo.IsGrblHAL)
+            if (!GrblInfo.IsGrblHAL)
                 ReportProbeCoordinates = true;
 
             GrblInfo.OnSettingsLoaded(model);
-
+            model.SettingsLoaded();
             return IsLoaded;
         }
 
@@ -2717,11 +2724,11 @@ namespace CNC.Core
                     setting.IsDirty = setting.HasErrors;
                 }
             }
-
+            
             return ok;
         }
 
-        private static List<string> Export ()
+        private static List<string> Export()
         {
             List<string> exp = new List<string>();
 
@@ -2754,7 +2761,7 @@ namespace CNC.Core
 
             foreach (GrblSettingDetails setting in Settings)
             {
-                if(!string.IsNullOrEmpty(setting.Name))
+                if (!string.IsNullOrEmpty(setting.Name))
                     exp.Add(string.Format("; {0} - {1}", setting.Id, setting.Name));
                 exp.Add(string.Format("${0}={1}", setting.Id, setting.Value));
             }
@@ -2768,32 +2775,32 @@ namespace CNC.Core
         public static void CopyToClipboard()
         {
             if (Settings.Count > 0) try
-            {
-                Clipboard.SetText(string.Join("\r\n", Export().ToArray()));
-            }
-            catch
-            {
-            }
+                {
+                    Clipboard.SetText(string.Join("\r\n", Export().ToArray()));
+                }
+                catch
+                {
+                }
         }
 
         public static void Backup(string filename)
         {
             if (Settings.Count > 0) try
-            {
-                StreamWriter file = new StreamWriter(filename);
-                if (file != null)
                 {
-                    List<string> settings = Export();
+                    StreamWriter file = new StreamWriter(filename);
+                    if (file != null)
+                    {
+                        List<string> settings = Export();
 
-                    foreach (string s in settings)
-                        file.WriteLine(s);
+                        foreach (string s in settings)
+                            file.WriteLine(s);
 
-                    file.Close();
+                        file.Close();
+                    }
                 }
-            }
-            catch
-            {
-            }
+                catch
+                {
+                }
         }
 
         public static string FormatFloat(string value, string format)
@@ -2900,7 +2907,7 @@ namespace CNC.Core
             if (PollInterval != 0)
             {
                 suspend = false;
-                if(pollTimer.Enabled)
+                if (pollTimer.Enabled)
                     pollTimer.Stop();
                 pollTimer.Interval = PollInterval;
                 pollTimer.Start();
@@ -2912,7 +2919,7 @@ namespace CNC.Core
 
         void pollTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if(!suspend)
+            if (!suspend)
                 Comms.com.WriteByte(RTCommand);
 
             if (RTCommand == GrblConstants.CMD_STATUS_REPORT_ALL)
@@ -2925,23 +2932,23 @@ namespace CNC.Core
         public static byte ConvertRTCommand(byte cmd)
         {
             if (GrblInfo.UseLegacyRTCommands) switch (cmd)
-            {
-                case GrblConstants.CMD_STATUS_REPORT_ALL:
-                    cmd = (byte)GrblConstants.CMD_STATUS_REPORT_LEGACY[0];
-                    break;
+                {
+                    case GrblConstants.CMD_STATUS_REPORT_ALL:
+                        cmd = (byte)GrblConstants.CMD_STATUS_REPORT_LEGACY[0];
+                        break;
 
-                case GrblConstants.CMD_STATUS_REPORT:
-                    cmd = (byte)GrblConstants.CMD_STATUS_REPORT_LEGACY[0];
-                    break;
+                    case GrblConstants.CMD_STATUS_REPORT:
+                        cmd = (byte)GrblConstants.CMD_STATUS_REPORT_LEGACY[0];
+                        break;
 
-                case GrblConstants.CMD_CYCLE_START:
-                    cmd = (byte)GrblConstants.CMD_CYCLE_START_LEGACY[0];
-                    break;
+                    case GrblConstants.CMD_CYCLE_START:
+                        cmd = (byte)GrblConstants.CMD_CYCLE_START_LEGACY[0];
+                        break;
 
-                case GrblConstants.CMD_FEED_HOLD:
-                    cmd = (byte)GrblConstants.CMD_FEED_HOLD_LEGACY[0];
-                    break;
-            }
+                    case GrblConstants.CMD_FEED_HOLD:
+                        cmd = (byte)GrblConstants.CMD_FEED_HOLD_LEGACY[0];
+                        break;
+                }
 
             return cmd;
         }
