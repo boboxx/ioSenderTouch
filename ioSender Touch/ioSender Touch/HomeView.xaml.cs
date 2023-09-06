@@ -1,8 +1,5 @@
-
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Resources;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +16,8 @@ namespace ioSenderTouch
     
     public partial class HomeView : UserControl
     {
+        
+
         private bool? initOK = null;
         private bool isBooted = false;
         private IInputElement focusedControl = null;
@@ -39,7 +38,6 @@ namespace ioSenderTouch
             _model = model;
             DataContext = _model;
             InitializeComponent();
-            
             Grbl.GrblViewModel = _model;
             _renderView = new RenderControl(_model);
             _grblSettingView = new GrblConfigView(_model);

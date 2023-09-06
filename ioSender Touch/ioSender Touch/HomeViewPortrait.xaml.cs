@@ -50,7 +50,6 @@ namespace ioSenderTouch
             AppConfig.Settings.OnConfigFileLoaded += AppConfiguationLoaded;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
             InitSystem();
-            BuildOptionalUi();
             GCode.File.FileLoaded += File_FileLoaded;
         }
 
