@@ -25,7 +25,7 @@ namespace ioSenderTouch.ViewModels
     {
         private string _instructions =
             "-Load spindle with center point bit\n such 90 degrees chamfer bit or pointed dial.\n\r" +
-            "-Zero stock at lower left corner.\n\r" +
+            "-Zero WCS at lower left corner.\n\r" +
             "-Enter measurement of desired triangle.\r" +
             "The larger the triangle the increase in accuracy\r\n" +
             "-Note: Using low tac tape at point A, B and C\nmay increase visibility of imprint marks \n" +
@@ -66,6 +66,10 @@ namespace ioSenderTouch.ViewModels
         private readonly CalibrationTriangle _calibrationTriangle;
         private readonly GCodeTriangle _triangleGcode;
         private bool _calibrationRan;
+        private string _calibrationUnit;
+        private string _calibrationUnitPerMin;
+        private string _calibratioMeasurement;
+        private bool _usingInchesCalibration;
         public ICommand ShowView { get; }
         public ICommand SurfacingCommand { get; set; }
         public ICommand CalibrationRunCommand { get; set; }
@@ -118,6 +122,7 @@ namespace ioSenderTouch.ViewModels
                 }
             }
         }
+       
         public string Unit
         {
             get => _unit;
@@ -248,6 +253,41 @@ namespace ioSenderTouch.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string CalibrationMeasurement
+        {
+            get => _calibratioMeasurement;
+            set
+            {
+                if (_calibratioMeasurement != value)
+                {
+                    _calibratioMeasurement = value;
+                    SetCalibrationUnits(value);
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string CalibrationUnitPerMin
+        {
+            get => _calibrationUnitPerMin;
+            set
+            {
+                
+                if (value == _calibrationUnitPerMin) return;
+                _calibrationUnitPerMin = $"{value}/min";
+                OnPropertyChanged();
+            }
+        }
+
+        public string CalibrationUnit
+        {
+            get => _calibrationUnit;
+            set
+            {
+                if (value == _calibrationUnit) return;
+                _calibrationUnit = value;
+                OnPropertyChanged();
+            }
+        }
         public UtilityViewModel(GrblViewModel grblViewModel)
         {
             _grblViewModel = grblViewModel;
@@ -265,6 +305,7 @@ namespace ioSenderTouch.ViewModels
             AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
             _calibrationTriangle = new CalibrationTriangle();
             _triangleGcode = new GCodeTriangle();
+            CalibrationMeasurement = Metric;
         }
 
         private void BuildProbeMacro()
@@ -482,6 +523,20 @@ namespace ioSenderTouch.ViewModels
                
             }
         }
+
+        private void SetCalibrationUnits(string unit)
+        {
+            _usingInchesCalibration = unit.Equals("Inches");
+            UpdateCalibrationMeasurementUnit();
+        }
+
+        private void UpdateCalibrationMeasurementUnit()
+        {
+            CalibrationUnit = CalibrationUnitPerMin = _usingInchesCalibration ? "inch" : "mm";
+        }
+
+      
+
         private void CreateCalibrationJob(object x)
         {
             HypothesesTriangle = _calibrationTriangle.CalculateTriangle(LengthA, LengthB);
@@ -490,7 +545,7 @@ namespace ioSenderTouch.ViewModels
             double feedRate;
             double depth;
             double safeHeight;
-            if (_usingInches)
+            if (_usingInchesCalibration)
             {
                  lengthA = HypothesesTriangle.SideA * Inches_To_MM;
                  lengthB = HypothesesTriangle.SideB * Inches_To_MM;
@@ -517,13 +572,13 @@ namespace ioSenderTouch.ViewModels
             MeasurementResults = string.Empty;
             var triangle = _calibrationTriangle.CalculateResults(MeasureA, MeasureB, MeasureC);
             var delta = _calibrationTriangle.CalculateDelta(triangle);
-            if (_usingInches)
+            if (_usingInchesCalibration)
             {
                 delta /= Inches_To_MM;
             }
             delta = Math.Round(delta, 3);
             var leftDelta = delta * -1;
-            var tolerance = _usingInches ? .001 : .0254;
+            var tolerance = _usingInchesCalibration ? .001 : .0254;
             if (Math.Abs(triangle.SideA - HypothesesTriangle.SideA) > tolerance)
             {
                 MeasurementResults += "X axis measurements not equal\nCalibrate X steps\n\r";
@@ -539,7 +594,7 @@ namespace ioSenderTouch.ViewModels
                 MeasurementResults += "Gantry is Square\n\r";
             }
             MeasurementResults += $"Move Left Axis: { leftDelta}\n or Right Axis: { delta}";
-            MeasurementResults += _usingInches ? " Inches" : " MM";
+            MeasurementResults += _usingInchesCalibration ? " Inches" : " MM";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

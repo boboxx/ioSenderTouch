@@ -46,33 +46,33 @@
                                 <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
-                                <RadioButton Name="UseMetric"  Content="Metric"   IsChecked="{Binding Path=Measurement, Mode=TwoWay, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=Metric}"    Padding="0,0,10,0"></RadioButton>
-                                <RadioButton Name="UseStandard" Content="Inches" IsChecked="{Binding Path =Measurement, Mode=TwoWay,  Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=Inches}"  ></RadioButton>
+                                <RadioButton Name="UseMetric"  Content="Metric"   IsChecked="{Binding Path=CalibrationMeasurement, Mode=TwoWay, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=Metric}"    Padding="0,0,10,0"></RadioButton>
+                                <RadioButton Name="UseStandard" Content="Inches" IsChecked="{Binding Path =CalibrationMeasurement, Mode=TwoWay,  Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=Inches}"  ></RadioButton>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                                 <Label Content="Length A:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                                 <TextBox  Name ="LengthA"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding LengthA, StringFormat={}{0:F3}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                                 <Label Name="DiaUnitLabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
-                                   Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
+                                   Margin="0,6,0,5"  Content="{Binding CalibrationUnit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                             </StackPanel>
                             <StackPanel Grid.Row="2" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                                 <Label Content="Length B:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                                 <TextBox  Name ="LenghB"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding LengthB, StringFormat={}{0:F3},Mode=TwoWay}"  FontWeight ="Bold" 
                                       FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
-                                <Label  FontSize ="12" Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Visibility="Visible" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" 
+                                <Label  FontSize ="12" Content="{Binding CalibrationUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Visibility="Visible" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" 
                                     Width="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="30" Margin="0,6,0,5"></Label>
                             </StackPanel>
                             <StackPanel Grid.Row="3" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                                 <Label Content="Z Depth:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                                 <TextBox Name ="DepthCalibration"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding DepthCalibration, StringFormat={}{0:F3},Mode=TwoWay}"    FontWeight ="Bold" FontSize="20"  
                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
-                                <Label Content="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
+                                <Label Content="{Binding CalibrationUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30" Margin="0,6,0,5"></Label>
                             </StackPanel>
                             <StackPanel Grid.Row="4" Width="285" Orientation="Horizontal" HorizontalAlignment="Left">
                                 <Label Content="Feed Rate:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                                 <TextBox  Name ="FeedRateCalibration" Text="{Binding FeedRateCalibration, StringFormat={}{0:},Mode= TwoWay}"  MouseDoubleClick="TextBox_GotFocus"  FontWeight ="Bold" FontSize="20" 
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
-                                <Label Content="{Binding  UnitPerMin, UpdateSourceTrigger=PropertyChanged}"    VerticalAlignment="Center"  HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
+                                <Label Content="{Binding  CalibrationUnitPerMin, UpdateSourceTrigger=PropertyChanged}"    VerticalAlignment="Center"  HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                             </StackPanel>
 
                         </Grid>
@@ -107,19 +107,19 @@
                             <Label Content="Length A:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="MeasurementA"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding MeasureA, StringFormat={}{0:F3}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Name="MeasurementALabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
-                           Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
+                           Margin="0,6,0,5"  Content="{Binding CalibrationUnit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Length B:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="MeasurementB"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding MeasureB, StringFormat={}{0:F3}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Name="MeasurementBLabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
-                           Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
+                           Margin="0,6,0,5"  Content="{Binding CalibrationUnit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Width="260" Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label Content="Length C:" VerticalAlignment="Center" HorizontalAlignment="Left" Width="125" Height="30"></Label>
                             <TextBox  Name ="MeasurementC"  MouseDoubleClick="TextBox_GotFocus" Text="{Binding MeasureC, StringFormat={}{0:F3}, Mode=TwoWay}"   FontWeight ="Bold" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="2"  TextAlignment="Center"  HorizontalAlignment="Right" Width="100" VerticalAlignment="Center" Height="30"/>
                             <Label Name="MeasurementCLabel"  VerticalAlignment="Center"  HorizontalAlignment="Left" Width="35" Height="30"  
-                           Margin="0,6,0,5"  Content="{Binding Unit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
+                           Margin="0,6,0,5"  Content="{Binding CalibrationUnit, Mode = TwoWay, UpdateSourceTrigger = PropertyChanged}" ></Label>
                         </StackPanel>
                         <Button Grid.Row="3" Content="Calculate" Height="40" Width="110" HorizontalAlignment="Left" Margin="0,5,0,0" Command="{Binding Path=CalibrationResultsCommand}"></Button>
                     </Grid>
