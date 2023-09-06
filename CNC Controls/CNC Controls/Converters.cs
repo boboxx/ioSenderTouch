@@ -197,78 +197,78 @@ namespace CNC.Controls
             string res = string.Empty;
             string format = value.Length > 1 && value[1] is string ? value[1] as string : "####0.000";
 
-            if(value[0] is Position) switch(GrblInfo.NumAxes)
-            {
-                case 4:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format),
-                                           (value[0] as Position).A.ToInvariantString(format));
-                    break;
+            if (value[0] is Position) switch (GrblInfo.NumAxes)
+                {
+                    case 4:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format),
+                                               (value[0] as Position).A.ToInvariantString(format));
+                        break;
 
-                case 5:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format),
-                                           (value[0] as Position).A.ToInvariantString(format),
-                                            (value[0] as Position).B.ToInvariantString(format));
-                    break;
+                    case 5:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format),
+                                               (value[0] as Position).A.ToInvariantString(format),
+                                                (value[0] as Position).B.ToInvariantString(format));
+                        break;
 
-                case 6:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format),
-                                           (value[0] as Position).A.ToInvariantString(format),
-                                            (value[0] as Position).B.ToInvariantString(format),
-                                             (value[0] as Position).C.ToInvariantString(format));
-                    break;
+                    case 6:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format),
+                                               (value[0] as Position).A.ToInvariantString(format),
+                                                (value[0] as Position).B.ToInvariantString(format),
+                                                 (value[0] as Position).C.ToInvariantString(format));
+                        break;
 
-                case 7:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format),
-                                           (value[0] as Position).A.ToInvariantString(format),
-                                            (value[0] as Position).B.ToInvariantString(format),
-                                             (value[0] as Position).C.ToInvariantString(format),
-                                              (value[0] as Position).U.ToInvariantString(format));
-                    break;
+                    case 7:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format),
+                                               (value[0] as Position).A.ToInvariantString(format),
+                                                (value[0] as Position).B.ToInvariantString(format),
+                                                 (value[0] as Position).C.ToInvariantString(format),
+                                                  (value[0] as Position).U.ToInvariantString(format));
+                        break;
 
-                case 8:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format),
-                                           (value[0] as Position).A.ToInvariantString(format),
-                                            (value[0] as Position).B.ToInvariantString(format),
-                                             (value[0] as Position).C.ToInvariantString(format),
-                                              (value[0] as Position).U.ToInvariantString(format),
-                                               (value[0] as Position).V.ToInvariantString(format));
-                    break;
+                    case 8:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format),
+                                               (value[0] as Position).A.ToInvariantString(format),
+                                                (value[0] as Position).B.ToInvariantString(format),
+                                                 (value[0] as Position).C.ToInvariantString(format),
+                                                  (value[0] as Position).U.ToInvariantString(format),
+                                                   (value[0] as Position).V.ToInvariantString(format));
+                        break;
 
-                case 9:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format),
-                                           (value[0] as Position).A.ToInvariantString(format),
-                                            (value[0] as Position).B.ToInvariantString(format),
-                                             (value[0] as Position).C.ToInvariantString(format),
-                                              (value[0] as Position).U.ToInvariantString(format),
-                                               (value[0] as Position).V.ToInvariantString(format),
-                                                (value[0] as Position).W.ToInvariantString(format));
-                    break;
+                    case 9:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format),
+                                               (value[0] as Position).A.ToInvariantString(format),
+                                                (value[0] as Position).B.ToInvariantString(format),
+                                                 (value[0] as Position).C.ToInvariantString(format),
+                                                  (value[0] as Position).U.ToInvariantString(format),
+                                                   (value[0] as Position).V.ToInvariantString(format),
+                                                    (value[0] as Position).W.ToInvariantString(format));
+                        break;
 
-                default:
-                    res = string.Format(GrblInfo.PositionFormatString,
-                                        (value[0] as Position).X.ToInvariantString(format),
-                                         (value[0] as Position).Y.ToInvariantString(format),
-                                          (value[0] as Position).Z.ToInvariantString(format));
-                    break;
-            }
+                    default:
+                        res = string.Format(GrblInfo.PositionFormatString,
+                                            (value[0] as Position).X.ToInvariantString(format),
+                                             (value[0] as Position).Y.ToInvariantString(format),
+                                              (value[0] as Position).Z.ToInvariantString(format));
+                        break;
+                }
 
             return res;
         }
@@ -342,16 +342,19 @@ namespace CNC.Controls
         {
             Brush result = System.Windows.SystemColors.ControlBrush;
 
-            if (value is HomedState) switch ((HomedState)value)
-            {
-                case HomedState.NotHomed:
-                    result = Brushes.LightYellow;
-                    break;
-
-                case HomedState.Homed:
-                    result = Brushes.LightGreen;
-                    break;
-            }
+            if (value is HomedState)
+                switch ((HomedState)value)
+                {
+                    case HomedState.NotHomed:
+                        result = Brushes.LightCoral;
+                        break;
+                    case HomedState.Unknown:
+                        result = Brushes.LightCoral;
+                        break;
+                    case HomedState.Homed:
+                        result = Brushes.LightGreen;
+                        break;
+                }
 
             return result;
         }
@@ -404,7 +407,7 @@ namespace CNC.Controls
             Converters.grblState.Value.TryGetValue(((GrblState)value).State, out result);
             int substate = ((GrblState)value).State == GrblStates.Alarm && ((GrblState)value).LastAlarm > 0 ? ((GrblState)value).LastAlarm : ((GrblState)value).Substate;
 
-            if (value is GrblState && ((GrblState)value).State != GrblStates.Unknown) 
+            if (value is GrblState && ((GrblState)value).State != GrblStates.Unknown)
                 result = (result == string.Empty ? ((GrblState)value).State.ToString().ToUpper() : result) + (substate == -1 ? "" : (":" + substate.ToString()));
 
             return result;
@@ -516,10 +519,10 @@ namespace CNC.Controls
         {
             bool enabled = false;
 
-            if(values.Length == 2 && values[0] is int && values[1] is int && (int)values[0] >= (int)values[1])
+            if (values.Length == 2 && values[0] is int && values[1] is int && (int)values[0] >= (int)values[1])
                 enabled = ((int)values[0] & (int)values[1]) != 0;
 
-            if(values.Length == 2 && values[0] is AxisFlags && values[1] is AxisFlags)
+            if (values.Length == 2 && values[0] is AxisFlags && values[1] is AxisFlags)
                 enabled = ((AxisFlags)values[0]).HasFlag((AxisFlags)values[1]);
 
             return enabled ? Visibility.Visible : Visibility.Collapsed;

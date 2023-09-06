@@ -76,6 +76,15 @@ namespace CNC.Controls
             set { SetValue(ValueProperty, value); }
         }
 
+        public static readonly DependencyProperty MPosProperty = DependencyProperty.Register(nameof(MPos), typeof(string), typeof(DROBaseControl), new PropertyMetadata());
+        public string MPos
+        {
+            get => (string)GetValue(MPosProperty);
+            set => SetValue(MPosProperty, value);
+        }
+
+
+
         public bool IsReadOnly
         {
             get { return txtReadout.IsReadOnly; }
@@ -83,6 +92,8 @@ namespace CNC.Controls
         }
 
         public static readonly DependencyProperty IsScaledProperty = DependencyProperty.Register(nameof(IsScaled), typeof(bool), typeof(DROBaseControl), new PropertyMetadata(false, new PropertyChangedCallback(OnIsScaledChanged)));
+        private string _mPos;
+
         public bool IsScaled
         {
             get { return (bool)GetValue(IsScaledProperty); }

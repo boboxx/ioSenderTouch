@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              Width="280" VerticalAlignment="Stretch">
     <UserControl.Resources>
@@ -18,9 +19,16 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" x:Name="lblAxis" Content="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Stretch" FontSize="22" Margin="0,0,3,0" Width="30"/>
-        <local:NumericTextBox Grid.Column="1" x:Name="txtReadout" Format="{Binding Path=FormatSigned}" Value="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsReadOnly="True"   
-                              Width="106" FontSize="22" TextWrapping="NoWrap" TextAlignment="Right" HorizontalAlignment="Center" Height="Auto
-                              " VerticalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0,0,1,0"/>
+       <StackPanel Grid.Column="1">
+           <local:NumericTextBox Grid.Column="1" x:Name="txtReadout" Format="{Binding Path=FormatSigned}" 
+                                 Value="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsReadOnly="True"   
+                                 Width="106" FontSize="24" TextWrapping="NoWrap" TextAlignment="Right" HorizontalAlignment="Center" Height="Auto" VerticalAlignment="Stretch" 
+                                 HorizontalContentAlignment="Center" Margin="0,0,1,0"/>
+            <TextBox  Grid.Column="1" IsReadOnly ="True" BorderThickness="1,0,1,1" BorderBrush="Gray" x:Name="MPosReadOut" Foreground="Black"  Text ="{Binding Path=MPos, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"  Background="WhiteSmoke"     
+                      Width="106" FontSize="12" TextWrapping="NoWrap" TextAlignment="Right" VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  
+                      Margin="0,0,1,0" />
+        </StackPanel>
         <Button Grid.Column="2" x:Name="btnZero" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="Auto"
                 IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
                 Focusable="False" Click="btnZero_Click" Margin="5,1,2,1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="80"/>

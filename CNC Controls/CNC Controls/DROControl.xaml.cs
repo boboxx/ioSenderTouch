@@ -55,7 +55,13 @@ namespace CNC.Controls
         private bool hasFocus = false;
         private Brush background = null;
         private static bool keyboardMappingsOk = false;
+        public new bool IsFocused { get { return hasFocus; } }
+        public bool IsFocusable { get; set; }
 
+        public void EnableFocus()
+        {
+            IsFocusable = true;
+        }
         public string DisplayFormat { get; private set; }
 
         public delegate void DROEnabledChangedHandler(bool enabled);
@@ -64,19 +70,9 @@ namespace CNC.Controls
         public DROControl()
         {
             InitializeComponent();
-
-           
         }
 
-     
-
-        public new bool IsFocused { get { return hasFocus; } }
-        public bool IsFocusable { get; set; }
-
-        public void EnableFocus()
-        {
-            IsFocusable = true;
-        }
+        
 
         private void DRO_Loaded(object sender, RoutedEventArgs e)
         {
@@ -118,41 +114,41 @@ namespace CNC.Controls
         {
             return AxisLetters.IndexOf(letter, StringComparison.Ordinal);
         }
-        public  string AxisLetters { get; private set; } = "XYZABCUVW";
+        public  string AxisLetters { get; private set; } = "XYZAB";
 
         private void txtReadout_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (IsFocusable && !(DataContext as GrblViewModel).IsJobRunning)
-            {
-                (DataContext as GrblViewModel).SuspendPositionNotifications = true;
+            //if (IsFocusable && !(DataContext as GrblViewModel).IsJobRunning)
+            //{
+            //    (DataContext as GrblViewModel).SuspendPositionNotifications = true;
 
-                orgpos = (DataContext as GrblViewModel).Position.Values[(int)((NumericTextBox)(sender)).Tag];
+            //    orgpos = (DataContext as GrblViewModel).Position.Values[(int)((NumericTextBox)(sender)).Tag];
 
-                background = (sender as NumericTextBox).Background;
-                (sender as NumericTextBox).IsReadOnly = false;
-                (sender as NumericTextBox).Background = Brushes.White;
+            //    background = (sender as NumericTextBox).Background;
+            //    (sender as NumericTextBox).IsReadOnly = false;
+            //    (sender as NumericTextBox).Background = Brushes.White;
 
-                hasFocus = true;
+            //    hasFocus = true;
 
-                DROEnabledChanged?.Invoke(true);
-            }
+            //    DROEnabledChanged?.Invoke(true);
+            //}
         }
 
         void txtReadout_LostFocus(object sender, EventArgs e)
         {
-            ((NumericTextBox)(sender)).IsReadOnly = true;
+            //((NumericTextBox)(sender)).IsReadOnly = true;
 
-            (DataContext as GrblViewModel).SuspendPositionNotifications = false;
+            //(DataContext as GrblViewModel).SuspendPositionNotifications = false;
 
-            if (hasFocus)
-            {
-                (sender as NumericTextBox).Background = background;
-                (DataContext as GrblViewModel).Position.Values[(int)(sender as NumericTextBox).Tag] = orgpos;
-            }
+            //if (hasFocus)
+            //{
+            //    (sender as NumericTextBox).Background = background;
+            //    (DataContext as GrblViewModel).Position.Values[(int)(sender as NumericTextBox).Tag] = orgpos;
+            //}
 
-            hasFocus = false;
+            //hasFocus = false;
 
-            DROEnabledChanged?.Invoke(false);
+            //DROEnabledChanged?.Invoke(false);
         }
 
         private void txtReadout_PreviewKeyDown(object sender, KeyEventArgs e)
