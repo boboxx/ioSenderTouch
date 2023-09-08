@@ -24,7 +24,9 @@ Creates Button on  Home Screen in Utility Section to run the job
 
 ![Surface](media/Surface3.png)
 
-<br><br>
+Gantry Squaring 
+<br>
+![XY Calibration](media/Calibration.png)
 
 Portrait Orientation 
 ![Home Screen](media/Portrait.png)
@@ -40,7 +42,7 @@ Portrait Orientation
 <br>
 ~~Finish utility section for material surfacing~~ (8/22/23 Implemented needs more testing)
 <br>
--Create axis alignment/squaring helper under utility 
+~~-Create axis alignment/squaring helper under utility~~
 <br>
 ~~Add support for portrait orientation~~ (release v0.0.3)
 <br><br>
