@@ -61,6 +61,9 @@ namespace ioSenderTouch.Utility
             var zFeedRate = _feedRate / 2;
             var gCodeList = new List<string>
             {
+                $"G1 Z{_safeZHeight:f4}f{zFeedRate:f4}",
+                $"G1 Z-{_depth:f4}f{zFeedRate:f4}",
+                $"G1 Z{_safeZHeight:f4}f{zFeedRate:f4}",
                 $"G1 X{_lengthA:f4}f{_feedRate:f4}",
                 $"G1 Z-{_depth:f4}f{zFeedRate:f4}",
                 $"G1 Z{_safeZHeight:f4}f{zFeedRate:f4}",
