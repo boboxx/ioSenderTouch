@@ -291,19 +291,7 @@ namespace CNC.Controls
         private CommandIgnoreState _ignoreM6 = CommandIgnoreState.No, _ignoreM7 = CommandIgnoreState.No, _ignoreM8 = CommandIgnoreState.No, _ignoreG61G64 = CommandIgnoreState.Strip;
         private string _theme = "default";
 
-        [XmlIgnore]
-        // public Dictionary<string, string> Themes { get; private set; } = new Dictionary<string, string>();
-
-        //public string Theme
-        //{
-        //    get { return _theme; }
-        //    set {
-        //        _theme = value; //.Substring(0, 1).ToUpper() + value.Substring(1);
-        //        //Settings.Default.ColorMode = value; // value.Substring(0, 1).ToUpper() + value.Substring(1);
-        //        //Settings.Default.Save();
-        //        OnPropertyChanged();
-        //    }
-        //}
+        
         public int PollInterval { get { return _pollInterval < 100 ? 100 : _pollInterval; } set { _pollInterval = value; OnPropertyChanged(); } }
         public string PortParams { get; set; } = "COMn:115200,N,8,1";
         public int ResetDelay { get; set; } = 2000;
@@ -350,17 +338,11 @@ namespace CNC.Controls
 
         private AppConfig()
         {
-            //Controls.Settings.Default.PropertyChanged += Default_PropertyChanged;
+           
         }
-
-        //private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        //{
-        //    OnPropertyChanged(nameof(ColorMode));   
-        //}
 
         public static AppConfig Settings { get { return settings.Value; } }
 
-        //public static string ColorMode { get { return Controls.Settings.Default.ColorMode; } }
 
         public Config Base
         {
@@ -543,12 +525,6 @@ namespace CNC.Controls
                 else
                     return 1;
             }
-
-            //Base.Themes.Add("Standard", LibStrings.FindResource("ThemeDefault"));
-            //Base.Themes.Add("Black", LibStrings.FindResource("ThemeBlack"));
-            //Base.Themes.Add("Dark", LibStrings.FindResource("ThemeDark"));
-            //Base.Themes.Add("Light", LibStrings.FindResource("ThemeLight"));
-            //Base.Themes.Add("White", LibStrings.FindResource("ThemeWhite"));
 
             if (jogMode != -1)
                 Base.Jog.Mode = (JogConfig.JogMode)jogMode;

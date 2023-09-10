@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="BlueGrey" SecondaryColor="Blue" />
+                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="BlueGrey" SecondaryColor="LightGreen" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!--SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#656865"/>
@@ -21,6 +21,7 @@
             
             <!-- accent -->
             <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="#989994"/>
+            <SolidColorBrush x:Key="SecondaryHueLightBrush" Color="LightGreen"/>
             <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#FFFFFF"/>
         </ResourceDictionary>
     </Application.Resources>

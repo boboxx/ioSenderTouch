@@ -702,7 +702,15 @@ namespace CNC.Core
         public bool IsProbing { get { return _isProbing; } set { _isProbing = value; OnPropertyChanged(); } }
         public bool ProgramEnd { get { return _pgmEnd; } set { _pgmEnd = value; if (_pgmEnd) OnPropertyChanged(); } }
         public int GrblError { get { return _grblState.Error; } set { _grblState.Error = value; OnPropertyChanged(); } }
-        public StreamingState StreamingState { get { return _streamingState; } set { if (_streamingState != value) { _streamingState = value; OnPropertyChanged(); } } }
+        public StreamingState StreamingState { get { return _streamingState; }
+            set
+            {
+                if (_streamingState != value)
+                {
+                    _streamingState = value; 
+                    OnPropertyChanged();
+                }
+            } }
         public string WorkCoordinateSystem { get { return _wcs; } private set { _wcs = value; OnPropertyChanged(); } }
         public string ToolNumber { get { return _toolNumber; } private set { _toolNumber = value; OnPropertyChanged(); } }
         public Position MachinePosition { get; private set; } = new Position();

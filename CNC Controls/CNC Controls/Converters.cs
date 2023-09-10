@@ -77,6 +77,7 @@ namespace CNC.Controls
         public static FeedSpeedToStringConverter FeedSpeedToStringConverter = new FeedSpeedToStringConverter();
         public static AxisLetterToJogPlusConverter AxisLetterToJogPlusConverter = new AxisLetterToJogPlusConverter();
         public static AxisLetterToJogMinusConverter AxisLetterToJogMinusConverter = new AxisLetterToJogMinusConverter();
+       
 
         internal static string numBlocks = LibStrings.FindResource("NumBlocks");
         internal static string blockOfBlocks = LibStrings.FindResource("BlockOfBlocks");
@@ -342,8 +343,8 @@ namespace CNC.Controls
         {
             Brush result = System.Windows.SystemColors.ControlBrush;
 
-            if (value is HomedState)
-                switch ((HomedState)value)
+            if (value is HomedState state)
+                switch (state)
                 {
                     case HomedState.NotHomed:
                         result = Brushes.LightCoral;
@@ -358,7 +359,300 @@ namespace CNC.Controls
 
             return result;
         }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class SelectedConverter : IValueConverter
+    {
+        SolidColorBrush SecondaryHue = Application.Current.TryFindResource("SecondaryHueLightBrush") as SolidColorBrush;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
 
+            if (value is bool state)
+                switch (state)
+                {
+                    case false:
+                        result = Brushes.Transparent;
+                        break;
+                    case true:
+                        result = SecondaryHue ?? Brushes.WhiteSmoke;
+                        break;
+                    default:
+                        result = Brushes.Transparent;
+                        break;
+                }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public  class JogDistanceConverter : IValueConverter
+    {
+        SolidColorBrush SecondaryHue = Application.Current.TryFindResource("SecondaryHueLightBrush") as SolidColorBrush;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
+            if (!(value is double v)) return Brushes.Transparent;
+            if (!(parameter is double p)) return Brushes.Transparent;
+            if (v == p)
+            {
+                result = SecondaryHue ?? Brushes.WhiteSmoke;
+            }
+            else
+            {
+                result = Brushes.Transparent;
+            }
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class JogRateConverter : IValueConverter
+    {
+        SolidColorBrush SecondaryHue = Application.Current.TryFindResource("SecondaryHueLightBrush") as SolidColorBrush;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
+            if (!(value is double v)) return Brushes.Transparent;
+            if (!(parameter is double p)) return Brushes.Transparent;
+            if (v == p)
+            {
+                result = SecondaryHue ?? Brushes.WhiteSmoke;
+            }
+            else
+            {
+                result = Brushes.Transparent;
+            }
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StreamingStateConvertor : IValueConverter
+    {
+      
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
+
+            if (!(value is StreamingState state)) return result;
+            switch (state)
+            {
+                case StreamingState.Stop:
+                    result = Brushes.LightCoral;
+                    break;
+                case StreamingState.Paused:
+                case StreamingState.FeedHold:
+                    result = Brushes.Yellow;
+                    break;
+                case StreamingState.Start:
+                case StreamingState.Send:
+                    result = Brushes.LightGreen;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class SpindleCCWStateConvertor : IValueConverter
+    {
+        
+        SolidColorBrush SecondaryHue = Application.Current.TryFindResource("SecondaryHueLightBrush") as SolidColorBrush;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = Brushes.Transparent;
+
+            if (!(value is EnumFlags<SpindleState> state)) return result;
+            switch (state.Value)
+            {
+                case SpindleState.CCW:
+                    result = SecondaryHue ?? Brushes.WhiteSmoke;
+                    break;
+                case SpindleState.CW:
+                    result = Brushes.Transparent;
+                    break;
+
+                case SpindleState.Off:
+                    result = Brushes.Transparent;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class SpindleCWStateConvertor : IValueConverter
+    {
+        SolidColorBrush SecondaryHue = Application.Current.TryFindResource("SecondaryHueLightBrush") as SolidColorBrush;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = Brushes.Transparent;
+
+            if (!(value is EnumFlags<SpindleState> state)) return result;
+            switch (state.Value)
+            {
+                case SpindleState.CW:
+                    result = SecondaryHue ?? Brushes.WhiteSmoke;
+                    break;
+                case SpindleState.CCW:
+                    result = Brushes.Transparent;
+                    break;
+
+                case SpindleState.Off:
+                    result = Brushes.Transparent;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class SpindleOffStateConvertor : IValueConverter
+    {
+        SolidColorBrush SecondaryHue = Application.Current.TryFindResource("SecondaryHueLightBrush") as SolidColorBrush;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = Brushes.Transparent;
+
+            if (!(value is EnumFlags<SpindleState> state)) return result;
+            switch (state.Value)
+            {
+                case SpindleState.Off:
+                    result = SecondaryHue ?? Brushes.WhiteSmoke;
+                    break;
+                case SpindleState.CCW:
+                    result = Brushes.Transparent;
+                    break;
+
+                case SpindleState.CW:
+                    result = Brushes.Transparent;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class StreamingHoldStateConvertor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
+
+            if (!(value is StreamingState state)) return result;
+            switch (state)
+            {
+                case StreamingState.Stop:
+                    result = Brushes.LightCoral;
+                    break;
+                case StreamingState.Paused:
+                case StreamingState.FeedHold:
+                    result = Brushes.LightGreen;
+                    break;
+                case StreamingState.Start:
+                case StreamingState.Send:
+                    result = Brushes.Yellow;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class StreamingStopStateConvertor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
+
+            if (!(value is StreamingState state)) return result;
+            switch (state)
+            {
+                case StreamingState.Stop:
+                    result = Brushes.LightGreen;
+                    break;
+                case StreamingState.Paused:
+                case StreamingState.FeedHold:
+                case StreamingState.Start:
+                case StreamingState.Send:
+                    result = Brushes.Red;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class StreamingReWindStateConvertor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Brush result = System.Windows.SystemColors.ControlBrush;
+
+            if (!(value is StreamingState state)) return result;
+            switch (state)
+            {
+                
+                case StreamingState.Halted:
+                    result = Brushes.Red;
+                    break;
+                default:
+                    result = Brushes.Transparent;
+                    break;
+            }
+
+            return result;
+        }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
