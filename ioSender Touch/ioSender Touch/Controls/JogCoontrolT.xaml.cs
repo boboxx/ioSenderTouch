@@ -64,8 +64,6 @@ namespace ioSenderTouch.Controls
         private KeypressHandler keyboard;
         private static bool keyboardMappingsOk = false;
         private GrblViewModel _grblViewModel;
-        JogStep _jogStep = JogStep.Step1;
-        JogFeed _jogFeed = JogFeed.Feed1;
         private double[] _distance = new double[4];
         private double[] _feedRate = new double[4];
 
@@ -89,6 +87,8 @@ namespace ioSenderTouch.Controls
         {
             _grblViewModel = Grbl.GrblViewModel;
             DataContext = _grblViewModel;
+            JogStep = JogStep.Step2;
+            JobFeed = JogFeed.Feed2;
             SetUpControl();
         }
         private void SetJogRate()
@@ -110,12 +110,6 @@ namespace ioSenderTouch.Controls
                     jogAxis = -1;
             }
 
-            if (e.PropertyName == nameof(GrblViewModel.FeedRate))
-            {
-            }
-            if (e.PropertyName == nameof(GrblViewModel.JogStep))
-            {
-            }
         }
 
         private void SetUpControl()
@@ -129,6 +123,7 @@ namespace ioSenderTouch.Controls
 
                 SetMetric(mode == "G21");
                 viewModel.JogRate = FeedRate;
+                viewModel.JogStep = Distance;
                 if (!keyboardMappingsOk)
                 {
                     if (!GrblInfo.HasFirmwareJog || AppConfig.Settings.Jog.LinkStepJogToUI)
