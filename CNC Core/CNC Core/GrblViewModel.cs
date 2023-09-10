@@ -1736,6 +1736,15 @@ namespace CNC.Core
                 OnPropertyChanged(nameof(IsSleepMode));
                 if (IsReady && AutoReportingEnabled)
                     Comms.com.WriteByte(GrblConstants.CMD_AUTO_REPORTING_TOGGLE);
+                else
+                {
+                    if (Poller != null && IsReady && !Poller.IsEnabled)
+                    {
+                        Poller.SetState(PollingInterval);
+                    }
+                }
+                
+                
             }
             else if (_grblState.State != GrblStates.Jog)
             {
