@@ -8,6 +8,7 @@ using CNC.Controls;
 using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
 using CNC.Core;
+using ioSenderTouch.Controls;
 using ioSenderTouch.Views;
 using ConfigControl = CNC.Controls.Probing.ConfigControl;
 
@@ -179,6 +180,7 @@ namespace ioSenderTouch
         private void AppConfiguationLoaded(object sender, EventArgs e)
         {
             BuildOptionalUi();
+            
             _model.PollingInterval = AppConfig.Settings.Base.PollInterval;
             var controls = new ObservableCollection<UserControl>();
 
@@ -198,6 +200,7 @@ namespace ioSenderTouch
             {
                 controls.Add(new CNC.Controls.Viewer.ConfigControl());
             }
+            controls.Add(new AppUiSettings());
             _grblAppSettings.Setup(controls, AppConfig.Settings);
 
         }

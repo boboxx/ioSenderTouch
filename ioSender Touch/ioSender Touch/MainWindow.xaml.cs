@@ -36,6 +36,7 @@ namespace ioSenderTouch
             //    Environment.Exit(res);
             _viewModel = DataContext as GrblViewModel ?? new GrblViewModel();
             BaseWindowTitle = Title;
+            AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
 
             if (SystemInformation.ScreenOrientation ==ScreenOrientation.Angle90)
             {
@@ -64,6 +65,11 @@ namespace ioSenderTouch
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
 
+        }
+
+        private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
+        {
+            WindowStyle = AppConfig.Settings.AppUiSettings.EnableToolBar ? WindowStyle.SingleBorderWindow : WindowStyle.None;
         }
 
         private void _viewModel_OnShutDown(object sender, EventArgs e)

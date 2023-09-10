@@ -11,6 +11,7 @@ using CNC.Controls;
 using CNC.Controls.Probing;
 using CNC.Controls.Viewer;
 using CNC.Core;
+using ioSenderTouch.Controls;
 using ioSenderTouch.Views;
 using ConfigControl = CNC.Controls.Probing.ConfigControl;
 
@@ -207,6 +208,7 @@ namespace ioSenderTouch
             {
                 controls.Add(new CNC.Controls.Viewer.ConfigControl());
             }
+            controls.Add(new AppUiSettings());
             _grblAppSettings.Setup(controls, AppConfig.Settings);
 
         }

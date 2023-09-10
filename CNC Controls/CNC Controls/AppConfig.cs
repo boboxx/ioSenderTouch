@@ -249,6 +249,35 @@ namespace CNC.Controls
         public double Distance2 { get { return _distance[2]; } set { _distance[2] = value; OnPropertyChanged(); } }
         public double Distance3 { get { return _distance[3]; } set { _distance[3] = value; OnPropertyChanged(); } }
     }
+    [Serializable]
+    public class AppUiSettingsConfig : ViewModelBase
+    {
+        private bool _enableToolBar;
+        private bool _enableStopLightTheme;
+
+
+        public bool EnableToolBar
+        {
+            get => _enableToolBar;
+            set
+            {
+                if (value == _enableToolBar) return;
+                _enableToolBar = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool EnableStopLightTheme
+        {
+            get => _enableStopLightTheme;
+            set
+            {
+                if (value == _enableStopLightTheme) return;
+                _enableStopLightTheme = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     [Serializable]
     public class JogConfig : ViewModelBase
@@ -321,8 +350,9 @@ namespace CNC.Controls
         public CameraConfig Camera { get; set; } = new CameraConfig();
         public GCodeViewerConfig GCodeViewer { get; set; } = new GCodeViewerConfig();
         public ProbeConfig Probing { get; set; } = new ProbeConfig();
-
         public SurfaceConfig Surface { get; set; } = new SurfaceConfig();
+
+        public AppUiSettingsConfig AppUISettings { get; set; } = new AppUiSettingsConfig();
     }
 
     public class AppConfig : ViewModelBase
@@ -364,6 +394,8 @@ namespace CNC.Controls
         public ProbeConfig Probing { get { return Base == null ? null : Base.Probing; } }
 
         public SurfaceConfig Surface { get { return Base == null ? null : Base.Surface; } }
+
+        public AppUiSettingsConfig AppUiSettings { get { return Base == null ? null : Base.AppUISettings; } }
 
         public bool Save(string filename)
         {

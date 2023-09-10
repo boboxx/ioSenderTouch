@@ -130,6 +130,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AppUiSettings.xaml.cs">
+      <DependentUpon>AppUiSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CalibrationControl.xaml.cs">
       <DependentUpon>CalibrationControl.xaml</DependentUpon>
     </Compile>
@@ -163,6 +166,10 @@
     <Compile Include="Views\UtilityView.xaml.cs">
       <DependentUpon>UtilityView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\AppUiSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CalibrationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

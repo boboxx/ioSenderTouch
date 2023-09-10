@@ -45,6 +45,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Threading;
+using System.Windows.Media;
 using CNC.Core;
 using CNC.GCode;
 
@@ -130,7 +131,19 @@ namespace CNC.Controls
 
             for (int i = 0; i < streamingHandlers.Length; i++)
                 streamingHandlers[i].Handler = (StreamingHandler)i;
+            AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
             Loaded += JobControl_Loaded;
+        }
+
+        private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
+        {
+            var uiSettings = AppConfig.Settings.AppUiSettings;
+            if (uiSettings.EnableStopLightTheme)
+            {
+                btnStart.Background = Brushes.Green;
+                btnHold.Background = Brushes.Yellow;
+                btnStop.Background = Brushes.DarkRed;
+            }
         }
 
         private void JobControl_Loaded(object sender, RoutedEventArgs e)
@@ -1137,7 +1150,7 @@ namespace CNC.Controls
             while (job.NextRow != null)
             {
 
-                string line = (string)job.NextRow["Data"];;
+                string line = (string)job.NextRow["Data"]; ;
 
                 // Send comment lines as empty comment
                 if ((bool)job.NextRow["IsComment"])
