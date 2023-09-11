@@ -51,7 +51,7 @@ namespace CNC.Controls
     /// <summary>
     /// Interaction logic for SDCardView.xaml
     /// </summary>
-    public partial class SDCardView : UserControl, ICNCView
+    public partial class SDCardView : UserControl
     {
         public delegate void FileSelectedHandler(string filename, bool rewind);
         public event FileSelectedHandler FileSelected;
@@ -68,17 +68,10 @@ namespace CNC.Controls
             InitializeComponent();
             _viewModel = grblViewModel;
             ctxMenu.DataContext = grblViewModel;
-            if (_viewModel != null)
-            {
-               SetupView();
-            }
+            SetupView();
         }
 
-        #region Methods and properties required by IRenderer interface
-
-        public ViewType ViewType { get { return ViewType.SDCard; } }
-        public bool CanEnable { get { return !_viewModel.IsGCLock; } }
-
+        
         public void SetupView()
         {
             GrblSDCard.Load(_viewModel, ViewAll);
@@ -87,29 +80,12 @@ namespace CNC.Controls
             CanViewAll = GrblInfo.Build >= 20230312;
             CanRewind = GrblInfo.IsGrblHAL;
         }
-        public void Activate(bool activate, ViewType chgMode)
-        {
-            if (activate)
-            {
-                GrblSDCard.Load(_viewModel, ViewAll);
-                CanUpload = GrblInfo.UploadProtocol != string.Empty;
-                CanDelete = GrblInfo.Build >= 20210421;
-                CanViewAll = GrblInfo.Build >= 20230312;
-                CanRewind = GrblInfo.IsGrblHAL;
-            }
-            else
-                _viewModel.Message = string.Empty;
-        }
-
+      
         public void CloseFile()
         {
         }
 
-        public void Setup(UIViewModel model, AppConfig profile)
-        {
-        }
-
-        #endregion
+        
 
         #region Dependency properties
 

@@ -51,6 +51,7 @@ namespace ioSenderTouch
             AppConfig.Settings.OnConfigFileLoaded += AppConfiguationLoaded;
             AppConfig.Settings.SetupAndOpen(_model, Application.Current.Dispatcher);
             InitSystem();
+            BuildOptionalUi();
             GCode.File.FileLoaded += File_FileLoaded;
         }
 
@@ -188,7 +189,6 @@ namespace ioSenderTouch
 
         private void AppConfiguationLoaded(object sender, EventArgs e)
         {
-            BuildOptionalUi();
             _model.PollingInterval = AppConfig.Settings.Base.PollInterval;
             var controls = new ObservableCollection<UserControl>();
 
