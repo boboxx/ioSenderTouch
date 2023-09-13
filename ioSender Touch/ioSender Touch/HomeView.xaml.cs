@@ -63,7 +63,7 @@ namespace ioSenderTouch
 
             if (_model.HasATC)
             {
-                _toolView = new ToolView(_model);
+                //_toolView = new ToolView(_model);
             }
             if (GrblInfo.HasProbe && GrblSettings.ReportProbeCoordinates)
             {

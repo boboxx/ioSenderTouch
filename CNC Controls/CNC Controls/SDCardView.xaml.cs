@@ -55,7 +55,7 @@ namespace CNC.Controls
     {
         public delegate void FileSelectedHandler(string filename, bool rewind);
         public event FileSelectedHandler FileSelected;
-        private readonly GrblViewModel _viewModel;
+        private  GrblViewModel _viewModel;
         private DataRow currentFile = null;
 
         public SDCardView()
@@ -138,7 +138,6 @@ namespace CNC.Controls
         private void SDCardView_Loaded(object sender, RoutedEventArgs e)
         {
             dgrSDCard.DataContext = GrblSDCard.Files;
-            //      dgrSDCard.SelectedIndex = 0;
         }
 
         void dgrSDCard_SelectionChanged(object sender, SelectionChangedEventArgs e)
