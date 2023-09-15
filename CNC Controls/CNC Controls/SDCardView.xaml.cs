@@ -57,24 +57,29 @@ namespace CNC.Controls
         public event FileSelectedHandler FileSelected;
         private  GrblViewModel _viewModel;
         private DataRow currentFile = null;
+        private GrblSDCard _grblSdCard;
 
+        public bool ViewAll { get; set; }
         public SDCardView()
         {
             InitializeComponent();
+            DataContext = this;
             ctxMenu.DataContext = this;
+           
         }
         public SDCardView(GrblViewModel grblViewModel)
         {
             InitializeComponent();
             _viewModel = grblViewModel;
-            ctxMenu.DataContext = grblViewModel;
+            ctxMenu.DataContext = this;
+            _grblSdCard = new GrblSDCard();
             SetupView();
         }
 
         
         public void SetupView()
         {
-            GrblSDCard.Load(_viewModel, ViewAll);
+            _grblSdCard.Load(_viewModel, ViewAll);
             CanUpload = GrblInfo.UploadProtocol != string.Empty;
             CanDelete = GrblInfo.Build >= 20210421;
             CanViewAll = GrblInfo.Build >= 20230312;
@@ -103,12 +108,12 @@ namespace CNC.Controls
             set { SetValue(CanRewindProperty, value); }
         }
 
-        public static readonly DependencyProperty ViewAllProperty = DependencyProperty.Register(nameof(ViewAll), typeof(bool), typeof(SDCardView), new PropertyMetadata(false));
-        public bool ViewAll
-        {
-            get { return (bool)GetValue(ViewAllProperty); }
-            set { SetValue(ViewAllProperty, value); }
-        }
+        //public static readonly DependencyProperty ViewAllProperty = DependencyProperty.Register(nameof(ViewAll), typeof(bool), typeof(SDCardView), new PropertyMetadata(false));
+        //public bool ViewAll
+        //{
+        //    get { return (bool)GetValue(ViewAllProperty); }
+        //    set { SetValue(ViewAllProperty, value); }
+        //}
 
         public static readonly DependencyProperty CanViewAllProperty = DependencyProperty.Register(nameof(CanViewAll), typeof(bool), typeof(SDCardView), new PropertyMetadata(false));
         public bool CanViewAll
@@ -137,7 +142,7 @@ namespace CNC.Controls
 
         private void SDCardView_Loaded(object sender, RoutedEventArgs e)
         {
-            dgrSDCard.DataContext = GrblSDCard.Files;
+            dgrSDCard.DataContext = _grblSdCard.Files;
         }
 
         void dgrSDCard_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -259,7 +264,7 @@ namespace CNC.Controls
                 if(!(GrblInfo.UploadProtocol == "FTP" && !ok))
                     _viewModel.Message = (string)FindResource(ok ? "TransferDone" : "TransferAborted");
 
-                GrblSDCard.Load(_viewModel, ViewAll);
+                _grblSdCard.Load(_viewModel, ViewAll);
             }
         }
 
@@ -274,7 +279,7 @@ namespace CNC.Controls
         }
         private void ViewAll_Click(object sender, RoutedEventArgs e)
         {
-            GrblSDCard.Load(_viewModel, ViewAll);
+            _grblSdCard.Load(_viewModel, ViewAll);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -282,7 +287,7 @@ namespace CNC.Controls
             if (MessageBox.Show(string.Format((string)FindResource("DeleteFile"), (string)currentFile["Name"]), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
                 Comms.com.WriteCommand(GrblConstants.CMD_SDCARD_UNLINK + (string)currentFile["Name"]);
-                GrblSDCard.Load(_viewModel, ViewAll);
+                _grblSdCard.Load(_viewModel, ViewAll);
             }
         }
 
@@ -309,33 +314,33 @@ namespace CNC.Controls
         }
     }
 
-    public static class GrblSDCard
+    public  class GrblSDCard
     {
-        private static DataTable data;
-        private static bool? mounted = null;
-        private static int id = 0;
+        private  DataTable dataTable;
+        private  bool? mounted = null;
+        private  int id = 0;
 
-        static GrblSDCard()
+        public GrblSDCard()
         {
-            data = new DataTable("Filelist");
+            dataTable = new DataTable("Filelist");
 
-            data.Columns.Add("Id", typeof(int));
-            data.Columns.Add("Dir", typeof(string));
-            data.Columns.Add("Name", typeof(string));
-            data.Columns.Add("Size", typeof(int));
-            data.Columns.Add("Invalid", typeof(bool));
-            data.PrimaryKey = new DataColumn[] { data.Columns["Id"] };
+            dataTable.Columns.Add("Id", typeof(int));
+            dataTable.Columns.Add("Dir", typeof(string));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("Size", typeof(int));
+            dataTable.Columns.Add("Invalid", typeof(bool));
+            dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
         }
 
-        public static DataView Files { get { return data.DefaultView; } }
-        public static bool Loaded { get { return data.Rows.Count > 0; } }
+        public  DataView Files { get { return dataTable.DefaultView; } }
+        public  bool Loaded { get { return dataTable.Rows.Count > 0; } }
 
-        public static void Load(GrblViewModel model, bool ViewAll)
+        public  void Load(GrblViewModel model, bool viewAll)
         {
             bool? res = null;
             CancellationToken cancellationToken = new CancellationToken();
 
-            data.Clear();
+            dataTable.Clear();
 
             if (mounted == null)
             {
@@ -369,7 +374,7 @@ namespace CNC.Controls
                     response => Process(response),
                     a => model.OnResponseReceived += a,
                     a => model.OnResponseReceived -= a,
-                    2000, () => Comms.com.WriteCommand(ViewAll ? GrblConstants.CMD_SDCARD_DIR_ALL : GrblConstants.CMD_SDCARD_DIR));
+                    2000, () => Comms.com.WriteCommand(viewAll ? GrblConstants.CMD_SDCARD_DIR_ALL : GrblConstants.CMD_SDCARD_DIR));
                 }).Start();
 
                 while (res == null)
@@ -377,12 +382,19 @@ namespace CNC.Controls
 
                 model.Silent = false;
 
-                data.AcceptChanges();
+                dataTable.AcceptChanges();
             }
         }
 
-        private static void Process(string data)
+        private  void Process(string data)
         {
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => Process(data));
+                return;
+            }
+            
+
             string filename = "";
             int filesize = 0;
             bool invalid = false;
@@ -408,7 +420,8 @@ namespace CNC.Controls
                             break;
                     }
                 }
-                GrblSDCard.data.Rows.Add(new object[] { id++, "", filename, filesize, invalid });
+
+                dataTable.Rows.Add(new object[] { id++, "", filename, filesize, invalid });
             }
         }
     }
