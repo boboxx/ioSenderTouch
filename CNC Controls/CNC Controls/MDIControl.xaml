@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" Width="420" MinWidth="420" Height="321">
+             mc:Ignorable="d" Width="4010" MinWidth="410" Height="321">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
     </UserControl.Resources>

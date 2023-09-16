@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" d:DesignWidth="400" >
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500" >
     <UserControl.Resources>
         <local:StringCollectionToTextConverter x:Key="OcToString" />
     </UserControl.Resources>
@@ -21,16 +21,16 @@
             <CheckBox x:Uid="lbl_showAll" Content="All" IsChecked="{Binding Path=ResponseLogShowRTAll}" IsEnabled="{Binding Path=ResponseLogVerbose}" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <TextBox Name="TextBox" Grid.Row="1" IsReadOnly="True" TextWrapping="NoWrap" 
-                      FontSize="10" FontFamily="Verdana" HorizontalScrollBarVisibility="Auto"
-                      VerticalScrollBarVisibility ="Auto">
-            <TextBox.Text>
-                <MultiBinding Converter="{StaticResource OcToString}">
-                    <Binding Path="ResponseLog" Mode="OneWay"/>
-                    <Binding Path="ResponseLog.Count" Mode="OneWay" />
-                </MultiBinding>
-            </TextBox.Text>
-        </TextBox>
+        <ListBox  Name="ListViewControl" Grid.Row="1"   VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                      FontSize="10" FontFamily="Verdana" ItemsSource="{Binding Path=ResponseLog}"  ScrollViewer.HorizontalScrollBarVisibility="Auto"  ScrollViewer.CanContentScroll="True"  ScrollViewer.IsDeferredScrollingEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Auto" >
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
         <Button Grid.Row="2" x:Uid="btn_clear" Width="Auto" Content="Clear" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center"  Click="btn_Clear"/>
     </Grid>
 </UserControl>
