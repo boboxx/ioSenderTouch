@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="335" d:DesignWidth="400"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+             d:DesignHeight="335" d:DesignWidth="440"
              Loaded="UserControl_Loaded">
     <DataGrid x:Name="grdGCode" Grid.Row="0" ItemsSource="{Binding}" AllowDrop="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"
-                   CanUserSortColumns="false" CanUserResizeRows="False" IsReadOnly="true" DragEnter="grdGCode_Drag" DragOver="grdGCode_Drag" DragLeave="grdGCode_Drag" Drop="grdGCode_Drop" HorizontalScrollBarVisibility="Auto">
+                   CanUserSortColumns="false" CanUserResizeRows="False" IsReadOnly="true" DragEnter="grdGCode_Drag" DragOver="grdGCode_Drag" DragLeave="grdGCode_Drag" Drop="grdGCode_Drop"  HorizontalScrollBarVisibility="Hidden">
         <DataGrid.Columns>
-            <DataGridTextColumn x:Uid="hdr_block" Header="Block" Binding="{Binding LineNum}" Width="75" MinWidth="50"/>
-            <DataGridTextColumn Header="Status" Binding="{Binding Sent}" Width="75" MinWidth="35" />
-            <DataGridTextColumn x:Uid="hdr_data" Header="Data" Binding="{Binding Data}" Width="280" MinWidth="280"/>
+            <DataGridTextColumn x:Uid="hdr_block" CanUserResize="False" Header="Block" Binding="{Binding LineNum}" Width="77"/>
+            <DataGridTextColumn CanUserResize="False" Header="Status" Binding="{Binding Sent}" Width="70"  />
+            <DataGridTextColumn x:Uid="hdr_data" CanUserResize="False" Header="Data" Binding="{Binding Data}" Width="259"/>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>
