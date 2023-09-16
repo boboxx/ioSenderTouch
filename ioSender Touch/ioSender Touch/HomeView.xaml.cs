@@ -194,11 +194,11 @@ namespace ioSenderTouch
                 controls.Add(new JogConfigControl());
             }
             controls.Add(new StripGCodeConfigControl());
+            controls.Add(new AppUiSettings());
             if (AppConfig.Settings.GCodeViewer.IsEnabled)
             {
                 controls.Add(new CNC.Controls.Viewer.ConfigControl());
             }
-            controls.Add(new AppUiSettings());
             _grblAppSettings.Setup(controls, AppConfig.Settings);
 
         }
