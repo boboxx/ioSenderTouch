@@ -26,6 +26,7 @@ namespace CNC.Controls
         public GCodeListControl()
         {
             InitializeComponent();
+           
 
         }
         private void grdGCode_Drag(object sender, DragEventArgs e)
