@@ -47,11 +47,11 @@
 
                 <controls:FeedControl  x:Name="feedControl"  HorizontalAlignment="Center" VerticalAlignment="Stretch"  Margin="3,3,0,5" Width="260" Height="Auto" />
                 <local:JogControlT x:Name="jogControl" Margin="3,3,0,5" Height="Auto" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
-                <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Stretch" Margin="3,3,3,5" Width="260"  VerticalAlignment="Stretch"/>
+                <controls:SpindleControl x:Name="spindleControl" HorizontalAlignment="Stretch" Margin="3,3,3,5" Width="262"  VerticalAlignment="Stretch"/>
             </StackPanel>
         </Border>
 
-        <Grid DockPanel.Dock="Left" Width="440">
+        <Grid DockPanel.Dock="Left" Width="420">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -67,11 +67,11 @@
         <Border Name="RightMenuBorder" BorderBrush="Black" BorderThickness="1" Width="250" DockPanel.Dock="Right">
             <StackPanel Name ="RightStackPanel">
                 <controls:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
-                <controls:CoolantControl x:Name="coolantControl" Margin="3,5,3,3"   VerticalAlignment="Top" Height="158" Width="Auto"/>
-                <local:UtilityMacroControl Margin="3,5,3,3" Height="158" ></local:UtilityMacroControl>
+                <controls:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Top" Height="155" Width="Auto"/>
+                <local:UtilityMacroControl Margin="3,3,3,3" Height="Auto" ></local:UtilityMacroControl>
             </StackPanel>
         </Border>
-        <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
+        <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" Margin="3" DockPanel.Dock="Right">
         </Border>
     </DockPanel>
 </UserControl>
