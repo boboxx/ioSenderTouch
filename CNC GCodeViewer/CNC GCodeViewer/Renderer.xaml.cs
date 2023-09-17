@@ -593,7 +593,9 @@ namespace CNC.Controls.Viewer
                     case RenderMode.Mode3D:
                     case RenderMode.Mode2DXY:
                         pos = Math.Max(5d, Math.Max(bbox.SizeX, bbox.SizeY) / Math.Tan(ccamera.FieldOfView * Math.PI / 360d));
-                        viewport.Camera.Position = new Point3D((bbox.MaxX + bbox.MinX) / 2d, (bbox.MaxY + bbox.MinY) / 2d, pos*3);
+                        var x = (bbox.MaxX - bbox.MinX) / 2d;
+                        var y = (bbox.MaxY - bbox.MinY) / 2d;
+                        viewport.Camera.Position = new Point3D(x, y, pos * 1.2d);
                         viewport.Camera.LookDirection = new Vector3D(0d, 0d, -100d);
                         viewport.Camera.UpDirection = new Vector3D(0d, 1d, 1d);
                         break;

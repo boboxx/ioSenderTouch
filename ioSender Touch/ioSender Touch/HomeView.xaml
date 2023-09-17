@@ -51,7 +51,7 @@
             </StackPanel>
         </Border>
 
-        <Grid DockPanel.Dock="Left" Width="420">
+        <Grid DockPanel.Dock="Left" Width="440">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
