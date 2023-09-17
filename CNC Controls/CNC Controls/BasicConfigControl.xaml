@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CNC.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="210" d:DesignWidth="310">
-    <GroupBox x:Uid="grb_mainConfig" x:Name="grpBasic" Header="Main" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="310">
+    <GroupBox x:Uid="grb_mainConfig" x:Name="grpBasic" Header="Main" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="300">
         <StackPanel HorizontalAlignment="Left">
             <Grid x:Name="grid">
                 <Grid.ColumnDefinitions>

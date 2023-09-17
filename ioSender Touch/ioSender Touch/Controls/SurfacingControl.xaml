@@ -7,7 +7,7 @@
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:convertors="clr-namespace:ioSenderTouch.Convertors"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" Width="525" Height="525" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,5">
+             mc:Ignorable="d" Width="525" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,5">
     <UserControl.Resources>
         <convertors:RadioBoolToIntConverter x:Key="RadioBoolToIntConverter" />
     </UserControl.Resources>
@@ -17,8 +17,8 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <GroupBox Header="Surfacing Operation"  VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0,0,0,0" >
-                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0">
+            <GroupBox Header="Surfacing Operation"  VerticalAlignment="Stretch" HorizontalAlignment="Left"  >
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="Auto"/>
@@ -39,9 +39,8 @@
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
-                            <RowDefinition Height="40"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0"  Orientation="Horizontal">
+                        <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="0,0,0,0">
                             <ToggleButton Name="Mist" Content="Mist" FontWeight="Bold"  IsChecked="{Binding Mist, Mode=TwoWay}"
                                           Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                           Width="60"
@@ -126,7 +125,7 @@
                             <Label Content="RPM"   VerticalAlignment="Center"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="75" Height="30" Margin="0,6,0,5"></Label>
                         </StackPanel>
                     </Grid>
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="35" Margin="0,10,0,50">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="35" Margin="0,20,0,0">
                         <Button Name="GenGcodeBtn" Content="Generate"  Command="{Binding Path= SurfacingCommand}"  CommandParameter="{Binding ElementName=GenGcodeBtn, Path=Content}"
                             Margin="0,0,20,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="105"></Button>
                     </StackPanel>

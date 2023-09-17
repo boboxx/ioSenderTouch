@@ -38,7 +38,7 @@
                 <Button Content="App Settings" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_3" Width="140" Margin="1,0,1,0" ></Button>
             </StackPanel>
         </Border>
-        <Border Name="MainControlBorder" Height="325"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+        <Border Name="MainControlBorder" Height="315"  BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
             <StackPanel Name="MainStackPanel"  Orientation="Horizontal" Margin="0,0,0,0" >
                 <controls:MDIControl  x:Name="MdiControl" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" Height="Auto" Margin="5,3,0,5"/>
                 <controls:DROControl x:Name="DRO" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3,3,0,5"  VerticalContentAlignment="Stretch"/>
