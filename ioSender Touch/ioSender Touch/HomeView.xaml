@@ -71,7 +71,7 @@
                 <local:UtilityMacroControl Margin="3,3,3,3" Height="Auto" ></local:UtilityMacroControl>
             </StackPanel>
         </Border>
-        <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1" Margin="3" DockPanel.Dock="Right">
+        <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1"  DockPanel.Dock="Right">
         </Border>
     </DockPanel>
 </UserControl>
