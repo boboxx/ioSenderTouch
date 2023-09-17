@@ -555,13 +555,13 @@ namespace ioSenderTouch.Controls
                 VerticalContentAlignment = VerticalAlignment.Center
 
             };
-            Binding myBinding = new Binding
-            {
-                Source = _grblViewModel.FeedrateUnit,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-            };
-            BindingOperations.SetBinding(labelFR, Label.ContentProperty, myBinding);
-            PanelFeedRate.Children.Add(labelFR);
+            //Binding myBinding = new Binding
+            //{
+            //    Source = _grblViewModel.FeedrateUnit,
+            //    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            //};
+            //BindingOperations.SetBinding(labelFR, Label.ContentProperty, myBinding);
+            //PanelFeedRate.Children.Add(labelFR);
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {

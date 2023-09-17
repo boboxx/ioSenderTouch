@@ -89,7 +89,7 @@
                     </Grid>
                     <Border Grid.Column="1" x:Uid="grp_jogFeedrate"  Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto"  Width="Auto">
                         <StackPanel Name="PanelFeedRate" HorizontalAlignment="Stretch" Orientation="Vertical"  VerticalAlignment="Stretch" Height="Auto"  Width="Auto">
-                            <Label Content="Feed"  Margin="0,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch"></Label>
+                            <Label Content="{Binding FeedrateUnit}" ContentStringFormat="Feed {0}"  Margin="0,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch"></Label>
                             <!--<Button Height="45" Tag="3" Content="{Binding Path=Feedrate3, RelativeSource={RelativeSource AncestorType=UserControl}}"   HorizontalAlignment="Stretch" Margin="0,3,0,0" VerticalAlignment="Stretch" Click="feedrate_Click"/>
                             <Button Height="45" Tag="2" Content="{Binding Path=Feedrate2, RelativeSource={RelativeSource AncestorType=UserControl}}"  HorizontalAlignment="Stretch" Margin="0,3,0,0" VerticalAlignment="Stretch" Click="feedrate_Click"/>
                             <Button Height="45" Tag="1" Content="{Binding Path=Feedrate1, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch" Margin="0,3,0,0" VerticalAlignment="Stretch" Click="feedrate_Click"/>
