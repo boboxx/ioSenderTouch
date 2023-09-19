@@ -4,14 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ioSenderTouch.Controls"
+             xmlns:styleDic="clr-namespace:ioSenderTouch"
              xmlns:controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="45" d:DesignWidth="Auto">
     <UserControl.Resources>
-        <controls:BlocksToStringConverter x:Key="BlocksToStringConverter" />
-        <controls:LogicalNotConverter x:Key="BooleanConverter" />
-        <controls:GrblStateToColorConverter x:Key="StateColorConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../stlye/TitleBar.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <controls:BlocksToStringConverter x:Key="BlocksToStringConverter" />
+            <controls:LogicalNotConverter x:Key="BooleanConverter" />
+            <controls:GrblStateToColorConverter x:Key="StateColorConverter" />
+            <controls:BoolToVisibleConverter x:Key="BoolVisibleConverter" />
+            <controls:BoolToNotVisibleConverter x:Key="BoolNotVisibleConverter" />
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid  Name="Panel" Margin="0,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
@@ -51,8 +59,14 @@
                         Visibility="{Binding ShowAlarmButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Style="{StaticResource MaterialDesignRaisedButton}" />
 
-            <Button Grid.Column="3" Content="Shut Down" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" 
-                        VerticalContentAlignment="Center" Height="40" Width="110" Command="{Binding ShutDownCommand}" ></Button>
+            <StackPanel  Grid.Column="3"  Margin="0,0,0,0" VerticalAlignment="Center" 
+                         Visibility="{Binding DisplayMenuBar, Converter = {StaticResource BoolVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="MinimizeButton" Style="{StaticResource MinimizeButtonStyle}" Click="MinimizeWindow" KeyboardNavigation.IsTabStop="False" />
+                <Button x:Name="MaximizeButton" Style="{StaticResource RestoreButtonStyle}" Click="MaximizeClick" KeyboardNavigation.IsTabStop="False" />
+                <Button x:Name="CloseButton"  Style="{StaticResource CloseButtonStyle}"  Click="CloseButton_Click" KeyboardNavigation.IsTabStop="False" />
+            </StackPanel>
+            <Button  Visibility="{Binding Path=DisplayMenuBar, Converter= {StaticResource BoolNotVisibleConverter }}" Grid.Column="3" Content="Shut Down" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" 
+                     VerticalContentAlignment="Center" Height="40" Width="110" Command="{Binding ShutDownCommand}" ></Button>
         </Grid>
     </Grid>
 </UserControl>

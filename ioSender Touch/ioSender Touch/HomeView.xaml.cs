@@ -188,13 +188,13 @@ namespace ioSenderTouch
             {
                 controls.Add(new JogUiConfigControl());
             }
-
+            controls.Add(new AppUiSettings());
             if (AppConfig.Settings.Jog.Mode != JogConfig.JogMode.UI)
             {
                 controls.Add(new JogConfigControl());
             }
             controls.Add(new StripGCodeConfigControl());
-            controls.Add(new AppUiSettings());
+         
             if (AppConfig.Settings.GCodeViewer.IsEnabled)
             {
                 controls.Add(new CNC.Controls.Viewer.ConfigControl());
@@ -236,5 +236,6 @@ namespace ioSenderTouch
 
             btnShowConsole.Content = ConsoleControl.Visibility == Visibility.Hidden ? "Console" : "GCode Viewer";
         }
+
     }
 }

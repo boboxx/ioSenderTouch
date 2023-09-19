@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -64,12 +64,14 @@ namespace ioSenderTouch
             _viewModel.OnShutDown += _viewModel_OnShutDown;
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
-
         }
 
         private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
         {
-            WindowStyle = AppConfig.Settings.AppUiSettings.EnableToolBar ? WindowStyle.SingleBorderWindow : WindowStyle.None;
+            _viewModel.DisplayMenuBar = AppConfig.Settings.AppUiSettings.EnableToolBar;
+            WindowStyle = WindowStyle.None;
+            ResizeMode = ResizeMode.NoResize;
+            WindowState = WindowState.Maximized;
         }
 
         private void _viewModel_OnShutDown(object sender, EventArgs e)

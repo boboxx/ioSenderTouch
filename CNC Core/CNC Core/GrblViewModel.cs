@@ -100,6 +100,7 @@ namespace CNC.Core
         private bool _connected;
         private bool _hasAtc;
         private bool _isIndividualHomingEnabled;
+        private bool _displayMenuBar;
 
         public delegate void GrblResetHandler();
 
@@ -198,12 +199,22 @@ namespace CNC.Core
                 OnPropertyChanged();
             }
         }
+        public bool DisplayMenuBar
+        {
+            get => _displayMenuBar;
+            set
+            {
+                if (value == _displayMenuBar) return;
+                _displayMenuBar = value;
+                OnPropertyChanged();
+            }
+        }
         public GrblViewModel()
         {
             _a = _pn = _fs = _sc = _tool = string.Empty;
 
             Clear();
-
+          
             Keyboard = new KeypressHandler(this);
             MDICommand = new ActionCommand<string>(ExecuteMDI);
 
@@ -251,8 +262,8 @@ namespace CNC.Core
             ResetCommand = new Command(SetResetCommand);
             SetDefaults();
             Connected = false;
+            
         }
-
 
 
         public void SetShutDown(object obj)

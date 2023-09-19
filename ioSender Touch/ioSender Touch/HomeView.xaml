@@ -8,7 +8,6 @@
              xmlns:local="clr-namespace:ioSenderTouch.Controls"
              mc:Ignorable="d"
              Focusable="True">
-
     <UserControl.Resources>
         <system:String x:Uid="str_msgWait" x:Key="MsgWaiting">Waiting for controller ({0})...</system:String>
         <system:String x:Uid="str_msgNoCommAlarm" x:Key="MsgNoCommAlarm">Controller is not able to communicate due to alarm {0}, attempting a soft reset.</system:String>
@@ -22,6 +21,7 @@
         <system:String x:Uid="str_msgNoComm" x:Key="MsgNoComm">Controller is in {0} state and cannot respond, try a soft reset?</system:String>
         <system:String x:Uid="str_msgResetExit" x:Key="MsgResetExit">Controller soft reset failed, exiting.</system:String>
         <system:String x:Uid="str_msgNoResponse" x:Key="MsgNoResponse">Controller is not responding!</system:String>
+        
         <controls:BoolToVisibleConverter x:Key="IsVisibleConverter" />
     </UserControl.Resources>
     <DockPanel Name="DockPanelMain">
@@ -65,11 +65,16 @@
         </Grid>
 
         <Border Name="RightMenuBorder" BorderBrush="Black" BorderThickness="1" Width="250" DockPanel.Dock="Right">
-            <StackPanel Name ="RightStackPanel">
+            <Grid Name ="RightStackPanel">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*" ></RowDefinition>
+                </Grid.RowDefinitions>
                 <controls:JobControl x:Name="GCodeSender" Margin="3,3,0,5" Width="244" VerticalAlignment="Top"/>
-                <controls:CoolantControl x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Top" Height="155" Width="Auto"/>
-                <local:UtilityMacroControl Margin="3,3,3,3" Height="Auto" ></local:UtilityMacroControl>
-            </StackPanel>
+                <controls:CoolantControl Grid.Row="1" x:Name="coolantControl" Margin="3,3,3,3"   VerticalAlignment="Top" Height="Auto" Width="Auto"/>
+                <local:UtilityMacroControl Grid.Row="2" Margin="3,3,3,3" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"></local:UtilityMacroControl>
+            </Grid>
         </Border>
         <Border Name="FillBorder" BorderBrush="Black" BorderThickness="1"  DockPanel.Dock="Right">
         </Border>
