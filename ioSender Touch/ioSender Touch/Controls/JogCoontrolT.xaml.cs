@@ -322,54 +322,54 @@ namespace ioSenderTouch.Controls
         private bool JogStep0(Key key)
         {
             JogStep = JogStep.Step0;
-
+            SetJogDistance();
             return true;
         }
 
         private bool JogStep1(Key key)
         {
             JogStep = JogStep.Step1;
-
+            SetJogDistance();
             return true;
         }
 
         private bool JogStep2(Key key)
         {
             JogStep = JogStep.Step2;
-
+            SetJogDistance();
             return true;
         }
 
         private bool JogStep3(Key key)
         {
             JogStep = JogStep.Step3;
-
+            SetJogDistance();
             return true;
         }
 
         private bool JogFeed0(Key key)
         {
             this.JobFeed = JogFeed.Feed0;
-
+            SetJogRate();
             return true;
         }
 
         private bool JogFeed1(Key key)
         {
             this.JobFeed = JogFeed.Feed1;
-
+            SetJogRate();
             return true;
         }
         private bool JogFeed2(Key key)
         {
             this.JobFeed = JogFeed.Feed2;
-
+            SetJogRate();
             return true;
         }
         private bool JogFeed3(Key key)
         {
             this.JobFeed = JogFeed.Feed3;
-
+            SetJogRate();
             return true;
         }
 
@@ -570,24 +570,40 @@ namespace ioSenderTouch.Controls
         public void StepInc()
         {
             if (JogStep != JogStep.Step3)
+            {
                 JogStep += 1;
+                SetJogDistance();
+            }
+                
         }
         public void StepDec()
         {
             if (JogStep != JogStep.Step0)
+            {
                 JogStep -= 1;
+                SetJogDistance();
+            }
+                
         }
 
         public void FeedInc()
         {
             if (JobFeed != JogFeed.Feed3)
+            {
                 JobFeed += 1;
+                SetJogRate();
+            }
+           
         }
 
         public void FeedDec()
         {
             if (JobFeed != JogFeed.Feed0)
+            {
                 JobFeed -= 1;
+                SetJogRate();
+            }
+           
         }
 
 
