@@ -67,8 +67,10 @@ namespace CNC.Controls
         {
             _model = model;
             InitializeComponent();
-
-            _model.PropertyChanged += Parameters_PropertyChanged;
+            GrblWorkParameters.Get(_model);
+            dgrTools.ItemsSource = new ObservableCollection<Tool>(from tool in GrblWorkParameters.Tools where tool.Code != GrblConstants.NO_TOOL orderby tool.Code select tool);
+            dgrTools.SelectedIndex = 0;
+           // _model.PropertyChanged += Parameters_PropertyChanged;
         }
 
         public Position offset { get; private set; } = new Position();
@@ -218,7 +220,7 @@ namespace CNC.Controls
 
         private void RequestStatus()
         {
-            _model.Clear();
+           // _model.Clear();
             if (double.IsNaN(_model.WorkPosition.X) || true) // If not NaN then MPG is polling
                 Comms.com.WriteByte(GrblLegacy.ConvertRTCommand(GrblConstants.CMD_STATUS_REPORT_ALL));
         }

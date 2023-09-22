@@ -161,5 +161,11 @@ namespace CNC.Controls.Viewer
                 keyboard.AddHandler(Key.W, ModifierKeys.Control, ToggleWorkEnvelope);
             }
         }
+
+        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(_grblViewModel.GrblState.State == GrblStates.Tool)
+                Comms.com.WriteByte(GrblConstants.CMD_CYCLE_START);
+        }
     }
 }
