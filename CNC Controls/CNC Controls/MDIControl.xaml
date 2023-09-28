@@ -39,10 +39,10 @@
 
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="64"></RowDefinition>
-                    <RowDefinition Height="64"></RowDefinition>
-                    <RowDefinition Height="64"></RowDefinition>
-                    <RowDefinition Height="64"></RowDefinition>
+                    <RowDefinition Height="61"></RowDefinition>
+                    <RowDefinition Height="61"></RowDefinition>
+                    <RowDefinition Height="61"></RowDefinition>
+                    <RowDefinition Height="61"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Grid.Column="0" Content="7" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Grid.Row="1" Grid.Column="0" Content="4" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
