@@ -138,7 +138,7 @@ namespace CNC.Controls
         private double _stockLength;
         private double _stockWidth;
         private double _depth;
-        private int _overlap =50;
+        private int _overlap = 50;
         private int _passes = 1;
         private double _feedRate;
         private double _spindleRpm;
@@ -164,12 +164,12 @@ namespace CNC.Controls
             }
         }
 
-        public string FilePath { get { return _filePath; } set { _filePath = value;  OnPropertyChanged(); } }
+        public string FilePath { get { return _filePath; } set { _filePath = value; OnPropertyChanged(); } }
         public bool IsInches { get { return _isInches; } set { _isInches = value; OnPropertyChanged(); } }
         public double TooDiameter { get { return _toolDiameter; } set { _toolDiameter = value; OnPropertyChanged(); } }
         public double StockLength { get { return _stockLength; } set { _stockLength = value; OnPropertyChanged(); } }
-        public double StockWidth { get { return _stockWidth; } set { _stockWidth = value;  OnPropertyChanged(); } }
-        public double Depth { get { return _depth; } set { _depth = value;  OnPropertyChanged(); } }
+        public double StockWidth { get { return _stockWidth; } set { _stockWidth = value; OnPropertyChanged(); } }
+        public double Depth { get { return _depth; } set { _depth = value; OnPropertyChanged(); } }
         public int Overlap { get { return _overlap; } set { _overlap = value; OnPropertyChanged(); } }
         public int Passes { get { return _passes; } set { _passes = value; OnPropertyChanged(); } }
         public double FeedRate { get { return _feedRate; } set { _feedRate = value; OnPropertyChanged(); } }
@@ -332,7 +332,7 @@ namespace CNC.Controls
         private CommandIgnoreState _ignoreM6 = CommandIgnoreState.No, _ignoreM7 = CommandIgnoreState.No, _ignoreM8 = CommandIgnoreState.No, _ignoreG61G64 = CommandIgnoreState.Strip;
         private string _theme = "default";
 
-        
+
         public int PollInterval { get { return _pollInterval < 100 ? 100 : _pollInterval; } set { _pollInterval = value; OnPropertyChanged(); } }
         public string PortParams { get; set; } = "COMn:115200,N,8,1";
         public int ResetDelay { get; set; } = 2000;
@@ -380,7 +380,7 @@ namespace CNC.Controls
 
         private AppConfig()
         {
-           
+
         }
 
         public static AppConfig Settings { get { return settings.Value; } }
@@ -504,7 +504,7 @@ namespace CNC.Controls
             bool selectPort = false;
             int jogMode = -1;
             string port = string.Empty, baud = string.Empty;
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config"+Path.DirectorySeparatorChar);
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config" + Path.DirectorySeparatorChar);
             Resources.Path = path;
 
             string[] args = Environment.GetCommandLineArgs();
@@ -620,6 +620,7 @@ namespace CNC.Controls
                         new SerialStream(Base.PortParams, Base.ResetDelay, dispatcher);
 #endif
                     Save(CNC.Core.Resources.IniFile);
+                    OnConfigFileLoaded?.Invoke(this, null);
                 }
             }
 
