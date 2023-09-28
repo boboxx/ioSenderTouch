@@ -284,11 +284,11 @@ namespace CNC.Controls
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
+            if(dgrSDCard.SelectedItem == null)return;
             var selectedFile = (string)currentFile["Name"];
             if(string.IsNullOrEmpty(selectedFile))return;
             if (MessageBox.Show(string.Format((string)FindResource("DeleteFile"), (string)currentFile["Name"]), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
-                //if((string)currentFile["Name"] == null) return;
                 Comms.com.WriteCommand(GrblConstants.CMD_SDCARD_UNLINK + (string)currentFile["Name"]);
                 _grblSdCard.Load(_viewModel, ViewAll);
             }

@@ -20,13 +20,13 @@
                
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Name="Panel" Margin="0,0,0,0">
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Name="Panel" Margin="0,0,0,0">
                 <ComboBox x:Name="TxtMdi" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
                           SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
                       Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False"
                       HorizontalAlignment="Left" Height="30" Margin="3,16,3,24" VerticalAlignment="Center" Width="306" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
                 <Button x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                        Content="Send" Focusable="False"  HorizontalAlignment="Right" Margin="3,16,3,24" VerticalAlignment="Center" Width="73" Height="30" Click="Send_Click"/>
+                        Content="Send" Focusable="False"  HorizontalAlignment="Stretch" Margin="3,3,0,3" VerticalAlignment="Center" Width="85" Height="40" Click="Send_Click"/>
             </StackPanel>
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
