@@ -209,7 +209,6 @@ namespace ioSenderTouch
             {
                 controls.Add(new CNC.Controls.Viewer.ConfigControl());
             }
-            controls.Add(new AppUiSettings());
             _grblAppSettings.Setup(controls, AppConfig.Settings);
 
         }

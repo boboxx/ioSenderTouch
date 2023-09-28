@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cntrl="clr-namespace:CNC.Controls.Viewer;assembly=CNC.Controls.Viewer" 
              xmlns:local="clr-namespace:ioSenderTouch.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
@@ -12,7 +13,8 @@
             <StackPanel>
                 <CheckBox Name="StopLight" IsChecked="{Binding AppUISettings.EnableStopLightTheme}" materialDesign:CheckBoxAssist.CheckBoxSize="30" Content="StopLight Theme"  ></CheckBox>
                 <CheckBox Name="ToolBar" IsChecked="{Binding AppUISettings.EnableToolBar}" materialDesign:CheckBoxAssist.CheckBoxSize="30" Content="Window Tool Bar" ></CheckBox>
-                <Label Name="LabelRestart" Content="Restart Required" Visibility="Hidden"></Label>
+                <Label Name="ColorPicker" Content="UI Color Selection"></Label>
+                <cntrl:ColorPicker HorizontalAlignment="Left" SelectedColor="{Binding AppUISettings.UIColor, Mode=TwoWay}"></cntrl:ColorPicker>
             </StackPanel>
 
         </GroupBox>

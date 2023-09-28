@@ -8,8 +8,8 @@
         
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="BlueGrey" SecondaryColor="LightGreen" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="BlueGrey" SecondaryColor="LightGreen" ColorAdjustment="{materialDesign:ColorAdjustment}" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!--SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#656865"/>
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#FFFFFF"/>-->
@@ -19,9 +19,9 @@
             <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="#FFFFFF"/>-->
 
             
-            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#FF808587"/>
+            <!--<SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#FF808587"/>-->
 
-            <!-- accent -->
+             <!--accent--> 
             <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="#989994"/>
             <SolidColorBrush x:Key="SecondaryHueLightBrush" Color="LightGreen"/>
             <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#FFFFFF"/>

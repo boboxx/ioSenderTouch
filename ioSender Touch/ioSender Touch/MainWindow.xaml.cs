@@ -3,11 +3,13 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media;
 using System.Windows.Threading;
 using CNC.Controls;
 using CNC.Converters;
 using CNC.Core;
 using ioSenderTouch.Controls;
+using MaterialDesignThemes.Wpf;
 
 
 namespace ioSenderTouch
@@ -66,12 +68,28 @@ namespace ioSenderTouch
             PipeServer.FileTransfer += Pipe_FileTransfer;
         }
 
+        private  void SetPrimaryColor(Color color)
+        {
+            try
+            {
+                PaletteHelper paletteHelper = new PaletteHelper();
+                var theme = paletteHelper.GetTheme();
+                theme.SetPrimaryColor(color);
+                paletteHelper.SetTheme(theme);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
         private void Settings_OnConfigFileLoaded(object sender, EventArgs e)
         {
             _viewModel.DisplayMenuBar = AppConfig.Settings.AppUiSettings.EnableToolBar;
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             WindowState = WindowState.Maximized;
+            var color = AppConfig.Settings.AppUiSettings.UIColor;
+            SetPrimaryColor(color);
         }
 
         private void _viewModel_OnShutDown(object sender, EventArgs e)

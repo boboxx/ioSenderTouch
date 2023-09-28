@@ -254,6 +254,7 @@ namespace CNC.Controls
     {
         private bool _enableToolBar;
         private bool _enableStopLightTheme;
+        private Color _uIColor;
 
 
         public bool EnableToolBar
@@ -274,6 +275,17 @@ namespace CNC.Controls
             {
                 if (value == _enableStopLightTheme) return;
                 _enableStopLightTheme = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Color UIColor
+        {
+            get => _uIColor;
+            set
+            {
+                if (value == _uIColor) return;
+                _uIColor = value;
                 OnPropertyChanged();
             }
         }
