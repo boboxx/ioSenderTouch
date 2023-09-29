@@ -5,70 +5,58 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:CNC.Controls"
-             mc:Ignorable="d" Width="4010" MinWidth="410" Height="321">
+             mc:Ignorable="d" Width="Auto" MinWidth="350" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
     <UserControl.Resources>
         <local:LogicalNotConverter x:Key="BooleanConverter" />
     </UserControl.Resources>
 
     <Border   BorderBrush="{DynamicResource PrimaryHueMidBrush}" 
               BorderThickness="1" x:Uid="grp_mdi" x:Name="GrpMdi" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" 
-              HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto"   Margin="0,0,0,0">
-        <Grid Margin="5,0,5,3">
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto"   Margin="0,0,0,0">
+        <Grid Margin="5,0,3,1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="254"></RowDefinition>
-               
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="245"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Name="Panel" Margin="0,0,0,0">
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch" Width="Auto"  Name="Panel" Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="90"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 <ComboBox x:Name="TxtMdi" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
                           SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
-                      Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False"
-                      HorizontalAlignment="Left" Height="30" Margin="3,16,3,24" VerticalAlignment="Center" Width="306" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
-                <Button x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                        Content="Send" Focusable="False"  HorizontalAlignment="Stretch" Margin="3,3,0,3" VerticalAlignment="Center" Width="85" Height="40" Click="Send_Click"/>
-            </StackPanel>
-            <Grid Grid.Row="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="67" ></ColumnDefinition>
-                    <ColumnDefinition Width="67"></ColumnDefinition>
-                    <ColumnDefinition Width="67"></ColumnDefinition>
-                    <ColumnDefinition Width="67"></ColumnDefinition>
-                    <ColumnDefinition Width="67"></ColumnDefinition>
-                    <ColumnDefinition Width="67"></ColumnDefinition>
-
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="61"></RowDefinition>
-                    <RowDefinition Height="61"></RowDefinition>
-                    <RowDefinition Height="61"></RowDefinition>
-                    <RowDefinition Height="61"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="7" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="1" Grid.Column="0" Content="4" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="0" Content="1" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="3" Grid.Column="0" Content="." Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="0" Grid.Column="1" Content="8" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="1" Grid.Column="1" Content="5" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="1" Content="2" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="3" Grid.Column="1" Content="0" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="0" Grid.Column="2" Content="9" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="1" Grid.Column="2" Content="6" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="2" Content="3" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="3" Grid.Column="2" Content="Spc" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="0" Grid.Column="3" Content="+" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="1" Grid.Column="3" Content="-" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="3" Content="Enter" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
-                <Button Grid.Row="3" Grid.Column="3" Content="Del" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
-                <Button Grid.Row="0" Grid.Column="4" Content="G" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="1" Grid.Column="4" Content="X" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="4" Content="Y" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="3" Grid.Column="4" Content="Z" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="0" Grid.Column="5" Content="M" Height="Auto" Width="Auto" Margin="1" Click="Button_Click" ></Button>
-                <Button Grid.Row="1" Grid.Column="5" Content="T" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="2" Grid.Column="5" Content="H" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Grid.Row="3" Grid.Column="5" Content="$" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                          Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False"
+                          HorizontalAlignment="Stretch" Height="30" Margin="3,16,3,24" VerticalAlignment="Center" Width="Auto" MinWidth="250" SelectionChanged="txtMDI_SelectionChanged" KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
+                <Button Grid.Column="1" x:Uid="btn_send" Command="{Binding MDICommand}" CommandParameter="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                        Content="Send" Focusable="False"  HorizontalAlignment="Right" Margin="3,3,0,3" VerticalAlignment="Center" Width="85" Height="40" Click="Send_Click"/>
             </Grid>
+            <UniformGrid  Grid.Row="1" Columns="6" Rows="4"  >
+                <Button Content="7" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="8" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="9" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="+" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="G" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="M" Height="Auto" Width="Auto" Margin="1" Click="Button_Click" ></Button>
+                <Button Content="4" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="5" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="6" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="-" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="X" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="T" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="1" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="2" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="3" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="Enter" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
+                <Button Content="Y" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="H" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="." Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="0" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="Spc" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="Del" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
+                <Button Content="Z" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button Content="$" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+            </UniformGrid>
         </Grid>
     </Border>
 </UserControl>
