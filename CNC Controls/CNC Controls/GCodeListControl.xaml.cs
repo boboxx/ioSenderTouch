@@ -23,11 +23,15 @@ namespace CNC.Controls
     {
         public ScrollViewer scroll = null;
 
+        public static readonly DependencyProperty ShowScrollBarProperty = DependencyProperty.Register(nameof(ShowScrollBar), typeof(bool), typeof(SDCardView), new PropertyMetadata(false));
+        public bool ShowScrollBar
+        {
+            get { return (bool)GetValue(ShowScrollBarProperty); }
+            set { SetValue(ShowScrollBarProperty, value); }
+        }
         public GCodeListControl()
         {
             InitializeComponent();
-           
-
         }
         private void grdGCode_Drag(object sender, DragEventArgs e)
         {

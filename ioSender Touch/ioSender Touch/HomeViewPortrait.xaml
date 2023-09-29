@@ -49,7 +49,7 @@
         <Border Name="LeftBorder" BorderBrush="Black" BorderThickness="1" Width="Auto" DockPanel.Dock="Left">
             <Expander  materialDesign:ExpanderAssist.VerticalHeaderPadding="0,10,0,5"
                       ExpandDirection="Right" >
-                <Grid DockPanel.Dock="Left" Width="225">
+                <Grid DockPanel.Dock="Left" Width="235">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -59,7 +59,7 @@
                         <Button  Name="btnShowConsole" Content="Console" Click="ButtonBase_OnClick"   Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource IsVisibleConverter}}"></Button>
                     </StackPanel>
                     <controls:ConsoleControl Grid.Row="1" Name="ConsoleControl" HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Margin="2,5,0,5" />
-                    <controls:GCodeListControl Grid.Row="1" Name ="CodeListControl"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="2,5,0,10" Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource IsVisibleConverter}}"></controls:GCodeListControl>
+                    <controls:GCodeListControl  ShowScrollBar="True" Grid.Row="1" Name ="CodeListControl"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="2,5,0,10" Visibility="{Binding Path=IsFileLoaded, Converter= {StaticResource IsVisibleConverter}}"></controls:GCodeListControl>
                 </Grid>
             </Expander>
         </Border>
