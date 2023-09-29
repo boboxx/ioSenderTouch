@@ -18,9 +18,12 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,0">
                     <Label x:Name="lblFeed" Content="Feed Rate:" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
-                    <local:NumericTextBox x:Name="cvFeedRate" Value="{Binding Path=FeedRate, Mode=OneWay}" Format="####0"  HorizontalAlignment="Left"  IsReadOnly="True" Focusable="False" VerticalAlignment="Center" Width="50"/>
-                    <Label x:Name="lblFeedRrate" Content="{Binding Path=FeedrateUnit, Mode=OneWay}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,16" VerticalAlignment="Center" Width="62" Height="23" />
-                    <Label x:Name="lblFeedRratePercent" Content="{Binding FeedOverride}" ContentStringFormat="%{0}"   HorizontalContentAlignment="Right" VerticalAlignment="Center"  Height="23" />
+                    <local:NumericTextBox x:Name="cvFeedRate" Value="{Binding Path=FeedRate, Mode=OneWay}" Format="####0"  HorizontalAlignment="Left"  
+                                          IsReadOnly="True" Focusable="False" VerticalAlignment="Center" Width="46"/>
+                    <Label x:Name="lblFeedRrate" Content="{Binding Path=FeedrateUnit, Mode=OneWay}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" 
+                           Margin="0,16" VerticalAlignment="Center" Width="61" Height="23" />
+                    <Label x:Name="lblFeedRratePercent" Content="{Binding FeedOverride}" ContentStringFormat="%{0}"   
+                           HorizontalContentAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Center"  Height="23" />
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10,0,0,0" >
                     <Grid.ColumnDefinitions>
