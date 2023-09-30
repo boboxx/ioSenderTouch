@@ -15,7 +15,7 @@
         <Grid Name="Main" Height="Auto" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Stretch"  Width="235">
                 <Grid.ColumnDefinitions>
@@ -42,29 +42,29 @@
             </Grid>
             <Grid Grid.Row="1" VerticalAlignment="Stretch" Height="Auto">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition  Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Margin="3,0,3,0" VerticalAlignment="Stretch" Height="Auto">
-                    <Grid.RowDefinitions>
+                <UniformGrid Grid.Column="0" Rows="3" Margin="3,0,3,0" VerticalAlignment="Stretch" Height="Auto">
+                    <!--<Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Button Grid.Row="0" Name="G54" Content="G54" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="63" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
-                    <Button Grid.Row="1" Name="G56" Content="G56" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="63" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
-                    <Button Grid.Row="2" Name="G58" Content="G58" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="63" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
-                </Grid>
-                <Grid Grid.Column="1" Margin="3,0,3,0" VerticalAlignment="Stretch" Height="Auto">
-                    <Grid.RowDefinitions>
+                    </Grid.RowDefinitions>-->
+                    <Button Grid.Row="0" Name="G54" Content="G54" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
+                    <Button Grid.Row="1" Name="G56" Content="G56" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
+                    <Button Grid.Row="2" Name="G58" Content="G58" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
+                </UniformGrid>
+                <UniformGrid Grid.Column="1"  Rows="3" Margin="3,0,3,0" VerticalAlignment="Stretch" Height="Auto">
+                    <!--<Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Button Grid.Row="0" Name="G55" Content="G55" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="63" Command="{Binding Path= WcsCommand}"  CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
-                    <Button Grid.Row="1" Name="G57" Content="G57" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="63" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
-                    <Button Grid.Row="2" Name="G59" Content="G59" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="63" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
-                </Grid>
+                    </Grid.RowDefinitions>-->
+                    <Button Grid.Row="0" Name="G55" Content="G55" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Command="{Binding Path= WcsCommand}"  CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
+                    <Button Grid.Row="1" Name="G57" Content="G57" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
+                    <Button Grid.Row="2" Name="G59" Content="G59" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Command="{Binding Path= WcsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="0,2"></Button>
+                </UniformGrid>
             </Grid>
         </Grid>
     </GroupBox>

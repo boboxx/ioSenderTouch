@@ -47,13 +47,13 @@
                 <Button Content="1" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Content="2" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Content="3" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Content="Enter" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
+                <Button FontSize="10" Content="Enter" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
                 <Button Content="Y" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Content="H" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Content="." Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Content="0" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Content="Spc" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
-                <Button Content="Del" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
+                <Button FontSize="10" Content="Space" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
+                <Button FontSize="10" Content="Delete" Height="Auto" Width=" Auto" Margin="1" Click="Button_Click" ></Button>
                 <Button Content="Z" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
                 <Button Content="$" Height="Auto" Width="Auto" Margin="1" Click="Button_Click"></Button>
             </UniformGrid>
