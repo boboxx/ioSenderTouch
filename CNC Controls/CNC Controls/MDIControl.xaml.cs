@@ -129,12 +129,12 @@ namespace CNC.Controls
                 case "Enter":
                     ProcessEnterAndCommand(txt);
                     break;
-                case "Del":
+                case "Delete":
                     if(string.IsNullOrEmpty(txt))return;
                     var remove = txt.Remove(txt.Length - 1, 1);
                     TxtMdi.Text = remove;
                     break;
-                case "Spc":
+                case "Space":
                     TxtMdi.Text = txt + " ";
                     break;
                 default:
