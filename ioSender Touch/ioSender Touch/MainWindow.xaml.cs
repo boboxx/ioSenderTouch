@@ -16,7 +16,7 @@ namespace ioSenderTouch
 {
     public partial class MainWindow : Window
     {
-        private const string Version = "1.0.1";
+        private const string Version = "1.0.2";
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
