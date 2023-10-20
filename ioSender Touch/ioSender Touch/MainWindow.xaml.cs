@@ -23,6 +23,7 @@ namespace ioSenderTouch
         private readonly GrblViewModel _viewModel;
         private readonly HomeView _homeView;
         private readonly HomeViewPortrait _homeViewPortrait;
+        private bool _shown;
 
         public string BaseWindowTitle { get; set; }
         public bool JobRunning => _viewModel.IsJobRunning;
@@ -64,8 +65,19 @@ namespace ioSenderTouch
                 MenuBorder.DataContext = _viewModel;
             }
             _viewModel.OnShutDown += _viewModel_OnShutDown;
+           
             new PipeServer(App.Current.Dispatcher);
             PipeServer.FileTransfer += Pipe_FileTransfer;
+            
+        }
+
+        protected override void OnContentRendered(EventArgs e)
+        {
+            base.OnContentRendered(e);
+            if (_shown)
+                return;
+            _shown = true;
+            _viewModel.LoadComplete();
         }
 
         private  void SetPrimaryColor(Color color)

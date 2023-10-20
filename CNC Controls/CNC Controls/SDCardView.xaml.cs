@@ -37,12 +37,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+using System;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Threading;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.Win32;
 using CNC.Core;
 
@@ -55,7 +57,7 @@ namespace CNC.Controls
     {
         public delegate void FileSelectedHandler(string filename, bool rewind);
         public event FileSelectedHandler FileSelected;
-        private  GrblViewModel _viewModel;
+        private GrblViewModel _viewModel;
         private DataRow currentFile = null;
         private GrblSDCard _grblSdCard;
 
@@ -65,7 +67,7 @@ namespace CNC.Controls
             InitializeComponent();
             DataContext = this;
             ctxMenu.DataContext = this;
-           
+
         }
         public SDCardView(GrblViewModel grblViewModel)
         {
@@ -73,10 +75,15 @@ namespace CNC.Controls
             _viewModel = grblViewModel;
             ctxMenu.DataContext = this;
             _grblSdCard = new GrblSDCard();
+            grblViewModel.GrblInitialized += GrblViewModel_GrblInitialized;
+            
+        }
+
+        private void GrblViewModel_GrblInitialized(object sender, EventArgs e)
+        {
             SetupView();
         }
 
-        
         public void SetupView()
         {
             _grblSdCard.Load(_viewModel, ViewAll);
@@ -85,12 +92,12 @@ namespace CNC.Controls
             CanViewAll = GrblInfo.Build >= 20230312;
             CanRewind = GrblInfo.IsGrblHAL;
         }
-      
+
         public void CloseFile()
         {
         }
 
-        
+
 
         #region Dependency properties
 
@@ -130,7 +137,7 @@ namespace CNC.Controls
         }
 
         public static readonly DependencyProperty CanDeleteProperty = DependencyProperty.Register(nameof(CanDelete), typeof(bool), typeof(SDCardView), new PropertyMetadata(false));
-      
+
 
         public bool CanDelete
         {
@@ -164,7 +171,7 @@ namespace CNC.Controls
         {
             if (currentFile != null && MessageBox.Show(string.Format((string)FindResource("DownloandRun"), (string)currentFile["Name"]), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
-               
+
 
                 using (new UIUtils.WaitCursor())
                 {
@@ -223,7 +230,7 @@ namespace CNC.Controls
 
             if (filename != string.Empty)
             {
-               
+
 
                 _viewModel.Message = (string)FindResource("Uploading");
 
@@ -231,27 +238,27 @@ namespace CNC.Controls
                 {
                     if (GrblInfo.IpAddress == string.Empty)
                         _viewModel.Message = (string)FindResource("NoConnection");
-                    else using(new UIUtils.WaitCursor())
-                    {
-                        _viewModel.Message = (string)FindResource("Uploading");
-                        try
+                    else using (new UIUtils.WaitCursor())
                         {
-                            using (WebClient client = new WebClient())
+                            _viewModel.Message = (string)FindResource("Uploading");
+                            try
                             {
-                                client.Credentials = new NetworkCredential("grblHAL", "grblHAL");
-                                client.UploadFile(string.Format("ftp://{0}/{1}", GrblInfo.IpAddress, filename.Substring(filename.LastIndexOf('\\') + 1)), WebRequestMethods.Ftp.UploadFile, filename);
-                                ok = true;
+                                using (WebClient client = new WebClient())
+                                {
+                                    client.Credentials = new NetworkCredential("grblHAL", "grblHAL");
+                                    client.UploadFile(string.Format("ftp://{0}/{1}", GrblInfo.IpAddress, filename.Substring(filename.LastIndexOf('\\') + 1)), WebRequestMethods.Ftp.UploadFile, filename);
+                                    ok = true;
+                                }
+                            }
+                            catch (WebException ex)
+                            {
+                                _viewModel.Message = ex.Message.ToString() + " " + ((FtpWebResponse)ex.Response).StatusDescription;
+                            }
+                            catch (System.Exception ex)
+                            {
+                                _viewModel.Message = ex.Message.ToString();
                             }
                         }
-                        catch (WebException ex)
-                        {
-                            _viewModel.Message = ex.Message.ToString() + " " + ((FtpWebResponse)ex.Response).StatusDescription;
-                        }
-                        catch (System.Exception ex)
-                        {
-                            _viewModel.Message = ex.Message.ToString();
-                        }
-                    }
                 }
                 else
                 {
@@ -261,7 +268,7 @@ namespace CNC.Controls
                     ok = ymodem.Upload(filename);
                 }
 
-                if(!(GrblInfo.UploadProtocol == "FTP" && !ok))
+                if (!(GrblInfo.UploadProtocol == "FTP" && !ok))
                     _viewModel.Message = (string)FindResource(ok ? "TransferDone" : "TransferAborted");
 
                 _grblSdCard.Load(_viewModel, ViewAll);
@@ -284,9 +291,9 @@ namespace CNC.Controls
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if(dgrSDCard.SelectedItem == null)return;
+            if (dgrSDCard.SelectedItem == null) return;
             var selectedFile = (string)currentFile["Name"];
-            if(string.IsNullOrEmpty(selectedFile))return;
+            if (string.IsNullOrEmpty(selectedFile)) return;
             if (MessageBox.Show(string.Format((string)FindResource("DeleteFile"), (string)currentFile["Name"]), "ioSender", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
                 Comms.com.WriteCommand(GrblConstants.CMD_SDCARD_UNLINK + (string)currentFile["Name"]);
@@ -317,11 +324,11 @@ namespace CNC.Controls
         }
     }
 
-    public  class GrblSDCard
+    public class GrblSDCard
     {
-        private  DataTable dataTable;
-        private  bool? mounted = null;
-        private  int id = 0;
+        private DataTable dataTable;
+        private bool? mounted = null;
+        private int id = 0;
 
         public GrblSDCard()
         {
@@ -335,16 +342,16 @@ namespace CNC.Controls
             dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
         }
 
-        public  DataView Files { get { return dataTable.DefaultView; } }
-        public  bool Loaded { get { return dataTable.Rows.Count > 0; } }
+        public DataView Files { get { return dataTable.DefaultView; } }
+        public bool Loaded { get { return dataTable.Rows.Count > 0; } }
 
-        public  void Load(GrblViewModel model, bool viewAll)
+        public void Load(GrblViewModel model, bool viewAll)
         {
             bool? res = null;
             CancellationToken cancellationToken = new CancellationToken();
 
             dataTable.Clear();
-
+            //SendSettings(model, GrblConstants.CMD_SDCARD_MOUNT, "ok");
             if (mounted == null)
             {
                 Comms.com.PurgeQueue();
@@ -372,12 +379,12 @@ namespace CNC.Controls
 
                 new Thread(() =>
                 {
-                res = WaitFor.AckResponse<string>(
-                    cancellationToken,
-                    response => Process(response),
-                    a => model.OnResponseReceived += a,
-                    a => model.OnResponseReceived -= a,
-                    2000, () => Comms.com.WriteCommand(viewAll ? GrblConstants.CMD_SDCARD_DIR_ALL : GrblConstants.CMD_SDCARD_DIR));
+                    res = WaitFor.AckResponse<string>(
+                        cancellationToken,
+                        response => Process(response),
+                        a => model.OnResponseReceived += a,
+                        a => model.OnResponseReceived -= a,
+                        2000, () => Comms.com.WriteCommand(viewAll ? GrblConstants.CMD_SDCARD_DIR_ALL : GrblConstants.CMD_SDCARD_DIR));
                 }).Start();
 
                 while (res == null)
@@ -388,15 +395,53 @@ namespace CNC.Controls
                 dataTable.AcceptChanges();
             }
         }
+        private void SendSettings(GrblViewModel model, string command, string key)
+        {
+            try
+            {
 
-        private  void Process(string data)
+                bool res = false;
+                var cancellationToken = new CancellationToken();
+                model.Poller.SetState(0);
+
+                void ProcessSettings(string response)
+                {
+                    if (response.StartsWith(key))
+                    {   
+                        Process(response);
+                        res = true;
+                    }
+                }
+                void Send()
+                {
+                    Comms.com.DataReceived -= ProcessSettings;
+                    Comms.com.DataReceived += ProcessSettings;
+                    Comms.com.WriteCommand(command);
+                    while (!res)
+                    {
+                        Thread.Sleep(50);
+                    }
+                    Comms.com.DataReceived -= ProcessSettings;
+                    model.Poller.SetState(model.PollingInterval);
+                }
+                
+                Task.Factory.StartNew(Send, cancellationToken);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                model.Poller.SetState(200);
+            }
+        }
+        private void Process(string data)
         {
             if (!Application.Current.Dispatcher.CheckAccess())
             {
                 Application.Current.Dispatcher.Invoke(() => Process(data));
                 return;
             }
-            
+
 
             string filename = "";
             int filesize = 0;

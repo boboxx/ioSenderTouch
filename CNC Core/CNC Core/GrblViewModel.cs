@@ -54,7 +54,7 @@ namespace CNC.Core
     public class GrblViewModel : MeasureViewModel
     {
         public event EventHandler OnShutDown;
-
+        public event EventHandler GrblInitialized;
         private string _tool, _message, _WPos, _MPos, _wco, _wcs, _a, _fs, _ov, _pn, _sc, _sd, _fans, _d, _gc, _h, _thcv, _thcs;
         private string _mdiCommand, _fileName;
         private string[] _rtState = new string[3];
@@ -216,6 +216,7 @@ namespace CNC.Core
             Clear();
           
             Keyboard = new KeypressHandler(this);
+            Keyboard.LoadMappings("KeyMap0");
             MDICommand = new ActionCommand<string>(ExecuteMDI);
 
             pollThread = new Thread(new ThreadStart(Poller.Run));
@@ -1851,6 +1852,11 @@ namespace CNC.Core
             var result = GrblSettings.Get(grblHALSetting.HomingEnable).Value;
             var bitValue =(byte)int.Parse(result);
             IsIndividualHomingEnabled = ((bitValue & 0x02) == 0x02);
+        }
+
+        public void LoadComplete()
+        {
+            GrblInitialized?.Invoke(this,null);
         }
     }
 }
