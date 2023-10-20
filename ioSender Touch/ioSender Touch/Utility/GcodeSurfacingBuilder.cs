@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 
 namespace ioSenderTouch.Utility
 {
@@ -33,29 +35,34 @@ namespace ioSenderTouch.Utility
         private readonly bool _mist;
         private readonly bool _flood;
         private double _overLapPercent;
+        private  CultureInfo _oldCulture;
 
         public string FilePath { get; set; }
         public GcodeSurfacingBuilder(double width, double length, double feedRate, double dia, int numberOfPasses, double depth, double overlap, double rpm, double safeHeight, bool mist , bool flood)
         {
-            _width = width;
-            _length = length;
-            _feedRate = feedRate;
-            _toolDiameter = dia;
-            _numberOfPasses = numberOfPasses;
-            _depth = depth;
-            _rpm = rpm;
-            _safeHeight = safeHeight;
-            _mist = mist;
-            _flood = flood;
-            _overLapPercent = overlap / 100;
-            GenerateGcode();
+            using (new TemporaryThreadCulture( new CultureInfo("en-US")))
+            {
+                _width = width;
+                _length = length;
+                _feedRate = feedRate;
+                _toolDiameter = dia;
+                _numberOfPasses = numberOfPasses;
+                _depth = depth;
+                _rpm = rpm;
+                _safeHeight = safeHeight;
+                _mist = mist;
+                _flood = flood;
+                _overLapPercent = overlap / 100;
+                GenerateGcode();
+            }
+            
         }
-
         private void GenerateGcode()
         {
             var gcodeList = new List<string>();
             gcodeList.AddRange(BuildHeader());
-            gcodeList.AddRange(BuildGcodeRamp());
+            //TODO remove ramp for now
+            //gcodeList.AddRange(BuildGcodeRamp());
             gcodeList.AddRange(BuildSurfaceLayer());
             gcodeList.AddRange(BuildShutDown());
             WriteFile(gcodeList);
@@ -112,6 +119,9 @@ namespace ioSenderTouch.Utility
             double y = 0;
             var layer = 1;
             var gcodeList = new List<string> { $";Layer{layer}" };
+            var depth =  _depth;
+            var formattedDepth = $"{depth:f4}";
+            gcodeList.Add($"{TravelFeedRate}Z-{formattedDepth}");
             for (int i = 0; i <= lines; i++)
             {
                 if(y>=_width)break;
@@ -147,5 +157,20 @@ namespace ioSenderTouch.Utility
             };
             return endList;
         }
+    }
+}
+public class TemporaryThreadCulture : IDisposable
+{
+    CultureInfo _oldCulture;
+
+    public TemporaryThreadCulture(CultureInfo newCulture)
+    {
+        _oldCulture = CultureInfo.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture = newCulture;
+    }
+
+    public void Dispose()
+    {
+        Thread.CurrentThread.CurrentCulture = _oldCulture;
     }
 }
