@@ -42,6 +42,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using CNC.GCode;
@@ -72,7 +73,7 @@ namespace CNC.Core
             [XmlIgnore]
             public Func<Key, bool> Call;
             public string Context { get { return context == null ? "null" : context.Name; } set { dummy = value; } }
-            public string Method { get { return Call.Method.ReflectedType.Name + "." +  Call.Method.Name; } set { method = value; } }
+            public string Method { get { return Call.Method.ReflectedType.Name + "." + Call.Method.Name; } set { method = value; } }
         }
 
         private int N_AXIS = 3;
@@ -84,7 +85,7 @@ namespace CNC.Core
 
         public void AddHandler(Key key, ModifierKeys modifiers, Func<Key, bool> handler, UserControl context = null, bool onUp = true)
         {
-            handlers.Add(new KeypressHandlerFn(){Key = key, Modifiers = modifiers, Call = handler, context = context, OnUp = onUp });
+            handlers.Add(new KeypressHandlerFn() { Key = key, Modifiers = modifiers, Call = handler, context = context, OnUp = onUp });
         }
         public void AddHandler(Key key, ModifierKeys modifiers, Func<Key, bool> handler, bool onUp)
         {
@@ -94,7 +95,11 @@ namespace CNC.Core
         public KeypressHandler(GrblViewModel model)
         {
             grbl = model;
+            AddHandler(Key.C, ModifierKeys.Shift | ModifierKeys.Control, ToggleContinuousJogging, false);
         }
+
+
+        private const string FileName = "KeyMap.xml";
 
         public double[] JogDistances { get; set; } = new double[3] { 0.01, 500.0, 500.0 };
         public double[] JogFeedrates { get; set; } = new double[3] { 100.0, 200.0, 500.0 };
@@ -107,9 +112,12 @@ namespace CNC.Core
         public bool CanJog2 { get { return grbl.GrblState.State == GrblStates.Idle || grbl.GrblState.State == GrblStates.Tool || grbl.GrblState.State == GrblStates.Jog; } }
         public bool CanJog { get { return allowJog && (grbl.GrblState.State == GrblStates.Idle || grbl.GrblState.State == GrblStates.Tool || grbl.GrblState.State == GrblStates.Jog); } }
         public bool IsJogging { get { return jogMode != JogMode.None || grbl.GrblState.State == GrblStates.Jog; } }
-       
 
-        public bool SaveMappings (string filename)
+        private bool ToggleContinuousJogging(Key arg)
+        {
+            return IsContinuousJoggingEnabled = IsContinuousJoggingEnabled != true;
+        }
+        public bool SaveMappings(string filename)
         {
             if (handlers.Count == 0)
                 return false;
@@ -146,21 +154,24 @@ namespace CNC.Core
 
             try
             {
-                StreamReader reader = new StreamReader(filename);
-                keymappings = (List<KeypressHandlerFn>)xs.Deserialize(reader);
-                reader.Close();
-
-                foreach(var keymap in keymappings)
+                if (File.Exists(CNC.Core.Resources.Path + FileName))
                 {
-                    var map = handlers.Where(x => x.Method == keymap.method).FirstOrDefault();
-                    if(map != null)
-                    {
-                        map.Key = keymap.Key;
-                        map.Modifiers = keymap.Modifiers;
-                    }
-                }
+                    StreamReader reader = new StreamReader(CNC.Core.Resources.Path + FileName);
+                    keymappings = (List<KeypressHandlerFn>)xs.Deserialize(reader);
+                    reader.Close();
 
-                ok = true;
+                    foreach (var keymap in keymappings)
+                    {
+                        var map = handlers.Where(x => x.Method == keymap.method).FirstOrDefault();
+                        if (map != null)
+                        {
+                            map.Key = keymap.Key;
+                            map.Modifiers = keymap.Modifiers;
+                        }
+                    }
+
+                    ok = true;
+                }
             }
             catch
             {
@@ -244,7 +255,8 @@ namespace CNC.Core
                         break;
 
                     case Key.Home:
-                        if(N_AXIS == 4) {
+                        if (N_AXIS == 4)
+                        {
                             isJogging = axisjog[GrblConstants.A_AXIS] != Key.Home;
                             axisjog[GrblConstants.A_AXIS] = Key.Home;
                         }
@@ -269,70 +281,70 @@ namespace CNC.Core
                 if (GrblInfo.LatheModeEnabled)
                 {
                     for (int i = 0; i < 2; i++) switch (axisjog[i])
-                    {
-                        case Key.Left:
-                            dist[GrblConstants.Z_AXIS] = -1d;
-                            command += "Z-{3}";
-                            break;
+                        {
+                            case Key.Left:
+                                dist[GrblConstants.Z_AXIS] = -1d;
+                                command += "Z-{3}";
+                                break;
 
-                        case Key.Up:
-                            dist[GrblConstants.X_AXIS] = -1d;
-                            command += "X-{1}";
-                            break;
+                            case Key.Up:
+                                dist[GrblConstants.X_AXIS] = -1d;
+                                command += "X-{1}";
+                                break;
 
-                        case Key.Right:
-                            dist[GrblConstants.Z_AXIS] = 1d;
-                            command += "Z{3}";
-                            break;
+                            case Key.Right:
+                                dist[GrblConstants.Z_AXIS] = 1d;
+                                command += "Z{3}";
+                                break;
 
-                        case Key.Down:
-                            dist[GrblConstants.X_AXIS] = 1d;
-                            command += "X{1}";
-                            break;
-                    }
+                            case Key.Down:
+                                dist[GrblConstants.X_AXIS] = 1d;
+                                command += "X{1}";
+                                break;
+                        }
                 }
                 else for (int i = 0; i < N_AXIS; i++) switch (axisjog[i])
-                {
-                    case Key.PageUp:
-                        dist[GrblConstants.Z_AXIS] = 1d;
-                        command += "Z{3}";
-                        break;
+                        {
+                            case Key.PageUp:
+                                dist[GrblConstants.Z_AXIS] = 1d;
+                                command += "Z{3}";
+                                break;
 
-                    case Key.PageDown:
-                        dist[GrblConstants.Z_AXIS] = -1d;
-                        command += "Z-{3}";
-                        break;
+                            case Key.PageDown:
+                                dist[GrblConstants.Z_AXIS] = -1d;
+                                command += "Z-{3}";
+                                break;
 
-                    case Key.Left:
-                        dist[GrblConstants.X_AXIS] = -1d;
-                        command += "X-{1}";
-                        break;
+                            case Key.Left:
+                                dist[GrblConstants.X_AXIS] = -1d;
+                                command += "X-{1}";
+                                break;
 
-                    case Key.Up:
-                        dist[GrblConstants.Y_AXIS] = 1d;
-                        command += "Y{2}";
-                        break;
+                            case Key.Up:
+                                dist[GrblConstants.Y_AXIS] = 1d;
+                                command += "Y{2}";
+                                break;
 
-                    case Key.Right:
-                        dist[GrblConstants.X_AXIS] = 1d;
-                        command += "X{1}";
-                        break;
+                            case Key.Right:
+                                dist[GrblConstants.X_AXIS] = 1d;
+                                command += "X{1}";
+                                break;
 
-                    case Key.Down:
-                        dist[GrblConstants.Y_AXIS] = -1d;
-                        command += "Y-{2}";
-                        break;
+                            case Key.Down:
+                                dist[GrblConstants.Y_AXIS] = -1d;
+                                command += "Y-{2}";
+                                break;
 
-                    case Key.Home:
-                        dist[GrblConstants.A_AXIS] = 1d;
-                        command += "A{4}";
-                        break;
+                            case Key.Home:
+                                dist[GrblConstants.A_AXIS] = 1d;
+                                command += "A{4}";
+                                break;
 
-                    case Key.End:
-                        dist[GrblConstants.A_AXIS] = -1d;
-                        command += "A-{4}";
-                        break;
-                }
+                            case Key.End:
+                                dist[GrblConstants.A_AXIS] = -1d;
+                                command += "A-{4}";
+                                break;
+                        }
 
                 if ((isJogging = command != string.Empty))
                 {
@@ -343,7 +355,7 @@ namespace CNC.Core
                         preCancel = !(jogMode == JogMode.Step || jogMode == JogMode.None);
                         jogMode = JogMode.Step;
                         JogDistances[(int)jogMode] = grbl.JogStep;
-                      
+
                     }
                     else if (IsContinuousJoggingEnabled)
                     {
@@ -386,9 +398,10 @@ namespace CNC.Core
                                         {
                                             if (dist[i] > 0)
                                                 dist[i] = 0;
-                                            else if(dist[i] < (-GrblInfo.MaxTravel.Values[i] + LimitSwitchesClearance))
+                                            else if (dist[i] < (-GrblInfo.MaxTravel.Values[i] + LimitSwitchesClearance))
                                                 dist[i] = (-GrblInfo.MaxTravel.Values[i] + LimitSwitchesClearance);
-                                        } else
+                                        }
+                                        else
                                         {
                                             if (dist[i] < 0d)
                                                 dist[i] = 0d;
@@ -416,7 +429,7 @@ namespace CNC.Core
                     }
 
                     return jogMode != JogMode.None;
-                } 
+                }
             }
 
             IsRepeating = e.IsRepeat;
@@ -461,7 +474,7 @@ namespace CNC.Core
             if (IsJogging)
             {
                 while (Comms.com.OutCount != 0) ;
-                if(preCancel)
+                if (preCancel)
                     Comms.com.WriteByte(GrblConstants.CMD_JOG_CANCEL); // Cancel current jog
             }
             Comms.com.WriteCommand(command);
