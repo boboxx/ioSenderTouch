@@ -16,7 +16,7 @@ namespace ioSenderTouch
 {
     public partial class MainWindow : Window
     {
-        private const string Version = "1.0.3";
+        private const string Version = "1.0.4";
         private const string App_Name = "IO Sender Touch";
         public static MainWindow ui = null;
         public static UIViewModel UIViewModel { get; } = new UIViewModel();
@@ -41,7 +41,7 @@ namespace ioSenderTouch
             BaseWindowTitle = Title;
             AppConfig.Settings.OnConfigFileLoaded += Settings_OnConfigFileLoaded;
 
-            if (SystemInformation.ScreenOrientation ==ScreenOrientation.Angle90)
+            if (SystemInformation.ScreenOrientation ==ScreenOrientation.Angle90 || SystemInformation.ScreenOrientation == ScreenOrientation.Angle270)
             {
                 _homeViewPortrait = new HomeViewPortrait(_viewModel);
                 DockPanel.SetDock(_homeViewPortrait, Dock.Left);
